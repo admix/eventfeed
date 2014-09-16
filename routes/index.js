@@ -30,7 +30,7 @@ module.exports = exports = function(app, db) {
     app.get('/feed/events/:id', function (req, res) {
       var eventId = req.params.id;
       dbEvents.getEventById(db, eventId, function(err, msg) {
-        if(err) throw err;
+        if(err) console.log(err);
         res.send(msg, 200);
         res.end();
       })

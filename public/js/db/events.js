@@ -18,10 +18,13 @@ module.exports = {
       var events = db.collection("events");
 
       events.findOne({'id':parseInt(eventId)}, function(err, doc) {
-        if(err) console.log(err.message);
-        console.log(doc.name);
-        callback(null, doc.name);
-        //return false;
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        } else {
+          console.log(doc.name);
+          callback(null, doc.name);
+        }
       });
     },
     saveNewEvent: function(db, event, callback) {
