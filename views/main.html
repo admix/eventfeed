@@ -7,7 +7,7 @@
     <script type="text/javascript">
 
         $.ajax({
-            url: 'http://localhost:8080/feed/events',
+            url: 'http://eventfeed.me/feed/events',
             type: 'GET',
             success: function(data){
                 console.log(data);
@@ -28,7 +28,7 @@
         var id = $("#setId").val();
         e.preventDefault();
         $.ajax({
-            url: 'http://localhost:8080/feed/events/' + id,
+            url: 'http://eventfeed.me/feed/events/' + id,
             type: 'GET',
             success: function(data){
                 console.log(data);
