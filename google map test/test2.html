@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>API Test</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+
+     var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7080, -79.3680,
+                            43.6585,-79.3758,43.686,-79.3089,43.7620,-79.5000];
+
+function initialize() {
+
+// *********************************************************************
+// The events will come from the database in future versions           
+// the events created below are just used for testing                       
+//**********************************************************************
+
+
+        var events = new Array();
+
+        var event1 = {
+        name          : "Party",
+        details       : "Party at my house, everyone is invited!",
+        date          : "2014-10-6",
+        time          : "10pm - 2am ",
+        eventCreatedBy: "Jane Doe"
+};
+
+        var event2 = {
+        name          : "Baby Showeer",
+        details       : "Baby Shower, everyone is invited!",
+        date          : "2014-10-7",
+        time          : "1:00pm- 10:00pm",
+        eventCreatedBy: "Matt Ryan"
+};
+        var event3 = {
+        name          : "BBQ",
+        details       : "BBQ at my house, everyone is invited!",
+        date          : "2014-09-30",
+        time          : "1pm - 4pm " ,
+        eventCreatedBy: "Tom Brady"
+};
+
+   var event4 = {
+        name          : "Birthday Party",
+        details       : "Come to my party for a good time. Everyone is invited!",
+        date          : "2014-10-05",
+        time          : "11pm - 2am " ,
+        eventCreatedBy: "John Doe"
+};
+
+  var event5 = {
+        name          : "Graduation Convocation Ceremony",
+        details       : "Graduation Ceremony !",
+        date          : "2014-09-26",
+        time          : "1pm - 3pm " ,
+        eventCreatedBy: "Joe Flacco"
+};
+
+  var event6 = {
+        name          : "Birthday Party",
+        details       : "Birthday Party !",
+        date          : "2014-10-28",
+        time          : "10pm - 3pm " ,
+        eventCreatedBy: "Jimmy Fallon"
+};
+
+ events.push(event1);
+ events.push(event2)
+ events.push(event3);
+ events.push(event4);
+ events.push(event5);
+ events.push(event6);
+
+
+  var myLatlng = new google.maps.LatLng(43.7000,-79.4000);
+  var mapOptions = {
+    zoom: 11,
+    center: myLatlng
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+  setMarkers(map,locations,events);
+
+}  // end of initialize
+
+ function setMarkers(map,locations,events){
+  var eventNum = -1;
+
+  for (var i = 0; i < locations.length; i+=2) {
+  eventNum++;
+
+  var contentString = '<div id="content">' +
+  '<div id="siteNotice">' +
+  '</div>' +
+  '<h1 id="firstHeading" class="firstHeading">Event Feed</h1>' +
+  '<div id="bodyContent">' +
+  '<b>Event Details: </b>'+events[eventNum].details + '<br><br>'+
+  '<b>Date: </b>'+ events[eventNum].date + '<br><br>'+
+  '<b>Time: </b>'+ events[eventNum].time + '<br><br>' +
+  '<b>Event Created By: </b>' + events[eventNum].eventCreatedBy + '<br><br>' +
+  '<b>People Attending: Link to List of people attending?</b>'+'<br><br>' +
+  '<button onclick="joinEvent()">Join Event</button>'+
+  '</div>' +
+  '</div>';
+
+  var infowindow = new google.maps.InfoWindow()
+   
+  var marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i], locations[i + 1]),
+      map: map,
+      title: events[eventNum].name
+  });
+
+  google.maps.event.addListener(marker,'click', (function(marker,contentString,infowindow){
+        return function() {
+           infowindow.setContent(contentString);
+           infowindow.open(map,marker);
+        };
+    })(marker,contentString,infowindow));
+ } //end of for loop      
+            
+ }// end of function
+
+function joinEvent(){
+
+  // make call to database.
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>

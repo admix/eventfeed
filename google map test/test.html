@@ -3,7 +3,7 @@
 <head>
     <style type="text/css">
         html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
-        #panel {
+        #Search_panel {
             position: absolute;
             top: 5px;
             left: 50%;
@@ -17,61 +17,51 @@
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZvJFK0w-S8DisqYbld0upPVmjh67r0NQ">
     </script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <!--Include the slidepanel plugin -->
+    <script type="text/javascript" src="js/jquery.slidepanel.js"></script>
+    <!--Add the css -->
+    <link rel="stylesheet" type="text/css" href="css/jquery.slidepanel.css">
     <script type="text/javascript">
-        var map;
-        var marker;
-        var infowindow
-        function initialize() {
-            var mystartloc = new google.maps.LatLng(43.7000,-79.4000);
-            var mapOptions = {
-                zoom: 12,
-                center: mystartloc
-            }
-            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        }
-        function GetEvents(){
-            // Get the events from Json to objects events
-        }
-        function LoadEvents(events) {
-            var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7200, -79.4000];
-            for (var i = 0; i < locations.length; i += 2) {
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(locations[i], locations[i + 1]),
-                    map: map,
-                    title: 'Event Name',
-                    icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
-                });
-                google.maps.event.addListener(marker, 'click', ClickEvent);
-                google.maps.event.addListener(marker, 'mouseover', MouseOverEvent);
-                var contentString = '<div id="content">' +
-                        '<div id="siteNotice">' +
-                        '</div>' +
-                        '<h1 id="firstHeading" class="firstHeading">Event Feed Party</h1>' +
-                        '<div id="bodyContent">' +
-                        '<p><b>Party details</b>' +
-                        '</div>' +
-                        '</div>';
-
-                infowindow = new google.maps.InfoWindow({
-                    content: contentString
-                });
-            }
-        }
-        function MouseOverEvent(){
-            // user mouse over event
-        }
-        function ClickEvent(){
-            map.setCenter(marker.getPosition());
-            infowindow.open(map,marker);
-        }
-        google.maps.event.addDomListener(window, 'load', initialize);
-
-
+        $(document).ready(function(){
+            $('[data-slidepanel]').slidepanel({
+                orientation: 'right',
+                mode: 'overlay'
+            });
+        });
     </script>
+    <script type="text/javascript" src="js/map.js"></script>
 </head>
 <body>
-<div id="panel">
-    <input onclick="LoadEvents();" type=button value="Load Events">
+<div id="Search_panel">
+    Tags:
+    <select id="tag">
+        <option>None</option>
+        <option>Bars</option>
+        <option>Clubs</option>
+        <option>Lounge</option>
+        <option>Holiday</option>
+        <option>Sports</option>
+        <option>Charity</option>
+        <option>Dinner</option>
+        <option>Lunch</option>
+        <option>Breakfast</option>
+        <option>Park</option>
+        <option>Campaign</option>
+        <option>Election</option>
+        <option>Dating</option>
+        <option>Book</option>
+        <option>Poker</option>
+        <option>Casino</option>
+        <option>Party</option>
+    </select>
+    <input id="Searchtxt" type="text"><input onclick="Search();" type="button" value="Search">
+   <input onclick="LoadEvents();" type=button value="My Events">
+    <br>
+    <a href="a_search.html" data-slidepanel="panel">Advanced Search</a>
+    <a href="profile.html" data-slidepanel="panel">Profile</a>
+    <a href="Create.html" data-slidepanel="panel">Create</a>
+    <a href="Feed.html" data-slidepanel="panel">Feed</a>
 </div>
 <div id="map-canvas"></div>
 </body>
