@@ -46,6 +46,17 @@ module.exports = exports = function(app, db) {
       })
     });
 
+    //GET user by ID
+    app.get('/feed/users/:id', function (req, res) {
+      var userId = req.params.id;
+      dbUsers.getUserById(db, userId, function(err, msg) {
+        if(err) console.log(err);
+        res.send(msg, 200);
+        res.end();
+      })
+
+    });
+
     //POST save new event (data will store user-who-created-id and the event will be stored to User's-created document as well)
     app.post('/feed/event', function (req, res) {
       var eventData = req.body;

@@ -17,11 +17,11 @@ module.exports = {
     getUserById: function(db, userId, callback) {
       "use strict";
       var users = db.collection("users");
-
+      console.log("Getting user id: " + userId);
       users.findOne({'id':parseInt(userId)}, function(err, doc) {
         if(err) console.log(err.message);
-        console.log(doc.name);
-        callback(null, doc.name);
+        console.log(doc);
+        callback(null, doc);
         //return false;
       });
     }, //adding new user
