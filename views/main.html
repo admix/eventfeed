@@ -5,9 +5,10 @@
 <head>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <script type="text/javascript">
-
+        var eventfeed = "http://eventfeed.me",
+            localhost = "http://localhost:8080";
         $.ajax({
-            url: 'http://eventfeed.me/feed/events',
+            url: localhost + '/feed/events',
             type: 'GET',
             success: function(data){
                 console.log(data);
@@ -24,15 +25,17 @@
   <button id="byId">Get by id</button>
   <div id="dataById"></div>
   <script>
+    var eventfeed = "http://eventfeed.me",
+        localhost = "http://localhost:8080";
     $("#byId").click(function(e) {
         var id = $("#setId").val();
         e.preventDefault();
         $.ajax({
-            url: 'http://eventfeed.me/feed/events/' + id,
+            url: localhost + '/feed/events/' + id,
             type: 'GET',
             success: function(data){
                 console.log(data);
-                $("#dataById").html(data);
+                $("#dataById").html(data.name);
             }
         });
     });

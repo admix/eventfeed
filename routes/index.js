@@ -47,8 +47,9 @@ module.exports = exports = function(app, db) {
     });
 
     //POST save new event (data will store user-who-created-id and the event will be stored to User's-created document as well)
-    app.post('/feed/events', function (req, res) {
+    app.post('/feed/event', function (req, res) {
       var eventData = req.body;
+      console.log("data received: " + eventData);
       dbEvents.saveNewEvent(db, eventData, function(err, msg) {
         if(err) throw err;
         res.send(msg, 200);
