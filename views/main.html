@@ -1,44 +1,97 @@
-<!-- <h1>Main html file</h1>
-<h2>Eventfeed.me coming soon...</h2> -->
-
+<!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <style type="text/css">
+        html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
+        #Search_panel {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            margin-left: -180px;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+        }
+    </style>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZvJFK0w-S8DisqYbld0upPVmjh67r0NQ">
+    </script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <!--Include the slidepanel plugin -->
+    <script type="text/javascript" src="js/jquery.slidepanel.js"></script>
+    <script type="text/javascript" src="js/createEvent.js"></script>
+    <!--Add the css -->
+    <link rel="stylesheet" type="text/css" href="css/jquery.slidepanel.css">
     <script type="text/javascript">
-        var eventfeed = "http://eventfeed.me",
-            localhost = "http://localhost:8080";
-        $.ajax({
-            url: localhost + '/feed/events',
-            type: 'GET',
-            success: function(data){
-                console.log(data);
-                $("#data").html(data);
-            }
+        // var eventfeed = "http://eventfeed.me",
+        //     localhost = "http://localhost:8080";
+        // $.ajax({
+        //     url: localhost + '/feed/events',
+        //     type: 'GET',
+        //     success: function(data){
+        //         console.log(data);
+        //         $("#data").html(data);
+        //     }
+        // });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('[data-slidepanel]').slidepanel({
+                orientation: 'right',
+                mode: 'overlay'
+            });
         });
     </script>
-
+    <script type="text/javascript" src="js/map.js"></script>
 </head>
 <body>
-  <div id="data"></div>
-  Provide Id:
-  <input id="setId">
-  <button id="byId">Get by id</button>
-  <div id="dataById"></div>
-  <script>
-    var eventfeed = "http://eventfeed.me",
-        localhost = "http://localhost:8080";
-    $("#byId").click(function(e) {
-        var id = $("#setId").val();
-        e.preventDefault();
-        $.ajax({
-            url: localhost + '/feed/events/' + id,
-            type: 'GET',
-            success: function(data){
-                console.log(data);
-                $("#dataById").html(data.name);
-            }
-        });
-    });
-  </script>
+<div id="Search_panel">
+    Tags:
+    <select id="tag">
+        <option>None</option>
+        <option>Bars</option>
+        <option>Clubs</option>
+        <option>Lounge</option>
+        <option>Holiday</option>
+        <option>Sports</option>
+        <option>Charity</option>
+        <option>Dinner</option>
+        <option>Lunch</option>
+        <option>Breakfast</option>
+        <option>Park</option>
+        <option>Campaign</option>
+        <option>Election</option>
+        <option>Dating</option>
+        <option>Book</option>
+        <option>Poker</option>
+        <option>Casino</option>
+        <option>Party</option>
+    </select>
+    <input id="Searchtxt" type="text"><input onclick="Search();" type="button" value="Search">
+   <input onclick="LoadEvents();" type=button value="My Events">
+    <br>
+    <a href="a_search.html" data-slidepanel="panel">Advanced Search</a>
+    <a href="profile.html" data-slidepanel="panel">Profile</a>
+    <a href="Create.html" data-slidepanel="panel">Create</a>
+    <a href="Feed.html" data-slidepanel="panel">Feed</a>
+</div>
+<div id="map-canvas"></div>
+<script>
+//   var eventfeed = "http://eventfeed.me",
+//       localhost = "http://localhost:8080";
+//   $("#byId").click(function(e) {
+//       var id = $("#setId").val();
+//       e.preventDefault();
+//       $.ajax({
+//           url: localhost + '/feed/events/' + id,
+//           type: 'GET',
+//           success: function(data){
+//               console.log(data);
+//               $("#dataById").html(data.name);
+//           }
+//       });
+//   });
+</script>
 </body>
 </html>

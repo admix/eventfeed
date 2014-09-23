@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/createEvent.js"></script>
+</head>
+<body>
+<!--<form name="create_event" action="something.html" method="get">-->
+<script>
+  // function create() {
+  //   alert("hello!");
+  // }
+  // var eventfeed = "http://eventfeed.me",
+  //     localhost = "http://localhost:8080";
+  // $("#createButton").click(function(e) {
+  //     //var id = $("#setId").val();
+  //     console.log("in post click");
+  //     e.preventDefault();
+  //     var eventName = $("#name").val();
+  //     var eventCat = $("#category").val();
+  //     var eventDate = $("#date").val();
+  //     var eventTime = $("#time").val();
+  //     var eventDesc = $("#description").val();
+  //     var eventData = {
+  //       "name": eventName,
+  //       "category": eventCat,
+  //       "date": eventDate,
+  //       "time": eventTime,
+  //       "description": eventDesc
+  //     }
+  //     $.ajax({
+  //         url: localhost + '/feed/event',
+  //         type: 'POST',
+  //         data: JSON.stringify(eventData)
+  //         success: function(data){
+  //             console.log(data);
+  //             $("#dataById").html(data.name);
+  //         }
+  //     });
+  // });
+</script>
+</form>
+    <TABLE>
+        <TR>
+            <TD>Event Name:</TD>
+            <TD>
+                <INPUT id="name" TYPE="TEXT" NAME="e_name" SIZE="15">
+            </TD>
+        </TR>
+        <TR>
+            <TD>Category:</TD>
+            <TD><INPUT id="category" TYPE="TEXT" NAME="e_category" SIZE="15"></TD>
+        </TR>
+        <TR>
+            <TD>Date:</TD>
+            <TD><INPUT id="date" TYPE="date" NAME="e_date" SIZE="12"></TD>
+        </TR>
+        <TR>
+            <TD>Time:</TD>
+            <TD><INPUT id="time" TYPE="time" NAME="e_time" SIZE="20"></TD>
+        </TR>
+        <TR>
+            <TD>Description: </TD>
+            <TD><INPUT id="description" TYPE="text" NAME="e_description" SIZE="15"></TD>
+        </TR>
+
+    </TABLE>
+    <P><button id="createButton" type="button" onclick="create()">Click me</button></P>
+<!--</FORM>-->
+<div id="dataById">
+</div>
+
+</body>
+</html>

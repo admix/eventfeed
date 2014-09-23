@@ -41,7 +41,7 @@ module.exports = {
           if(err) throw err;
 
           console.log("New event has been added to the DB: " + JSON.stringify(doc));
-          callback(null, doc);
+          callback(null, doc[0]);
         });
       });
     }, //adding new event for specific user
