@@ -24,18 +24,6 @@
     <!--Add the css -->
     <link rel="stylesheet" type="text/css" href="css/jquery.slidepanel.css">
     <script type="text/javascript">
-        // var eventfeed = "http://eventfeed.me",
-        //     localhost = "http://localhost:8080";
-        // $.ajax({
-        //     url: localhost + '/feed/events',
-        //     type: 'GET',
-        //     success: function(data){
-        //         console.log(data);
-        //         $("#data").html(data);
-        //     }
-        // });
-    </script>
-    <script type="text/javascript">
         $(document).ready(function(){
             $('[data-slidepanel]').slidepanel({
                 orientation: 'right',
@@ -73,25 +61,9 @@
     <br>
     <a href="a_search.html" data-slidepanel="panel">Advanced Search</a>
     <a href="profile.html" data-slidepanel="panel">Profile</a>
-    <a href="Create.html" data-slidepanel="panel">Create</a>
-    <a href="Feed.html" data-slidepanel="panel">Feed</a>
+    <a href="create.html" data-slidepanel="panel">Create</a>
+    <a href="feed.html" data-slidepanel="panel">Feed</a>
 </div>
 <div id="map-canvas"></div>
-<script>
-//   var eventfeed = "http://eventfeed.me",
-//       localhost = "http://localhost:8080";
-//   $("#byId").click(function(e) {
-//       var id = $("#setId").val();
-//       e.preventDefault();
-//       $.ajax({
-//           url: localhost + '/feed/events/' + id,
-//           type: 'GET',
-//           success: function(data){
-//               console.log(data);
-//               $("#dataById").html(data.name);
-//           }
-//       });
-//   });
-</script>
 </body>
 </html>

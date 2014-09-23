@@ -32,32 +32,36 @@ function Search(){
         success: function(data){
             console.log(data);
             $("#dataById").html(data.name);
-            var locations = [43.7000, -79.4000];
-
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[0], locations[0 + 1]),
-                map: map,
-                title: data.name,
-                icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
-            });
-            google.maps.event.addListener(marker, 'click', ClickEvent);
-            google.maps.event.addListener(marker, 'mouseover', MouseOverEvent);
-            var contentString = '<div id="content">' +
-                '<div id="siteNotice">' +
-                '</div>' +
-                '<h1 id="firstHeading" class="firstHeading">Event Feed Party</h1>' +
-                '<div id="bodyContent">' +
-                '<p><b>Party details</b>' +
-                '</div>' +
-                '</div>';
-
-            infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
+            loadOneEvent(data);
         }
     });
       // });
     //alert("Your searched for " + search + " under " + tag + " tag");
+}
+
+function loadOneEvent(data) {
+  var locations = [43.7000, -79.4000];
+
+  marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[0], locations[0 + 1]),
+      map: map,
+      title: data.name,
+      icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
+  });
+  google.maps.event.addListener(marker, 'click', ClickEvent);
+  google.maps.event.addListener(marker, 'mouseover', MouseOverEvent);
+  var contentString = '<div id="content">' +
+      '<div id="siteNotice">' +
+      '</div>' +
+      '<h1 id="firstHeading" class="firstHeading">Event Feed Party</h1>' +
+      '<div id="bodyContent">' +
+      '<p><b>Party details</b>' +
+      '</div>' +
+      '</div>';
+
+  infowindow = new google.maps.InfoWindow({
+      content: contentString
+  });
 }
 function LoadEvents(events) {
     var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7200, -79.4000];
