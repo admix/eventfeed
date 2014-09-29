@@ -37,6 +37,19 @@ module.exports = exports = function(app, db) {
 
     });
 
+    //GET events by Name
+    app.get('/feed/events/name/:eventname', function (req, res) {
+      console.log("in GET by name");
+      var eventName = req.params.eventname;
+      dbEvents.getEventsByName(db, eventName, function(err, msg) {
+        if(err) console.log(err);
+        console.log("Answer: " + JSON.stringify(msg));
+        res.send(JSON.stringify(msg), 200);
+        //res.end();
+      })
+
+    });
+
     //GET all events for specified user (username/id provided)
     app.get('/feed/events/userID', function (req, res) {
       dbEvents.getEventsForUser(db, userID, function(err, msg) {

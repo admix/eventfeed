@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCtype html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
@@ -9,67 +9,31 @@
 </head>
 <body>
 <!--<form name="create_event" action="something.html" method="get">-->
-<script>
-  // function create() {
-  //   alert("hello!");
-  // }
-  // var eventfeed = "http://eventfeed.me",
-  //     localhost = "http://localhost:8080";
-  // $("#createButton").click(function(e) {
-  //     //var id = $("#setId").val();
-  //     console.log("in post click");
-  //     e.preventDefault();
-  //     var eventName = $("#name").val();
-  //     var eventCat = $("#category").val();
-  //     var eventDate = $("#date").val();
-  //     var eventTime = $("#time").val();
-  //     var eventDesc = $("#description").val();
-  //     var eventData = {
-  //       "name": eventName,
-  //       "category": eventCat,
-  //       "date": eventDate,
-  //       "time": eventTime,
-  //       "description": eventDesc
-  //     }
-  //     $.ajax({
-  //         url: localhost + '/feed/event',
-  //         type: 'POST',
-  //         data: JSON.stringify(eventData)
-  //         success: function(data){
-  //             console.log(data);
-  //             $("#dataById").html(data.name);
-  //         }
-  //     });
-  // });
-</script>
-</form>
-    <TABLE>
-        <TR>
-            <TD>Event Name:</TD>
-            <TD>
-                <INPUT id="name" TYPE="TEXT" NAME="e_name" SIZE="15">
-            </TD>
-        </TR>
-        <TR>
-            <TD>Category:</TD>
-            <TD><INPUT id="category" TYPE="TEXT" NAME="e_category" SIZE="15"></TD>
-        </TR>
-        <TR>
-            <TD>Date:</TD>
-            <TD><INPUT id="date" TYPE="date" NAME="e_date" SIZE="12"></TD>
-        </TR>
-        <TR>
-            <TD>Time:</TD>
-            <TD><INPUT id="time" TYPE="time" NAME="e_time" SIZE="20"></TD>
-        </TR>
-        <TR>
-            <TD>Description: </TD>
-            <TD><INPUT id="description" TYPE="text" NAME="e_description" SIZE="15"></TD>
-        </TR>
+    <table>
+        <tr>
+            <td>Event name:</td>
+            <td><input id="name" type="text" name="e_name" size="15"></td>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td><input id="category" type="text" name="e_category" size="15"></td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td><input id="date" type="date" name="e_date" size="12"></td>
+        </tr>
+        <tr>
+            <td>Time:</td>
+            <td><input id="time" type="time" name="e_time" size="20"></td>
+        </tr>
+        <tr>
+            <td>Description: </td>
+            <td><input id="description" type="text" name="e_description" size="15"></td>
+        </tr>
 
-    </TABLE>
-    <P><button id="createButton" type="button">Click me</button></P>
-<!--</FORM>-->
+    </table>
+    <p><button id="createButton" type="button">Click me</button></p>
+  <!--</form>-->
 <div id="dataById">
 </div>
 

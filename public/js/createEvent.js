@@ -1,13 +1,9 @@
 $(document).ready(function(){
-  console.log("File is inclided");
-  function create() {
-    alert("hello!");
-  }
+
   var eventfeed = "http://eventfeed.me",
       localhost = "http://localhost:8080";
   $("#createButton").click(function(e) {
-      //var id = $("#setId").val();
-      console.log("in post click");
+    
       e.preventDefault();
       var eventName = $("#name").val();
       var eventCat = $("#category").val();

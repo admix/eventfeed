@@ -23,9 +23,22 @@ module.exports = {
           console.log(err);
           callback(null, "Not found!");
         } else {
-          console.log(doc);
+          //console.log(doc);
           callback(null, doc);
         }
+      });
+    },
+    getEventsByName: function(db, eventName, callback) {
+      "use strict";
+      var events = db.collection("events");
+      console.log("search by event name: " + eventName);
+    events.find({'name':new RegExp(eventName, 'i')}).toArray(function(err, doc) {
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        }
+        console.log(doc);
+        callback(null, doc);
       });
     }, //adding new event
     saveNewEvent: function(db, event, callback) {

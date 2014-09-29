@@ -1,14 +1,41 @@
 {
-  "name": "The Guardians of the Galaxy",
+  "name": "Experience Seneca",
   "location": {
-    "address": "Yorkdale cineplex",
-    "latitude": "76.9213",
-    "longitude": "82.2124"
+    "address": "70 The Pond Road, North York, ON, Canada",
+    "latitude": 43.770871,
+    "longitude": -79.499252
   },
   "private": true,
-  "time_start": "19:00",
-  "time_end": "22:30",
-  "permalink": "the_guardians_of_the_galaxy"
+  "time_start": "8:00",
+  "time_end": "4:30",
+  "permalink": "experience_seneca",
+  "id":9
+},
+{
+  "name": "International Festival",
+  "location": {
+    "address": "1 Dundus street E., Toronto, ON, Canada",
+    "latitude": 43.656221,
+    "longitude": -79.380639
+  },
+  "private": false,
+  "time_start": "9:00",
+  "time_end": "19:30",
+  "permalink": "international_festival",
+  "id":10
+},
+{
+  "name": "Film Festival",
+  "location": {
+    "address": "142 Lake Shore W, Toronto, ON, Canada",
+    "latitude": 43.639138,
+    "longitude": -79.389835
+  },
+  "private": false,
+  "time_start": "9:00",
+  "time_end": "19:30",
+  "permalink": "film_festival",
+  "id":11
 },
 {
   "username": "admix",
