@@ -5,10 +5,12 @@ var map;
 var marker;
 var infowindow;
 var mystartloc;
+var geocoder;
 var eventfeed = "http://eventfeed.me",
     localhost = "http://localhost:8080";
 
 function initialize() {
+    geocoder = new google.maps.Geocoder();
     mystartloc = new google.maps.LatLng(43.7000,-79.4000);
     var mapOptions = {
         zoom: 12,
@@ -105,6 +107,93 @@ function mouseOverEvent(){
 function clickEvent(){
     map.setCenter(marker.getPosition());
     infowindow.open(map,marker);
+}
+
+$("#createButton").click(function(e) {
+
+    e.preventDefault();
+    var eventName = $("#name").val();
+    var eventCat = $("#category").val();
+    var eventDate = $("#date").val();
+    var eventTime = $("#time").val();
+    var eventDesc = $("#description").val();
+    var eventAddress = $("#address").val();
+    var eventData = {
+      "name": eventName,
+      "category": eventCat,
+      "date": eventDate,
+      "time": eventTime,
+      "private": false,
+      "permalink": eventName.replace(" ","_"),
+      "location": {
+        "address": eventAddress,
+        "latitude": 0,
+        "longitude": 0
+      },
+      "description": eventDesc
+    };
+
+    convertLatLong(eventData);
+
+});
+
+function convertLatLong(eventData) {
+  console.log("Converting location");
+  var latitude = 0;
+  var longitude = 0;
+  var event = [];
+  geocoder.geocode( { 'address': eventData.location.address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+          latitude = results[0].geometry.location.lat();
+          longitude = results[0].geometry.location.lng();
+          map.setCenter(results[0].geometry.location);
+          event = [latitude, longitude];
+          console.log(event);
+          console.log(eventData.location.latitude);
+          eventData.location.latitude = event[0];
+          eventData.location.longitude = event[1];
+          loadOneEventCreate(eventData);
+
+          $.ajax({
+              url: localhost + '/feed/event',
+              type: 'POST',
+              data: eventData,
+              success: function(data){
+                  $("#dataById").html(data.name);
+              }
+          });
+
+      } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+      }
+  });
+}
+
+function loadOneEventCreate(data) {
+  console.log(data);
+  console.log("location info lat: " + data.location.latitude);
+  console.log("location info long: " + data.location.longitude);
+  marker = new google.maps.Marker({
+      position: new google.maps.LatLng(data.location.latitude, data.location.longitude),
+      map: map,
+      title: data.name
+  });
+  google.maps.event.addListener(marker, 'click', clickEvent);
+  google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
+  var contentString = '<div id="content">' +
+      '<div id="siteNotice">' +
+      '</div>' +
+      '<h1 id="firstHeading" class="firstHeading">'+ data.name +'</h1>' +
+      '<div id="bodyContent">' +
+      '<p><b>Details: </b><br>' +
+      '<b>Description: ' + data.permalink + '<br>' +
+      'Time: ' + data.time_start + '<br>' +
+      '</b></p><br>' +
+      '</div>';
+
+  infowindow = new google.maps.InfoWindow({
+      content: contentString
+  });
 }
 
 // Initializes Map

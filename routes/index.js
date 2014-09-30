@@ -43,7 +43,6 @@ module.exports = exports = function(app, db) {
       var eventName = req.params.eventname;
       dbEvents.getEventsByName(db, eventName, function(err, msg) {
         if(err) console.log(err);
-        console.log("Answer: " + JSON.stringify(msg));
         res.send(JSON.stringify(msg), 200);
         //res.end();
       })
