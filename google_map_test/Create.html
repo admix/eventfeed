@@ -3,35 +3,39 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script type="text/javascript" src="js/map.js"></script>
 </head>
 <body>
-<form name="create_event" action="something.html" method="get">
+
     <TABLE>
         <TR>
             <TD>Event Name:</TD>
             <TD>
-                <INPUT TYPE="TEXT" NAME="e_name" SIZE="15">
+                <INPUT TYPE="TEXT" id="e_name" NAME="e_name" SIZE="15">
             </TD>
         </TR>
         <TR>
             <TD>Category:</TD>
-            <TD><INPUT TYPE="TEXT" NAME="e_category" SIZE="15"></TD>
+            <TD><INPUT TYPE="TEXT" id="e_c_name" NAME="e_category" SIZE="15"></TD>
         </TR>
         <TR>
             <TD>Date:</TD>
             <TD><INPUT TYPE="date" NAME="e_date" SIZE="12"></TD>
         </TR>
         <TR>
+            <TD>Address:</TD>
+            <TD><INPUT id="address" TYPE="text" NAME="address" SIZE="20"></TD>
+        </TR>
+        <TR>
             <TD>Time:</TD>
-            <TD><INPUT TYPE="time" NAME="e_time" SIZE="20"></TD>
+            <TD><INPUT TYPE="time" id="time" NAME="e_time" SIZE="20"></TD>
         </TR>
         <TR>
             <TD>Description: </TD>
-            <TD><INPUT TYPE="text" NAME="e_description" SIZE="15"></TD>
+            <TD><INPUT TYPE="text" id="description" NAME="e_description" SIZE="15"></TD>
         </TR>
 
     </TABLE>
-    <P><INPUT TYPE="SUBMIT" VALUE="Create Event" NAME="create_event"></P>
-</FORM>
+<P><INPUT TYPE="button" VALUE="Create Event" id="create" onclick="CreateEvent()" NAME="create_event"></P>
 </body>
 </html>
