@@ -3,6 +3,7 @@
  */
 var map;
 var marker;
+var markersArray = [];
 var infowindow;
 var mystartloc;
 var geocoder;
@@ -52,6 +53,7 @@ function loadOneEvent(data) {
       title: data[i].name,
       icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
   });
+  markersArray.push(marker);
   google.maps.event.addListener(marker, 'click', clickEvent);
   google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
   var contentString = '<div id="content">' +
@@ -72,6 +74,7 @@ function loadOneEvent(data) {
 function loadEvents(events) {
     var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7200, -79.4000]; // for testing
     console.log("loading events on map!");
+    clearMap();
     for (var k in events) {
         marker = new google.maps.Marker({
             position: new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude),
@@ -79,6 +82,7 @@ function loadEvents(events) {
             title: events[k].name,
             icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
         });
+        markersArray.push(marker);
         google.maps.event.addListener(marker, 'click', clickEvent);
         google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
         var contentString = '<div id="content">' +
@@ -178,6 +182,7 @@ function loadOneEventCreate(data) {
       map: map,
       title: data.name
   });
+  markersArray.push(marker);
   google.maps.event.addListener(marker, 'click', clickEvent);
   google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
   var contentString = '<div id="content">' +
@@ -194,6 +199,13 @@ function loadOneEventCreate(data) {
   infowindow = new google.maps.InfoWindow({
       content: contentString
   });
+}
+
+function clearMap() {
+  for (var i = 0; i < markersArray.length; i++ ) {
+    markersArray[i].setMap(null);
+  }
+  markersArray.length = 0;
 }
 
 // Initializes Map
