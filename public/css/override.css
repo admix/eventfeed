@@ -1,0 +1,8 @@
+.p-10 {
+  min-height: 600px;
+  max-height: 1000px;
+  height: 100%;
+}
+#map-canvas img{
+  max-width: none;
+}

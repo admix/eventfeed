@@ -27,7 +27,6 @@ MongoClient.connect('mongodb://localhost:27017/eventfeed', function(err, db) {
   app.engine('html', cons.swig);
   app.set('view engine', 'html');
   app.use(compression()); //use compression
-  app.use(express.static(__dirname + '/views'));
   app.engine('html', require('ejs').renderFile);
   // Express middleware to populate 'req.cookies' so we can access cookies
   app.use(express.cookieParser());

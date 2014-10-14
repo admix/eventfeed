@@ -15,6 +15,9 @@ module.exports = exports = function(app, db) {
     app.get('/', function(req, res) {
       res.render("main.html");
     });
+    app.get('/home', function(req, res) {
+      res.render("index.html");
+    });
 
     //GET all the events (some limit/data passed in with lat/long)
     app.get('/feed/events', function(req, res) {

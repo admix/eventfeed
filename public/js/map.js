@@ -209,4 +209,5 @@ function clearMap() {
 }
 
 // Initializes Map
+console.log("Creating map");
 google.maps.event.addDomListener(window, 'load', initialize);
