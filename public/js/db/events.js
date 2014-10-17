@@ -40,14 +40,14 @@ module.exports = {
         callback(null, doc);
       });
     }, //adding new event
-    saveNewEvent: function(db, event, callback) {
+    saveNewEvent: function(db, event, userEmail, callback) {
       "use strict";
       var events = db.collection("events");
       console.log("Processing new event");
 
       getNextSequence(db, "eventid", function(err, msg) {
         event.id = msg.seq;
-
+        event.eventCreatedBy = userEmail;
         console.log("ID to be saved: " + event.id);
         events.insert(event, function(err, doc) {
           if(err) throw err;
