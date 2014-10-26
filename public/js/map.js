@@ -43,6 +43,26 @@ function search(){
     });
 }
 
+// Get events by username
+function myEvents(){
+    //e.preventDefault();
+    $.ajax({
+        url: localhost + '/feed/eventsby/user',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+          console.log(data);
+          console.log("Successful GET.");
+          var events = [];
+          data.forEach(function(e) {
+            events.push(e);
+          });
+          console.log(events);
+          loadEvents(data);
+        }
+    });
+}
+
 // Loading only one event on a map
 function loadOneEvent(data) {
   var locations = [43.7000, -79.4000];
@@ -50,8 +70,8 @@ function loadOneEvent(data) {
   marker = new google.maps.Marker({
       position: new google.maps.LatLng(locations[0], locations[1]),
       map: map,
-      title: data[i].name,
-      icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
+      title: data[i].name
+      //icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
   });
   markersArray.push(marker);
   google.maps.event.addListener(marker, 'click', clickEvent);
@@ -79,8 +99,7 @@ function loadEvents(events) {
         marker = new google.maps.Marker({
             position: new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude),
             map: map,
-            title: events[k].name,
-            icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
+            title: events[k].name
         });
         markersArray.push(marker);
         google.maps.event.addListener(marker, 'click', clickEvent);

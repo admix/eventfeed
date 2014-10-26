@@ -39,6 +39,30 @@ module.exports = {
         console.log(doc);
         callback(null, doc);
       });
+    }, //get events for specific user
+    getEventsForUser: function(db, userId, callback) {
+      "use strict";
+      var events = db.collection("events");
+      events.find({'users.username':userId}).toArray(function(err, doc) {
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        }
+        console.log(doc);
+        callback(null, doc);
+      });
+    }, //get events of logged in user
+    getEventsForLoggedInUser: function(db, userEmail, callback) {
+      "use strict";
+      var events = db.collection("events");
+      console.log("in getting by logged in user");
+      events.find({'eventCreatedBy':userEmail}).toArray(function(err, doc) {
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        }
+        callback(null, doc);
+      });
     }, //adding new event
     saveNewEvent: function(db, event, userEmail, callback) {
       "use strict";

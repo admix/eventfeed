@@ -7,8 +7,13 @@ var http = require("http"),
     bodyParser = require('body-parser'),
     cons = require("consolidate"),
     swig = require("swig"),
-    validator = require("validator");
-    compression = require('compression');
+    validator = require("validator"),
+    compression = require('compression'),
+    mongoose = require('mongoose'),
+    passport = require('passport'),
+    flash    = require('connect-flash');
+
+	require('./config/passport')(passport); // pass passport for configuration
 
 habitat.load();
 var env = new habitat(),
@@ -27,6 +32,7 @@ MongoClient.connect('mongodb://localhost:27017/eventfeed', function(err, db) {
   app.engine('html', cons.swig);
   app.set('view engine', 'html');
   app.use(compression()); //use compression
+  app.use(express.static(__dirname + '/public'));
   app.engine('html', require('ejs').renderFile);
   // Express middleware to populate 'req.cookies' so we can access cookies
   app.use(express.cookieParser());
@@ -38,7 +44,13 @@ MongoClient.connect('mongodb://localhost:27017/eventfeed', function(err, db) {
 
   app.use(express.static(__dirname + "/public"));
 
-  routes(app, db);
+  // required for passport
+  app.use(express.session({ secret: 'MySesssion' })); // session secret
+  app.use(passport.initialize());
+  app.use(passport.session()); // persistent login sessions
+  app.use(flash()); // use connect-flash for flash messages stored in session
+
+  routes(app, db, passport);
 
   app.use(function(err, req, res, next) {
     // if error occurs
