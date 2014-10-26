@@ -1,22 +1,46 @@
 /**
  * Created by Owner on 9/22/2014.
  */
+var directionsService = new google.maps.DirectionsService();
+var pos;
+var directionsDisplay;
 var map;
 var marker;
 var markersArray = [];
 var infowindow;
 var mystartloc;
 var geocoder;
+var event_address;
 var eventfeed = "http://eventfeed.me",
     localhost = "http://localhost:8080";
 
 function initialize() {
+    directionsDisplay = new google.maps.DirectionsRenderer();
     geocoder = new google.maps.Geocoder();
-    mystartloc = new google.maps.LatLng(43.7000,-79.4000);
-    var mapOptions = {
-        zoom: 12,
-        center: mystartloc
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            pos = new google.maps.LatLng(position.coords.latitude,
+                position.coords.longitude);
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: pos,
+                content: 'Im Here.'
+            });
+            map.setCenter(pos);
+        }, function() {
+            handleNoGeolocation(true);
+        });
+    } else {
+		console.log("no pos");
+        mystartloc = new google.maps.LatLng(43.7000,-79.4000);
+		map.setCenter(mystartloc);
+        handleNoGeolocation(false);
     }
+	var mapOptions = {
+            zoom: 12,
+            center: mystartloc
+        }
+    directionsDisplay.setMap(map);
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 }
 function getEvents(){
@@ -83,11 +107,27 @@ function loadOneEvent(data) {
       '<div id="bodyContent">' +
       '<p><b>Party details</b>' +
       '</div>' +
+	  '<div><input type="button" onclick="calcRoute()" value="Directions"></div>' +
       '</div>';
 
   infowindow = new google.maps.InfoWindow({
       content: contentString
   });
+}
+// Directions calculations
+function calcRoute() {
+    var start = pos;
+    var end = event_address;
+    var request = {
+        origin:start,
+        destination:end,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+        }
+    });
 }
 
 // Loading array of the events on a map
@@ -113,6 +153,7 @@ function loadEvents(events) {
             '<b>Description: ' + events[k].permalink + '<br>' +
             'Start: ' + events[k].time_start + '<br>' +
             'End: ' + events[k].time_end + '</b></p><br>' +
+			'<div><input type="button" onclick="calcRoute()" value="Directions"></div>' +
             '</div>';
 
         infowindow = new google.maps.InfoWindow({
@@ -202,7 +243,10 @@ function loadOneEventCreate(data) {
       title: data.name
   });
   markersArray.push(marker);
-  google.maps.event.addListener(marker, 'click', clickEvent);
+  google.maps.event.addListener(marker, 'click', function() {
+        event_address = marker.getPosition();
+        infowindow.open(map,marker);
+  });
   google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
   var contentString = '<div id="content">' +
       '<div id="siteNotice">' +
@@ -213,6 +257,7 @@ function loadOneEventCreate(data) {
       '<b>Description: ' + data.permalink + '<br>' +
       'Time: ' + data.time_start + '<br>' +
       '</b></p><br>' +
+      '<div><input type="button" onclick="calcRoute()" value="Directions"></div>' +
       '</div>';
 
   infowindow = new google.maps.InfoWindow({
