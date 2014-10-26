@@ -55,7 +55,7 @@
 			js.src = "//connect.facebook.net/en_US/sdk.js";
 			fjs.parentNode.insertBefore(js, fjs);
 		   }(document, 'script', 'facebook-jssdk'));
-        </script> 
+        </script>
         <header id="header" class="media">
             <a href="" id="menu-toggle"></a>
             <a class="logo pull-left" href="index.html">EventFeed.me</a>
@@ -73,7 +73,7 @@
                     <div class="media-body">
                       <!-- <form class="form-inline"> -->
                       <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-5">
                             <input type="text" class="form-control m-b-10" id="searchtxt" placeholder="Enter event name">
                         </div>
                         <div class="col-lg-1">
@@ -82,11 +82,17 @@
                         <div class="col-lg-2">
                           <a data-toggle="modal" href="#modalCreate" class="btn btn-md">Create Event</a>
                         </div>
-						 <div class="col-lg-1">
+						            <div class="col-lg-1">
                           <a data-toggle="modal" href="#modalLogin" class="btn btn-md">Login</a>
                         </div>
-						  <div class="col-lg-2">
+                        <div class="col-lg-1">
+                          <button type="button" class="btn btn-md" onclick="reg();">Reg</button>
+                        </div>
+						            <!-- <div class="col-lg-2">
                           <a data-toggle="modal" href="#modalSign-up" class="btn btn-md">Sign-up</a>
+                        </div> -->
+                        <div class="col-lg-2">
+                          <button type="button" class="btn btn-md" onclick="myEvents();">My Events</button>
                         </div>
                       </div>
                     </div>
@@ -171,10 +177,10 @@
 
 								<button type="submit" class="btn btn-warning btn-lg">Login</button>
 							</form>
-		  	  
+
 							<h4>Login with Facebook</h4>
 							<a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook</a>
-       
+
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -183,7 +189,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div id="modalSign-up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -193,7 +199,7 @@
 					</div>
 				    <div class="modal-body">
 						<h4>Sign-up</h4>
-	
+
 						<form action="/signup" method="post">
 							<div class="form-group">
 								<label>First Name</label>
@@ -221,10 +227,10 @@
 							</div>
 							<button type="submit" class="btn btn-warning btn-lg">Signup</button>
 						</form>
-		  	  
+
 						<h4>Sign-up with Facebook</h4>
 						<a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook</a>
-       
+
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -1,6 +1,6 @@
 var ErrorHandler = require('./error').errorHandler;
-var dbEvents = require('../public/js/db/events');
-var dbUsers = require('../public/js/db/users');
+var dbEvents = require('../app/db/events');
+var dbUsers = require('../app/db/users');
 module.exports = exports = function(app, db, passport) {
 
     // Redirection from www to non-www
@@ -18,33 +18,36 @@ module.exports = exports = function(app, db, passport) {
     app.get('/home', function(req, res) {
       res.render("index.html");
     });
-	
-	// =====================================
-	// FACEBOOK ROUTES =====================
-	// =====================================
-	// route for face book authentication and login
-	app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
-	// handle the callback after face book has authenticated the user
-	app.get('/auth/facebook/callback',
-		passport.authenticate('facebook', {
-			successRedirect : '/',   // Need to discuss what happens after user logs in
-			failureRedirect : '/'
-		}));
-		
-	// process the login form
-	app.post('/local-login', passport.authenticate('local-login', {
-		successRedirect : '/', // redirect to the secure profile section
-		failureRedirect : '/', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
-	}));
+  	// =====================================
+  	// FACEBOOK ROUTES =====================
+  	// =====================================
+  	// route for face book authentication and login
+  	app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }), function(req, res) {
+      console.log("Facebook authentication");
+      res.send("hello");
+    });
 
-	// process the signup form
-	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : '/', // redirect to the secure profile section
-		failureRedirect : '/', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
-	}));
+  	// handle the callback after face book has authenticated the user
+  	app.get('/auth/facebook/callback',
+  		passport.authenticate('facebook', {
+  			successRedirect : '/',   // Need to discuss what happens after user logs in
+  			failureRedirect : '/'
+  		}));
+
+  	// process the login form
+  	app.post('/local-login', passport.authenticate('local-login', {
+  		successRedirect : '/', // redirect to the secure profile section
+  		failureRedirect : '/', // redirect back to the signup page if there is an error
+  		failureFlash : true // allow flash messages
+  	}));
+
+  	// process the signup form
+  	app.post('/signup', passport.authenticate('local-signup', {
+  		successRedirect : '/', // redirect to the secure profile section
+  		failureRedirect : '/', // redirect back to the signup page if there is an error
+  		failureFlash : true // allow flash messages
+  	}));
 
     //GET all the events (some limit/data passed in with lat/long)
     app.get('/feed/events', function(req, res) {
@@ -80,11 +83,28 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET all events for specified user (username/id provided)
-    app.get('/feed/events/userID', function (req, res) {
-      dbEvents.getEventsForUser(db, userID, function(err, msg) {
+    app.get('/feed/events/user/:userID', function (req, res) {
+      var userName = req.params.userID;
+      console.log("in GET by user");
+      dbEvents.getEventsForUser(db, userName, function(err, msg) {
         if(err) throw err;
         res.send(msg, 200);
         res.end();
+      })
+    });
+
+    //GET all events for specified user (username/id provided)
+    app.get('/feed/eventsby/user', function (req, res) {
+      console.log("in GET by logged in user");
+      if(req.user.facebook.email) {
+        userEmail = req.user.facebook.email;
+      } else if(req.user.local.email) {
+        userEmail = req.user.local.email;
+      }
+      dbEvents.getEventsForLoggedInUser(db, userEmail, function(err, msg) {
+        if(err) throw err;
+        res.send(JSON.stringify(msg), 200);
+        //res.end();
       })
     });
 
@@ -102,12 +122,13 @@ module.exports = exports = function(app, db, passport) {
     //POST save new event (data will store user-who-created-id and the event will be stored to User's-created document as well)
     app.post('/feed/event', function (req, res) {
       var eventData = req.body;
-	  var userData;
-	  if(req.user.facebook.email)
-	     userData = req.user.facebook.email;
-	  else if(req.user.local.email)	 
-	     userData = req.user.local.email;
-		 
+  	  var userData;
+  	  if(req.user.facebook.email) {
+        userData = req.user.facebook.email;
+      } else if(req.user.local.email) {
+        userData = req.user.local.email;
+      }
+
       console.log("data received: " + eventData + " User email passed by Session: " + userData );
       dbEvents.saveNewEvent(db, eventData, userData, function(err, msg) {
         if(err) throw err;
@@ -234,7 +255,3 @@ return next();
 // if they aren't redirect them to the home page
 res.redirect('/');
 }
-
-
-
-
