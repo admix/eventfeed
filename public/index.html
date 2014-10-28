@@ -11,15 +11,15 @@
         <title>Event Feed</title>
 
         <!-- CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/animate.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/form.css" rel="stylesheet">
-        <link href="css/calendar.css" rel="stylesheet">
-        <link href="css/style.css" rel="stylesheet">
-        <link href="css/icons.css" rel="stylesheet">
-        <link href="css/generics.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/jquery.slidepanel.css">
+        <link href="/css/vendors/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/vendors/animate.min.css" rel="stylesheet">
+        <link href="/css/vendors/font-awesome.min.css" rel="stylesheet">
+        <link href="/css/vendors/form.css" rel="stylesheet">
+        <link href="/css/vendors/calendar.css" rel="stylesheet">
+        <link href="/css/vendors/style.css" rel="stylesheet">
+        <link href="/css/vendors/icons.css" rel="stylesheet">
+        <link href="/css/vendors/generics.css" rel="stylesheet">
+        <link href="/css/vendors/jquery.slidepanel.css" rel="stylesheet" type="text/css">
         <style type="text/css">
             html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
             #search-panel {
@@ -33,7 +33,7 @@
                 border: 1px solid #999;
             }
         </style>
-        <link rel="stylesheet" type="text/css" href="css/override.css">
+        <link href="/css/override.css" rel="stylesheet" type="text/css">
         <script type="text/javascript"
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZvJFK0w-S8DisqYbld0upPVmjh67r0NQ">
         </script>
@@ -606,44 +606,47 @@
 
         <!-- Javascript Libraries -->
         <!-- jQuery -->
-        <script src="js/jquery.min.js"></script> <!-- jQuery Library -->
-        <script src="js/jquery-ui.min.js"></script> <!-- jQuery UI -->
-        <script src="js/jquery.easing.1.3.js"></script> <!-- jQuery Easing - Requirred for Lightbox + Pie Charts-->
+        <script src="/js/vendors/jquery.min.js"></script> <!-- jQuery Library -->
+        <script src="/js/vendors/jquery-ui.min.js"></script> <!-- jQuery UI -->
+        <script src="/js/vendors/jquery.easing.1.3.js"></script> <!-- jQuery Easing - Requirred for Lightbox + Pie Charts-->
 
         <!-- Bootstrap -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="/js/vendors/bootstrap.min.js"></script>
 
         <!-- Charts -->
-        <script src="js/charts/jquery.flot.js"></script> <!-- Flot Main -->
-        <script src="js/charts/jquery.flot.time.js"></script> <!-- Flot sub -->
-        <script src="js/charts/jquery.flot.animator.min.js"></script> <!-- Flot sub -->
-        <script src="js/charts/jquery.flot.resize.min.js"></script> <!-- Flot sub - for repaint when resizing the screen -->
+        <script src="/js/vendors/charts/jquery.flot.js"></script> <!-- Flot Main -->
+        <script src="/js/vendors/charts/jquery.flot.time.js"></script> <!-- Flot sub -->
+        <script src="/js/vendors/charts/jquery.flot.animator.min.js"></script> <!-- Flot sub -->
+        <script src="/js/vendors/charts/jquery.flot.resize.min.js"></script> <!-- Flot sub - for repaint when resizing the screen -->
 
-        <script src="js/sparkline.min.js"></script> <!-- Sparkline - Tiny charts -->
-        <script src="js/easypiechart.js"></script> <!-- EasyPieChart - Animated Pie Charts -->
-        <script src="js/charts.js"></script> <!-- All the above chart related functions -->
+        <script src="/js/vendors/sparkline.min.js"></script> <!-- Sparkline - Tiny charts -->
+        <script src="/js/vendors/easypiechart.js"></script> <!-- EasyPieChart - Animated Pie Charts -->
+        <script src="/js/vendors/charts.js"></script> <!-- All the above chart related functions -->
 
         <!-- Map -->
-        <script src="js/maps/jvectormap.min.js"></script> <!-- jVectorMap main library -->
-        <script src="js/maps/usa.js"></script> <!-- USA Map for jVectorMap -->
+        <script src="/js/vendors/maps/jvectormap.min.js"></script> <!-- jVectorMap main library -->
+        <script src="/js/vendors/maps/usa.js"></script> <!-- USA Map for jVectorMap -->
 
         <!--  Form Related -->
-        <script src="js/icheck.js"></script> <!-- Custom Checkbox + Radio -->
+        <script src="/js/vendors/icheck.js"></script> <!-- Custom Checkbox + Radio -->
 
         <!-- UX -->
-        <script src="js/scroll.min.js"></script> <!-- Custom Scrollbar -->
+        <script src="/js/vendors/scroll.min.js"></script> <!-- Custom Scrollbar -->
 
         <!-- Other -->
-        <script src="js/calendar.min.js"></script> <!-- Calendar -->
-        <script src="js/feeds.min.js"></script> <!-- News Feeds -->
+        <script src="/js/vendors/calendar.min.js"></script> <!-- Calendar -->
+        <script src="/js/vendors/feeds.min.js"></script> <!-- News Feeds -->
 
+
+        <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> <!-- google map API Places -->
+        <script src="/js/vendors/jquery.geocomplete.min.js"></script>
 
         <!-- All JS functions -->
-        <script src="js/functions.js"></script>
-        <script type="text/javascript" src="js/jquery.slidepanel.js"></script>
-        <script type="text/javascript" src="js/createEvent.js"></script>
-        <script type="text/javascript" src="js/map.js"></script>
-        <script type="text/javascript" src="js/utils.js"></script>
+        <script src="/js/vendors/functions.js"></script>
+        <script type="text/javascript" src="/js/vendors/jquery.slidepanel.js"></script>
+        <script type="text/javascript" src="/js/createEvent.js"></script>
+        <script type="text/javascript" src="/js/map.js"></script>
+        <script type="text/javascript" src="/js/utils.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
                 $('[data-slidepanel]').slidepanel({

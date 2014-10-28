@@ -5,4 +5,9 @@
 }
 #map-canvas img{
   max-width: none;
+  color: #000 !important;
+}
+
+.pac-container {
+  z-index: 9999;
 }

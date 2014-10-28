@@ -5,15 +5,15 @@
    color: rgba(255,255,255,0.7) !important;
 }
 
-:-moz-placeholder { 
+:-moz-placeholder {
    color: rgba(255,255,255,0.7) !important;
 }
 
-::-moz-placeholder {  
+::-moz-placeholder {
    color: rgba(255,255,255,0.7) !important;
 }
 
-:-ms-input-placeholder {  
+:-ms-input-placeholder {
     color: rgba(255,255,255,0.7) !important;
 }
 
@@ -73,10 +73,10 @@ select:not([multiple]){
    text-indent: 1px;
    text-overflow: '';
    line-height: normal !important;
-   background-image: url(../img/select-bg.png);
+   background-image: url(/img/select-bg.png);
    background-repeat: no-repeat;
    background-position: right center;
-   color: 
+   color:
 }
 
 .ie9 select:not([multiple]){
@@ -230,7 +230,7 @@ input[type="checkbox"], input[type="radio"]{
     border-top: 0;
     background: rgba(255,255,255,0.85);
     margin-top: -1px;
-     
+
 }
 .chzn-container.chzn-with-drop .chzn-drop {
      left: 0;
@@ -351,7 +351,7 @@ input[type="checkbox"], input[type="radio"]{
 }
 
 .chzn-container .chzn-results li:hover {
-    background: #fff !important;    
+    background: #fff !important;
 }
 
 .chzn-container .chzn-results li.active-result {
@@ -525,7 +525,7 @@ input[type="checkbox"], input[type="radio"]{
 
 .bootstrap-select.btn-group .dropdown-menu li small {
     padding-left: 0.5em;
-}    
+}
 
 .bootstrap-select.btn-group .dropdown-menu li:not(.disabled) > a:hover small,
 .bootstrap-select.btn-group .dropdown-menu li:not(.disabled) > a:focus small {
@@ -821,7 +821,7 @@ input[type="checkbox"], input[type="radio"]{
 .colorpicker-saturation {
 	width: 100px;
 	height: 100px;
-	background-image: url(../img/color-picker/saturation.png);
+	background-image: url(/img/color-picker/saturation.png);
 	cursor: crosshair;
 	float: left;
 }
@@ -861,10 +861,10 @@ input[type="checkbox"], input[type="radio"]{
 	margin-top: -1px;
 }
 .colorpicker-hue {
-	background-image: url(../img/color-picker/hue.png);
+	background-image: url(/img/color-picker/hue.png);
 }
 .colorpicker-alpha {
-	background-image: url(../img/color-picker/alpha.png);
+	background-image: url(/img/color-picker/alpha.png);
 	display: none;
 }
 .colorpicker {
@@ -888,7 +888,7 @@ input[type="checkbox"], input[type="radio"]{
 	height: 10px;
 	margin-top: 5px;
 	clear: both;
-	background-image: url(../img/color-picker/alpha.png);
+	background-image: url(/img/color-picker/alpha.png);
 	background-position: 0 100%;
 }
 .colorpicker-color div {
@@ -1302,7 +1302,7 @@ div.spinedit span:hover {
 }
 
 /* --------------------------------------------------------
-    Form Validation  
+    Form Validation
 -----------------------------------------------------------*/
 .formError {
      z-index: 990;
@@ -1693,7 +1693,7 @@ div.spinedit span:hover {
     text-align: right;
 }
 .note-editor .note-editable {
-    padding: 10px; 
+    padding: 10px;
     overflow: auto;
     outline: 0;
 }
@@ -1747,13 +1747,13 @@ div.spinedit span:hover {
 
 
 .note-editor .btn-group .btn+.btn, .note-editor .btn-group .btn+.btn-group, .note-editor .btn-group .btn-group+.btn, .note-editor .btn-group .btn-group+.btn-group,
-.md-editor .btn-group .btn+.btn, .md-editor .btn-group .btn+.btn-group, .md-editor .btn-group .btn-group+.btn, .md-editor .btn-group .btn-group+.btn-group{ margin-left: 0; } 
+.md-editor .btn-group .btn+.btn, .md-editor .btn-group .btn+.btn-group, .md-editor .btn-group .btn-group+.btn, .md-editor .btn-group .btn-group+.btn-group{ margin-left: 0; }
 
 .note-editor .note-color-palette div .note-color-btn:hover { border: 1px solid #fff }
-.note-editor .note-toolbar .btn, .md-editor .md-header .btn { 
-	background: none !important; 
-	font-size: 15px; 
-	padding: 0 4px 2px; 
+.note-editor .note-toolbar .btn, .md-editor .md-header .btn {
+	background: none !important;
+	font-size: 15px;
+	padding: 0 4px 2px;
 	color: #fff;
 	border: 0;
 	opacity: 0.7;

@@ -1,22 +1,23 @@
 var ErrorHandler = require('./error').errorHandler;
 var dbEvents = require('../app/db/events');
 var dbUsers = require('../app/db/users');
+
 module.exports = exports = function(app, db, passport) {
 
     // Redirection from www to non-www
-    app.get('/*', function(req, res, next) {
-      if (req.headers.host.match(/^www/) !== null ) {
-        res.redirect(301, 'http://' + req.headers.host.replace(/^www\./, '') + req.url);
-      } else {
-        next();
-      }
-    })
+    // app.get('/*', function(req, res, next) {
+    //   if (req.headers.host.match(/^www/) !== null ) {
+    //     res.redirect(301, 'http://' + req.headers.host.replace(/^www\./, '') + req.url);
+    //   } else {
+    //     next();
+    //   }
+    // })
     // Home page
     app.get('/', function(req, res) {
-      res.render("main.html");
+      res.render("index.html");
     });
     app.get('/home', function(req, res) {
-      res.render("index.html");
+      res.render("index");
     });
 
   	// =====================================
@@ -93,9 +94,8 @@ module.exports = exports = function(app, db, passport) {
       })
     });
 
-    //GET all events for specified user (username/id provided)
-    app.get('/feed/eventsby/user', function (req, res) {
-      console.log("in GET by logged in user");
+    //GET all events for logged in user (username/id provided)
+    app.get('/feed/events/myevents', loggedIn, function (req, res) {
       if(req.user.facebook.email) {
         userEmail = req.user.facebook.email;
       } else if(req.user.local.email) {
@@ -120,7 +120,7 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //POST save new event (data will store user-who-created-id and the event will be stored to User's-created document as well)
-    app.post('/feed/event', function (req, res) {
+    app.post('/feed/event', loggedIn, function (req, res) {
       var eventData = req.body;
   	  var userData;
   	  if(req.user.facebook.email) {
@@ -249,9 +249,23 @@ module.exports = exports = function(app, db, passport) {
 }
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
-// if user is authenticated in the session, carry on
-if (req.isAuthenticated())
-return next();
-// if they aren't redirect them to the home page
-res.redirect('/');
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()){
+    return next();
+  }
+  // if they aren't redirect them to the home page
+  console.log("is logged in. not.")
+  res.redirect('/');
+}
+
+function loggedIn(req, res, next) {
+    if(req.user != undefined) {
+      if(req.user.facebook.username) {
+        console.log(req.username);
+        next();
+      }
+    } else {
+      console.log("not logged in");
+      res.redirect('/');
+    }
 }

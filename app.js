@@ -10,6 +10,7 @@ var http = require("http"),
     validator = require("validator"),
     compression = require('compression'),
     mongoose = require('mongoose'),
+    morgan   = require('morgan'),
     passport = require('passport'),
     flash    = require('connect-flash');
 
@@ -38,11 +39,10 @@ MongoClient.connect('mongodb://localhost:27017/eventfeed', function(err, db) {
   app.use(express.cookieParser());
 
   // Express middleware to populate 'req.body' so we can access POST variables
+  app.use(morgan('dev')); // log every request to the console
   app.use(express.bodyParser());
   app.use(express.json());
   app.use(express.urlencoded());
-
-  app.use(express.static(__dirname + "/public"));
 
   // required for passport
   app.use(express.session({ secret: 'MySesssion' })); // session secret

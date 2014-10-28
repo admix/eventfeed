@@ -10,30 +10,30 @@
  * positions etc.
  */
 
-body.ps-active 
+body.ps-active
 {
 	-webkit-text-size-adjust: none;
 	overflow: hidden;
 }
-body.ps-active * 
-{ 
-	-webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+body.ps-active *
+{
+	-webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
-body.ps-active *:focus 
-{ 
-	outline: 0; 
+body.ps-active *:focus
+{
+	outline: 0;
 }
 
 
 /* Document overlay */
-div.ps-document-overlay 
+div.ps-document-overlay
 {
 	background: #000;
 }
 
 
 /* Viewport */
-div.ps-viewport 
+div.ps-viewport
 {
 	background: #000;
 	cursor: pointer;
@@ -47,21 +47,21 @@ div.ps-zoom-pan-rotate{
 
 
 /* Slider */
-div.ps-slider-item-loading 
-{ 
-	background: url(../loadinfo.gif) no-repeat center center; 
+div.ps-slider-item-loading
+{
+	background: url(/loadinfo.gif) no-repeat center center; 
 }
 
 /* Caption */
 div.ps-caption
-{ 
+{
 	background: #000000;
 	color: #ffffff;
 	text-align: center;
 }
 
 div.ps-caption-bottom
-{ 
+{
 	border-top: 1px solid #42403f;
 	border-bottom: none;
 }
@@ -74,7 +74,7 @@ div.ps-caption-content
 
 /* Toolbar */
 div.ps-toolbar
-{ 
+{
 	background: #000000;
 	color: #ffffff;
 	text-align: center;
@@ -83,7 +83,7 @@ div.ps-toolbar
 	table-layout: fixed;
 }
 
-div.ps-toolbar-top 
+div.ps-toolbar-top
 {
 	border-bottom: 1px solid #42403f;
 	border-top: none;
@@ -100,7 +100,7 @@ div.ps-toolbar div div.ps-toolbar-content
 	width: 44px;
 	height: 44px;
 	margin: 0 auto 0;
-	background-image: url(../img/photoswipe-icons.png);
+	background-image: url(/img/photoswipe-icons.png);
 	background-repeat: no-repeat;
 }
 
@@ -190,6 +190,6 @@ div.gallery-item > a:hover span {
 	div.ps-toolbar div div.ps-toolbar-content
 	{
 		-webkit-background-size: 176px 88px;
-		background-image: url(../img/photoswipe-icons@2x.png);
+		background-image: url(/img/photoswipe-icons@2x.png);
 	}
 }

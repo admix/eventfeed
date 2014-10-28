@@ -38,10 +38,11 @@ function initialize() {
     }
 	var mapOptions = {
             zoom: 12,
-            center: mystartloc
+            center: mystartloc,
+            scrollwheel: false
         }
-    directionsDisplay.setMap(map);
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    directionsDisplay.setMap(map);
 }
 function getEvents(){
     // Get the events from Json to objects events
@@ -71,7 +72,7 @@ function search(){
 function myEvents(){
     //e.preventDefault();
     $.ajax({
-        url: localhost + '/feed/eventsby/user',
+        url: localhost + '/feed/myevents',
         type: 'GET',
         dataType: 'json',
         success: function(data){
@@ -118,11 +119,13 @@ function loadOneEvent(data) {
 function calcRoute() {
     var start = pos;
     var end = event_address;
+    console.log("in calc route");
     var request = {
         origin:start,
         destination:end,
         travelMode: google.maps.TravelMode.DRIVING
     };
+
     directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
@@ -171,7 +174,19 @@ function mouseOverEvent(){
 function clickEvent(){
     map.setCenter(marker.getPosition());
     infowindow.open(map,marker);
+    event_address = marker.getPosition();
 }
+
+$("#address").geocomplete()
+  .bind("geocode:result", function(event, result){
+    $.log("Result: " + result.formatted_address);
+  })
+  .bind("geocode:error", function(event, status){
+    $.log("ERROR: " + status);
+  })
+  .bind("geocode:multiple", function(event, results){
+    $.log("Multiple: " + results.length + " results found");
+  });
 
 $("#createButton").click(function(e) {
 
@@ -224,6 +239,7 @@ function convertLatLong(eventData) {
               data: eventData,
               success: function(data){
                   $("#dataById").html(data.name);
+                  $("#modalCreate").modal("hide");
               }
           });
 
