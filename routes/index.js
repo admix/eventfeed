@@ -89,8 +89,9 @@ module.exports = exports = function(app, db, passport) {
       console.log("in GET by user");
       dbEvents.getEventsForUser(db, userName, function(err, msg) {
         if(err) throw err;
+        console.log(msg);
         res.send(msg, 200);
-        res.end();
+        //res.end();
       })
     });
 
@@ -104,6 +105,17 @@ module.exports = exports = function(app, db, passport) {
       dbEvents.getEventsForLoggedInUser(db, userEmail, function(err, msg) {
         if(err) throw err;
         res.send(JSON.stringify(msg), 200);
+        //res.end();
+      })
+    });
+
+    //GET all events user is hosting (username/id provided)
+    app.get('/feed/events/user/host/:userID', function (req, res) {
+      var hostId = req.params.userID;
+      console.log("hostid: " + hostId);
+      dbEvents.getEventsUserHost(db, hostId, function(err, msg) {
+        if(err) throw err;
+        res.send(msg, 200);
         //res.end();
       })
     });

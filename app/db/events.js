@@ -63,6 +63,18 @@ module.exports = {
         }
         callback(null, doc);
       });
+    },
+    getEventsUserHost: function(db, hostId, callback) {
+      "use strict";
+      var events = db.collection("events");
+      console.log("in getting events user is hosting");
+      events.find({'createdByUsername':hostId}).toArray(function(err, doc) {
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        }
+        callback(null, doc);
+      });
     }, //adding new event
     saveNewEvent: function(db, event, userEmail, callback) {
       "use strict";

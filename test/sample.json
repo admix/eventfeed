@@ -1,0 +1,27 @@
+[
+    {
+        "_id": "542b1f70cbacd6e7332c4448",
+        "category": "education",
+        "createdByUsername": "jevon",
+        "date": "12/11/2014",
+        "description": "project class",
+        "id": 21,
+        "location": {
+            "address": "10 Dundas E., Toronto, Ontario, Canada",
+            "latitude": "43.65696579999999",
+            "longitude": "-79.38047890000001"
+        },
+        "name": "PRJ666",
+        "permalink": "PRJ666",
+        "private": "false",
+        "time": "14:00",
+        "users": [
+            {
+                "username": "admix"
+            },
+            {
+                "username": "ayaz"
+            }
+        ]
+    }
+]
