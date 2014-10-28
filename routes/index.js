@@ -96,7 +96,8 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET all events for logged in user (username/id provided)
-    app.get('/feed/events/myevents', loggedIn, function (req, res) {
+    app.get('/feed/myevents', function (req, res) {
+      console.log(req.user.facebook.email);
       if(req.user.facebook.email) {
         userEmail = req.user.facebook.email;
       } else if(req.user.local.email) {

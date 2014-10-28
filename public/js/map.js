@@ -71,6 +71,7 @@ function search(){
 // Get events by username
 function myEvents(){
     //e.preventDefault();
+    console.log("in myevents");
     $.ajax({
         url: localhost + '/feed/myevents',
         type: 'GET',
