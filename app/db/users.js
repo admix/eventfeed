@@ -14,11 +14,11 @@ module.exports = {
       });
 
     }, //getting user by ID
-    getUserById: function(db, userId, callback) {
+    getUserByUsername: function(db, userName, callback) {
       "use strict";
       var users = db.collection("users");
-      console.log("Getting user id: " + userId);
-      users.findOne({'id':parseInt(userId)}, function(err, doc) {
+      console.log("Getting usee by username: " + userName);
+      users.findOne({'facebook.username':userName},{"facebook.token":0,"facebook.id":0,"_id":0,"__v":0}, function(err, doc) {
         if(err) console.log(err.message);
         console.log(doc);
         callback(null, doc);

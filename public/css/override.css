@@ -11,3 +11,8 @@
 .pac-container {
   z-index: 9999;
 }
+
+.markerInfo {
+  color: #333 !important;
+  margin: 0px;
+}

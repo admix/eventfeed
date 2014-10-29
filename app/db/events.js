@@ -23,7 +23,7 @@ module.exports = {
           console.log(err);
           callback(null, "Not found!");
         } else {
-          //console.log(doc);
+          console.log("Event: " + doc);
           callback(null, doc);
         }
       });
@@ -52,18 +52,6 @@ module.exports = {
         callback(null, doc);
       });
     }, //get events of logged in user
-    getEventsForLoggedInUser: function(db, userEmail, callback) {
-      "use strict";
-      var events = db.collection("events");
-      console.log("in getting by logged in user");
-      events.find({'eventCreatedBy':userEmail}).toArray(function(err, doc) {
-        if(err || doc == null) {
-          console.log(err);
-          callback(null, "Not found!");
-        }
-        callback(null, doc);
-      });
-    },
     getEventsUserHost: function(db, hostId, callback) {
       "use strict";
       var events = db.collection("events");
@@ -76,14 +64,15 @@ module.exports = {
         callback(null, doc);
       });
     }, //adding new event
-    saveNewEvent: function(db, event, userEmail, callback) {
+    saveNewEvent: function(db, event, username, callback) {
       "use strict";
       var events = db.collection("events");
       console.log("Processing new event");
 
       getNextSequence(db, "eventid", function(err, msg) {
         event.id = msg.seq;
-        event.eventCreatedBy = userEmail;
+        event.createdByUsername = username;
+        event.users = [];
         console.log("ID to be saved: " + event.id);
         events.insert(event, function(err, doc) {
           if(err) throw err;
@@ -93,10 +82,19 @@ module.exports = {
         });
       });
     }, //adding new event for specific user
-    saveNewEventForUser: function(db, event, callback) {
+    registerForEvent: function(db, userData, eventId, callback) {
       "use strict";
       var events = db.collection("events");
       var users = db.collection("users");
+      console.log(userData + " is registering for " + eventId);
+      events.update({"id":parseInt(eventId)},{"$addToSet":{"users":{"username": userData}}}, function(err, doc) {
+        if(err) {
+          callback(null);
+        }
+        console.log("return: ");
+        console.log(doc);
+        callback(null, doc);
+      })
 
 
     }, //updating event by ID

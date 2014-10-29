@@ -52,7 +52,7 @@ module.exports = exports = function(app, db, passport) {
 
     //GET all the events (some limit/data passed in with lat/long)
     app.get('/feed/events', function(req, res) {
-      console.log("inside events endpoint");
+      console.log("inside get all events endpoint");
       dbEvents.getAllEvents(db, function(err, msg) {
         if(err) throw err;
         res.send(JSON.stringify(msg), 200);
@@ -62,11 +62,11 @@ module.exports = exports = function(app, db, passport) {
 
     //GET event by ID
     app.get('/feed/events/:id', function (req, res) {
+      console.log("inside get event by id endpoint");
       var eventId = req.params.id;
       dbEvents.getEventById(db, eventId, function(err, msg) {
         if(err) console.log(err);
         res.send(msg, 200);
-        res.end();
       })
 
     });
@@ -84,8 +84,8 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET all events for specified user (username/id provided)
-    app.get('/feed/events/user/:userID', function (req, res) {
-      var userName = req.params.userID;
+    app.get('/feed/events/user/:id', function (req, res) {
+      var userName = req.params.id;
       console.log("in GET by user");
       dbEvents.getEventsForUser(db, userName, function(err, msg) {
         if(err) throw err;
@@ -96,14 +96,15 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET all events for logged in user (username/id provided)
-    app.get('/feed/myevents', function (req, res) {
-      console.log(req.user.facebook.email);
-      if(req.user.facebook.email) {
-        userEmail = req.user.facebook.email;
-      } else if(req.user.local.email) {
-        userEmail = req.user.local.email;
+    app.get('/feed/myevents', loggedIn, function (req, res) {
+      console.log("in get my events for logged in user");
+      var userData = "";
+      if(req.user.facebook.username) {
+        userData = req.user.facebook.username;
+      } else if(req.user.local.username) {
+        userData = req.user.local.username;
       }
-      dbEvents.getEventsForLoggedInUser(db, userEmail, function(err, msg) {
+      dbEvents.getEventsUserHost(db, userData, function(err, msg) {
         if(err) throw err;
         res.send(JSON.stringify(msg), 200);
         //res.end();
@@ -111,9 +112,9 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET all events user is hosting (username/id provided)
-    app.get('/feed/events/user/host/:userID', function (req, res) {
-      var hostId = req.params.userID;
-      console.log("hostid: " + hostId);
+    app.get('/feed/events/user/host/:id', function (req, res) {
+      var hostId = req.params.id;
+      console.log("Get all event user is hosting. hostid: " + hostId);
       dbEvents.getEventsUserHost(db, hostId, function(err, msg) {
         if(err) throw err;
         res.send(msg, 200);
@@ -122,52 +123,50 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET user by ID
-    app.get('/feed/users/:id', function (req, res) {
-      var userId = req.params.id;
-      dbUsers.getUserById(db, userId, function(err, msg) {
+    app.get('/feed/users/:username', function (req, res) {
+      console.log("in get user by username");
+      var userName = req.params.username;
+      dbUsers.getUserByUsername(db, userName, function(err, msg) {
         if(err) console.log(err);
         res.send(msg, 200);
-        res.end();
       })
 
     });
 
     //POST save new event (data will store user-who-created-id and the event will be stored to User's-created document as well)
     app.post('/feed/event', loggedIn, function (req, res) {
+      console.log("in post save new event");
       var eventData = req.body;
   	  var userData;
-  	  if(req.user.facebook.email) {
-        userData = req.user.facebook.email;
-      } else if(req.user.local.email) {
-        userData = req.user.local.email;
+  	  if(req.user.facebook.username) {
+        userData = req.user.facebook.username;
+      } else if(req.user.local.username) {
+        userData = req.user.local.username;
       }
 
       console.log("data received: " + eventData + " User email passed by Session: " + userData );
       dbEvents.saveNewEvent(db, eventData, userData, function(err, msg) {
         if(err) throw err;
         res.send(msg, 200);
-        res.end();
       })
     });
 
-    //POST save new user
-    app.post('/feed/user', function (req, res) {
-      var userData = req.body;
-      dbUsers.saveNewUser(db, userData, function(err, msg) {
-        if(err) throw err;
-        res.send(msg, 200);
-        res.end();
-      })
-    });
+    //POST save new event (Register) for particular user (userID passed in as a parameter)
+    app.post('/feed/user/event/:eventId', function (req, res) {
+      console.log("Registering for an event");
+      var userData = "";
+      var eventId = req.params.eventId;
+      if(req.user.facebook.username) {
+        userData = req.user.facebook.username;
+      } else if(req.user.local.email) {
+        userData = req.user.local.username;
+      }
 
-    //POST save new event for particular user (userID passed in as a parameter)
-    app.post('/feed/user/event/:id', function (req, res) {
-      var userID = req.params.id;
-      var eventData = req.body;
-      dbEvents.saveNewEventForUser(db, userID, eventData, function(err, msg) {
+      dbEvents.registerForEvent(db, userData, eventId, function(err, msg) {
         if(err) throw err;
+        console.log("Success");
+        //send email with confirmation
         res.send(msg, 200);
-        res.end();
       })
     });
 
@@ -273,8 +272,13 @@ function isLoggedIn(req, res, next) {
 
 function loggedIn(req, res, next) {
     if(req.user != undefined) {
-      if(req.user.facebook.username) {
-        console.log(req.username);
+      var fbUsername = req.user.facebook.username,
+          localUsername = req.user.local.username;
+      if(fbUsername) {
+        console.log("logged in fb: " + fbUsername);
+        next();
+      } else if(localUsername) {
+        console.log("logged in local: " + localUsername);
         next();
       }
     } else {

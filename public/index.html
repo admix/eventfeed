@@ -1,660 +1,463 @@
 <!DOCTYPE html>
-<!--[if IE 9 ]><html class="ie9"><![endif]-->
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <meta name="format-detection" content="telephone=no">
-        <meta charset="UTF-8">
+<!--[if IE 9 ]>
+<html class="ie9">
+  <![endif]-->
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <meta name="description" content="Violate Responsive Admin Template">
+    <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
+    <title>Event Feed</title>
+    <!-- CSS -->
+    <link href="/css/vendors/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/vendors/animate.min.css" rel="stylesheet">
+    <link href="/css/vendors/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/vendors/form.css" rel="stylesheet">
+    <link href="/css/vendors/calendar.css" rel="stylesheet">
+    <link href="/css/vendors/style.css" rel="stylesheet">
+    <link href="/css/vendors/icons.css" rel="stylesheet">
+    <link href="/css/vendors/generics.css" rel="stylesheet">
+    <link href="/css/vendors/jquery.slidepanel.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+      html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
+      #search-panel {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      margin-left: -180px;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+      }
+    </style>
+    <link href="/css/override.css" rel="stylesheet" type="text/css">
+  </head>
+  <body id="skin-blur-violate">
+    <script>
+      window.fbAsyncInit = function() {
+       FB.init({
+       appId      : '290517661140837',
+       xfbml      : true,
+       version    : 'v2.1'
+       });
+         };
 
-        <meta name="description" content="Violate Responsive Admin Template">
-        <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
+        (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
 
-        <title>Event Feed</title>
-
-        <!-- CSS -->
-        <link href="/css/vendors/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/vendors/animate.min.css" rel="stylesheet">
-        <link href="/css/vendors/font-awesome.min.css" rel="stylesheet">
-        <link href="/css/vendors/form.css" rel="stylesheet">
-        <link href="/css/vendors/calendar.css" rel="stylesheet">
-        <link href="/css/vendors/style.css" rel="stylesheet">
-        <link href="/css/vendors/icons.css" rel="stylesheet">
-        <link href="/css/vendors/generics.css" rel="stylesheet">
-        <link href="/css/vendors/jquery.slidepanel.css" rel="stylesheet" type="text/css">
-        <style type="text/css">
-            html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
-            #search-panel {
-                position: absolute;
-                top: 5px;
-                left: 50%;
-                margin-left: -180px;
-                z-index: 5;
-                background-color: #fff;
-                padding: 5px;
-                border: 1px solid #999;
-            }
-        </style>
-        <link href="/css/override.css" rel="stylesheet" type="text/css">
-        <script type="text/javascript"
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZvJFK0w-S8DisqYbld0upPVmjh67r0NQ">
-        </script>
-    </head>
-    <body id="skin-blur-violate">
-         <script>
-			window.fbAsyncInit = function() {
-			 FB.init({
-			 appId      : '290517661140837',
-			 xfbml      : true,
-			 version    : 'v2.1'
-			 });
-		    };
-
-		   (function(d, s, id){
-		    var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) {return;}
-			js = d.createElement(s); js.id = id;
-			js.src = "//connect.facebook.net/en_US/sdk.js";
-			fjs.parentNode.insertBefore(js, fjs);
-		   }(document, 'script', 'facebook-jssdk'));
-        </script>
-        <header id="header" class="media">
-            <a href="" id="menu-toggle"></a>
-            <a class="logo pull-left" href="index.html">EventFeed.me</a>
-
-            <div class="media-body">
-                <div class="media" id="top-menu">
-                    <div id="time" class="pull-right">
-                        <span id="hours"></span>
-                        :
-                        <span id="min"></span>
-                        :
-                        <span id="sec"></span>
-                    </div>
-
-                    <div class="media-body">
-                      <!-- <form class="form-inline"> -->
-                      <div class="row">
-                        <div class="col-lg-5">
-                            <input type="text" class="form-control m-b-10" id="searchtxt" placeholder="Enter event name">
-                        </div>
-                        <div class="col-lg-1">
-                          <button type="button" class="btn btn-md" onclick="search();">Search</button>
-                        </div>
-                        <div class="col-lg-2">
-                          <a data-toggle="modal" href="#modalCreate" class="btn btn-md">Create Event</a>
-                        </div>
-						            <div class="col-lg-1">
-                          <a data-toggle="modal" href="#modalLogin" class="btn btn-md">Login</a>
-                        </div>
-                        <div class="col-lg-1">
-                          <button type="button" class="btn btn-md" onclick="reg();">Reg</button>
-                        </div>
-						            <!-- <div class="col-lg-2">
-                          <a data-toggle="modal" href="#modalSign-up" class="btn btn-md">Sign-up</a>
-                        </div> -->
-                        <div class="col-lg-2">
-                          <button type="button" class="btn btn-md" onclick="myEvents();">My Events</button>
-                        </div>
-                      </div>
-                    </div>
-                </div>
+    </script>
+    <header id="header" class="media">
+      <a href="" id="menu-toggle"></a>
+      <a class="logo pull-left" href="index.html">EventFeed.me</a>
+      <div class="media-body">
+        <div class="media" id="top-menu">
+          <div id="time" class="pull-right">
+            <span id="hours"></span>
+            :
+            <span id="min"></span>
+            :
+            <span id="sec"></span>
+          </div>
+          <div class="media-body">
+            <div class="row">
+              <div class="col-lg-5 col-sm-5">
+                <input type="text" class="form-control m-b-10" id="searchtxt" placeholder="Enter event name">
+              </div>
+              <div class="col-lg-1 col-sm-1">
+                <button type="button" class="btn btn-md" onclick="search();">Search</button>
+              </div>
+              <div class="col-lg-2 col-sm-2">
+                <a data-toggle="modal" href="#modalCreate" class="btn btn-md">Create Event</a>
+              </div>
+              <div class="col-lg-1 col-sm-1">
+                <a data-toggle="modal" href="#modalLogin" class="btn btn-md">Login</a>
+              </div>
+              <div class="col-lg-1 col-sm-1">
+                <button id="register" type="button" class="btn btn-md">Reg</button>
+              </div>
+              <div class="col-lg-2 col-sm-2">
+                <button type="button" class="btn btn-md" onclick="myEvents();">My Events</button>
+              </div>
             </div>
-            <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Creating new event</h4>
-                        </div>
-                        <div class="modal-body">
-                            <h4 class="block-title">Provide information about the event you want to create!</h4>
-                        </div>
-                        <div class="block-area" id="multi-column">
-                            <form class="row form-columned" role="form">
-                                <div class="col-md-4">
-                                    <input id="name" type="text" class="form-control input-sm m-b-10" placeholder="Name">
-                                </div>
-                                <div class="col-md-4">
-                                    <input id="address" type="text" class="form-control input-sm m-b-10" placeholder="Address">
-                                </div>
-                                <div class="col-md-4">
-                                  <div id="cat" class="btn-group m-b-6">
-                                      <button type="button" class="btn btn-sm">Category</button>
-                                      <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
-                                          <span class="caret"></span>
-                                      </button>
-                                      <ul class="dropdown-menu animated fadeIn">
-                                          <li><a href="#">Fun</a></li>
-                                          <li><a href="#">Friends</a></li>
-                                          <li><a href="#">Family</a></li>
-                                          <li><a href="#">Business</a></li>
-                                          <li><a href="#">Adventure</a></li>
-                                          <li><a href="#">Holidays</a></li>
-                                          <li><a href="#">Concert</a></li>
-                                          <!-- <li class="divider"></li>
-                                          <li><input type="text" class="form-control input-sm m-b-10" placeholder="New Category"></li> -->
-                                      </ul>
-                                  </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-4">
-                                    <input id="date" type="text" class="form-control input-sm m-b-10" placeholder="Date">
-                                </div>
-                                <div class="col-md-4">
-                                    <input id="time" type="text" class="form-control input-sm m-b-10" placeholder="Time">
-                                </div>
-                                <div class="col-md-12">
-                                    <textarea id="description" class="form-control m-b-10" placeholder="Description"></textarea>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="createButton" type="button" class="btn btn-sm">Create event</button>
-                            <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-			<div id="modalLogin" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-							<h4 class="modal-title" id="myModalLabel">Login</h4>
-						</div>
-						<div class="modal-body">
-							<h4>Login</h4>
-							<p>If you have an account already, login with your email.</p>
-
-							<form action="/local-login" method="post">
-							     <div class="form-group">
-							         <label>Email</label>
-									 <input type="text" class="form-control" name="email">
-								 </div>
-						         <div class="form-group">
-									 <label>Password</label>
-									 <input type="password" class="form-control" name="password">
-								</div>
-
-								<button type="submit" class="btn btn-warning btn-lg">Login</button>
-							</form>
-
-							<h4>Login with Facebook</h4>
-							<a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook</a>
-
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						</div>
-
-					</div>
-				</div>
-			</div>
-
-			<div id="modalSign-up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-						<h4 class="modal-title" id="myModalLabel">Sign-up</h4>
-					</div>
-				    <div class="modal-body">
-						<h4>Sign-up</h4>
-
-						<form action="/signup" method="post">
-							<div class="form-group">
-								<label>First Name</label>
-								<input type="text" class="form-control" name="firstName">
-							</div>
-							<div class="form-group">
-								<label>Last Name</label>
-								<input type="text" class="form-control" name="lastName">
-							</div>
-							<div class="form-group">
-								<label>Email</label>
-								<input type="text" class="form-control" name="email">
-							</div>
-							<div class="form-group">
-								<label>Password</label>
-								<input type="password" class="form-control" name="password">
-							</div>
-							<div class="form-group">
-								<label>Default Location</label>
-								<input type="text" class="form-control" name="location">
-							</div>
-							<div class="form-group">
-								<label>Phone Number</label>
-								<input type="text" class="form-control" name="PhoneNUm">
-							</div>
-							<button type="submit" class="btn btn-warning btn-lg">Signup</button>
-						</form>
-
-						<h4>Sign-up with Facebook</h4>
-						<a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook</a>
-
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-
-				</div>
-			</div>
-		</div>
+          </div>
+        </div>
+      </div>
     </header>
-
-        <div class="clearfix"></div>
-
-        <section id="main" class="p-relative" role="main">
-
-            <!-- Sidebar -->
-            <aside id="sidebar">
-
-                <!-- Sidbar Widgets -->
-                <div class="side-widgets overflow">
-                    <!-- Profile Menu -->
-                    <div class="text-center s-widget m-b-25 dropdown" id="profile-menu">
-                        <a href="" data-toggle="dropdown">
-                            <img class="profile-pic animated" src="img/profile-pic.jpg" alt="">
-                        </a>
-                        <ul class="dropdown-menu profile-menu">
-                            <li><a href="">My Profile</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-                            <li><a href="">Messages</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-                            <li><a href="">Settings</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-                            <li><a href="">Sign Out</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-                        </ul>
-                        <h4 class="m-0">Alex Snurnikov</h4>
-                        @admixsn
-                    </div>
-
-                    <!-- Calendar -->
-                    <div class="s-widget m-b-25">
-                        <div id="sidebar-calendar"></div>
-                    </div>
-
-                    <!-- Feeds -->
-                    <div class="s-widget m-b-25">
-                        <h2 class="tile-title">
-                           News Feeds
-                        </h2>
-
-                        <div class="s-widget-body">
-                            <div id="news-feed"></div>
-                        </div>
-                    </div>
-
-                    <!-- Projects -->
-                    <div class="s-widget m-b-25">
-                        <h2 class="tile-title">
-                            Projects on going
-                        </h2>
-
-                        <div class="s-widget-body">
-                            <div class="side-border">
-                                <small>Joomla Website</small>
-                                <div class="progress progress-small">
-                                     <a href="#" data-toggle="tooltip" title="" class="progress-bar tooltips progress-bar-danger" style="width: 60%;" data-original-title="60%">
-                                          <span class="sr-only">60% Complete</span>
-                                     </a>
-                                </div>
-                            </div>
-                            <div class="side-border">
-                                <small>Opencart E-Commerce Website</small>
-                                <div class="progress progress-small">
-                                     <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-info" style="width: 43%;" data-original-title="43%">
-                                          <span class="sr-only">43% Complete</span>
-                                     </a>
-                                </div>
-                            </div>
-                            <div class="side-border">
-                                <small>Social Media API</small>
-                                <div class="progress progress-small">
-                                     <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-warning" style="width: 81%;" data-original-title="81%">
-                                          <span class="sr-only">81% Complete</span>
-                                     </a>
-                                </div>
-                            </div>
-                            <div class="side-border">
-                                <small>VB.Net Software Package</small>
-                                <div class="progress progress-small">
-                                     <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-success" style="width: 10%;" data-original-title="10%">
-                                          <span class="sr-only">10% Complete</span>
-                                     </a>
-                                </div>
-                            </div>
-                            <div class="side-border">
-                                <small>Chrome Extension</small>
-                                <div class="progress progress-small">
-                                     <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-success" style="width: 95%;" data-original-title="95%">
-                                          <span class="sr-only">95% Complete</span>
-                                     </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="clearfix"></div>
+    <section id="main" class="p-relative" role="main">
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <!-- Sidbar Widgets -->
+        <div class="side-widgets overflow">
+          <!-- Profile Menu -->
+          <div class="text-center s-widget m-b-25 dropdown" id="profile-menu">
+            <a href="" data-toggle="dropdown">
+            <img class="profile-pic animated" src="img/profile-pic.jpg" alt="">
+            </a>
+            <ul class="dropdown-menu profile-menu">
+              <li><a href="">My Profile</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
+              <li><a href="">Messages</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
+              <li><a href="">Settings</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
+              <li><a href="">Sign Out</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
+            </ul>
+            <h4 class="m-0">Alex Snurnikov</h4>
+            @admixsn
+          </div>
+          <!-- Calendar -->
+          <div class="s-widget m-b-25">
+            <div id="sidebar-calendar"></div>
+          </div>
+          <!-- Feeds -->
+          <div class="s-widget m-b-25">
+            <h2 class="tile-title">
+              News Feeds
+            </h2>
+            <div class="s-widget-body">
+              <div id="news-feed"></div>
+            </div>
+          </div>
+          <!-- Projects -->
+          <div class="s-widget m-b-25">
+            <h2 class="tile-title">
+              Projects on going
+            </h2>
+            <div class="s-widget-body">
+              <div class="side-border">
+                <small>Joomla Website</small>
+                <div class="progress progress-small">
+                  <a href="#" data-toggle="tooltip" title="" class="progress-bar tooltips progress-bar-danger" style="width: 60%;" data-original-title="60%">
+                  <span class="sr-only">60% Complete</span>
+                  </a>
                 </div>
-
-                <!-- Side Menu -->
-                <ul class="list-unstyled side-menu">
-                    <li class="active">
-                        <a class="sa-side-home" href="index.html">
-                            <span class="menu-item">Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="sa-side-typography" href="typography.html">
-                            <span class="menu-item">Friends</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="sa-side-widget" href="content-widgets.html">
-                            <span class="menu-item">Events</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="sa-side-table" href="tables.html">
-                            <span class="menu-item">Logout</span>
-                        </a>
-                    </li>
-                </ul>
-
-            </aside>
-
-            <!-- Content -->
-            <section id="content" class="container">
-                <!-- Notification Drawer -->
-                <div id="notifications" class="tile drawer animated">
-                    <div class="listview narrow">
-                        <div class="media">
-                            <a href="">Notification Settings</a>
-                            <span class="drawer-close">&times;</span>
-                        </div>
-                        <div class="overflow" style="height: 254px">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img width="40" src="img/profile-pics/1.jpg" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <small class="text-muted">Nadin Jackson - 2 Hours ago</small><br>
-                                    <a class="t-overflow" href="">Mauris consectetur urna nec tempor adipiscing. Proin sit amet nisi ligula. Sed eu adipiscing lectus</a>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img width="40" src="img/profile-pics/2.jpg" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <small class="text-muted">David Villa - 5 Hours ago</small><br>
-                                    <a class="t-overflow" href="">Suspendisse in purus ut nibh placerat Cras pulvinar euismod nunc quis gravida. Suspendisse pharetra</a>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img width="40" src="img/profile-pics/3.jpg" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <small class="text-muted">Harris worgon - On 15/12/2013</small><br>
-                                    <a class="t-overflow" href="">Maecenas venenatis enim condimentum ultrices fringilla. Nulla eget libero rhoncus, bibendum diam eleifend, vulputate mi. Fusce non nibh pulvinar, ornare turpis id</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="media text-center whiter l-100">
-                            <a href=""><small>VIEW ALL</small></a>
-                        </div>
-                    </div>
+              </div>
+              <div class="side-border">
+                <small>Opencart E-Commerce Website</small>
+                <div class="progress progress-small">
+                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-info" style="width: 43%;" data-original-title="43%">
+                  <span class="sr-only">43% Complete</span>
+                  </a>
                 </div>
-
-                <!-- Shortcuts -->
-                <!-- <div class="block-area shortcut-area">
-                    <a class="shortcut tile" href="">
-                        <img src="img/shortcuts/money.png" alt="">
-                        <small class="t-overflow">Purchases</small>
-                    </a>
-                    <a class="shortcut tile" href="">
-                        <img src="img/shortcuts/twitter.png" alt="">
-                        <small class="t-overflow">Tweets</small>
-                    </a>
-                    <a class="shortcut tile" href="">
-                        <img src="img/shortcuts/calendar.png" alt="">
-                        <small class="t-overflow">Calendar</small>
-                    </a>
-                    <a class="shortcut tile" href="">
-                        <img src="img/shortcuts/stats.png" alt="">
-                        <small class="t-overflow">Statistics</small>
-                    </a>
-                    <a class="shortcut tile" href="">
-                        <img src="img/shortcuts/connections.png" alt="">
-                        <small class="t-overflow">Connection</small>
-                    </a>
-                    <a class="shortcut tile" href="">
-                        <img src="img/shortcuts/reports.png" alt="">
-                        <small class="t-overflow">Reports</small>
-                    </a>
-                </div> -->
-
-                <hr class="whiter" />
-
-                <!-- Main Widgets -->
-
-                <!-- <div class="block-area" style="width: 100%;height: 100%;"> -->
-                    <div class="row" style="height: 100%;">
-                        <div class="col-md-12">
-                            <!-- Main Chart -->
-                            <!-- <div id="map-canvas"></div> -->
-                            <div class="tile">
-                                <!-- <h2 class="tile-title">Event Map</h2>
-                                <div class="tile-config dropdown">
-                                    <a data-toggle="dropdown" href="" class="tile-menu"></a>
-                                    <ul class="dropdown-menu pull-right text-right">
-                                        <li><a class="tile-info-toggle" href="">Chart Information</a></li>
-                                        <li><a href="">Refresh</a></li>
-                                        <li><a href="">Settings</a></li>
-                                    </ul>
-                                </div> -->
-                                <div class="p-10" style="height: 400px;padding:0px !important;margin: 0px;">
-                                  <div id="map-canvas"></div>
-                                </div>
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </div>
-
-                        <div class="clearfix"></div>
-                    </div>
-                <!-- </div> -->
-
-                <!-- Chat -->
-                <div class="chat">
-
-                    <!-- Chat List -->
-                    <div class="pull-left chat-list">
-                        <div class="listview narrow">
-                            <div class="media">
-                                <img class="pull-left" src="img/profile-pics/1.jpg" width="30" alt="">
-                                <div class="media-body p-t-5">
-                                    Alex Bendit
-                                </div>
-                            </div>
-                            <div class="media">
-                                <img class="pull-left" src="img/profile-pics/2.jpg" width="30" alt="">
-                                <div class="media-body">
-                                    <span class="t-overflow p-t-5">David Volla Watkinson</span>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <img class="pull-left" src="img/profile-pics/3.jpg" width="30" alt="">
-                                <div class="media-body">
-                                    <span class="t-overflow p-t-5">Mitchell Christein</span>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <img class="pull-left" src="img/profile-pics/4.jpg" width="30" alt="">
-                                <div class="media-body">
-                                    <span class="t-overflow p-t-5">Wayne Parnell</span>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <img class="pull-left" src="img/profile-pics/5.jpg" width="30" alt="">
-                                <div class="media-body">
-                                    <span class="t-overflow p-t-5">Melina April</span>
-                                </div>
-                            </div>
-                            <div class="media">
-                                <img class="pull-left" src="img/profile-pics/6.jpg" width="30" alt="">
-                                <div class="media-body">
-                                    <span class="t-overflow p-t-5">Ford Harnson</span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Chat Area -->
-                    <div class="media-body">
-                        <div class="chat-header">
-                            <a class="btn btn-sm" href="">
-                                <i class="fa fa-circle-o status m-r-5"></i> Chat with Friends
-                            </a>
-                        </div>
-
-                        <div class="chat-body">
-                            <div class="media">
-                                <img class="pull-right" src="img/profile-pics/1.jpg" width="30" alt="" />
-                                <div class="media-body pull-right">
-                                    Hiiii<br/>
-                                    How you doing bro?
-                                    <small>Me - 10 Mins ago</small>
-                                </div>
-                            </div>
-
-                            <div class="media pull-left">
-                                <img class="pull-left" src="img/profile-pics/2.jpg" width="30" alt="" />
-                                <div class="media-body">
-                                    I'm doing well buddy. <br/>How do you do?
-                                    <small>David - 9 Mins ago</small>
-                                </div>
-                            </div>
-
-                            <div class="media pull-right">
-                                <img class="pull-right" src="img/profile-pics/2.jpg" width="30" alt="" />
-                                <div class="media-body">
-                                    I'm Fine bro <br/>Thank you for asking
-                                    <small>Me - 8 Mins ago</small>
-                                </div>
-                            </div>
-
-                            <div class="media pull-right">
-                                <img class="pull-right" src="img/profile-pics/2.jpg" width="30" alt="" />
-                                <div class="media-body">
-                                    Any idea for a hangout?
-                                    <small>Me - 8 Mins ago</small>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="chat-footer media">
-                            <i class="chat-list-toggle pull-left fa fa-bars"></i>
-                            <i class="pull-right fa fa-picture-o"></i>
-                            <div class="media-body">
-                                <textarea class="form-control" placeholder="Type something..."></textarea>
-                            </div>
-                        </div>
-                    </div>
+              </div>
+              <div class="side-border">
+                <small>Social Media API</small>
+                <div class="progress progress-small">
+                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-warning" style="width: 81%;" data-original-title="81%">
+                  <span class="sr-only">81% Complete</span>
+                  </a>
                 </div>
-            </section>
-
-            <!-- Older IE Message -->
-            <!--[if lt IE 9]>
-                <div class="ie-block">
-                    <h1 class="Ops">Ooops!</h1>
-                    <p>You are using an outdated version of Internet Explorer, upgrade to any of the following web browser in order to access the maximum functionality of this website. </p>
-                    <ul class="browsers">
-                        <li>
-                            <a href="https://www.google.com/intl/en/chrome/browser/">
-                                <img src="img/browsers/chrome.png" alt="">
-                                <div>Google Chrome</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://www.mozilla.org/en-US/firefox/new/">
-                                <img src="img/browsers/firefox.png" alt="">
-                                <div>Mozilla Firefox</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://www.opera.com/computer/windows">
-                                <img src="img/browsers/opera.png" alt="">
-                                <div>Opera</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://safari.en.softonic.com/">
-                                <img src="img/browsers/safari.png" alt="">
-                                <div>Safari</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://windows.microsoft.com/en-us/internet-explorer/downloads/ie-10/worldwide-languages">
-                                <img src="img/browsers/ie.png" alt="">
-                                <div>Internet Explorer(New)</div>
-                            </a>
-                        </li>
-                    </ul>
-                    <p>Upgrade your browser for a Safer and Faster web experience. <br/>Thank you for your patience...</p>
+              </div>
+              <div class="side-border">
+                <small>VB.Net Software Package</small>
+                <div class="progress progress-small">
+                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-success" style="width: 10%;" data-original-title="10%">
+                  <span class="sr-only">10% Complete</span>
+                  </a>
                 </div>
-            <![endif]-->
-        </section>
-
-        <!-- Javascript Libraries -->
-        <!-- jQuery -->
-        <script src="/js/vendors/jquery.min.js"></script> <!-- jQuery Library -->
-        <script src="/js/vendors/jquery-ui.min.js"></script> <!-- jQuery UI -->
-        <script src="/js/vendors/jquery.easing.1.3.js"></script> <!-- jQuery Easing - Requirred for Lightbox + Pie Charts-->
-
-        <!-- Bootstrap -->
-        <script src="/js/vendors/bootstrap.min.js"></script>
-
-        <!-- Charts -->
-        <script src="/js/vendors/charts/jquery.flot.js"></script> <!-- Flot Main -->
-        <script src="/js/vendors/charts/jquery.flot.time.js"></script> <!-- Flot sub -->
-        <script src="/js/vendors/charts/jquery.flot.animator.min.js"></script> <!-- Flot sub -->
-        <script src="/js/vendors/charts/jquery.flot.resize.min.js"></script> <!-- Flot sub - for repaint when resizing the screen -->
-
-        <script src="/js/vendors/sparkline.min.js"></script> <!-- Sparkline - Tiny charts -->
-        <script src="/js/vendors/easypiechart.js"></script> <!-- EasyPieChart - Animated Pie Charts -->
-        <script src="/js/vendors/charts.js"></script> <!-- All the above chart related functions -->
-
-        <!-- Map -->
-        <script src="/js/vendors/maps/jvectormap.min.js"></script> <!-- jVectorMap main library -->
-        <script src="/js/vendors/maps/usa.js"></script> <!-- USA Map for jVectorMap -->
-
-        <!--  Form Related -->
-        <script src="/js/vendors/icheck.js"></script> <!-- Custom Checkbox + Radio -->
-
-        <!-- UX -->
-        <script src="/js/vendors/scroll.min.js"></script> <!-- Custom Scrollbar -->
-
-        <!-- Other -->
-        <script src="/js/vendors/calendar.min.js"></script> <!-- Calendar -->
-        <script src="/js/vendors/feeds.min.js"></script> <!-- News Feeds -->
-
-
-        <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> <!-- google map API Places -->
-        <script src="/js/vendors/jquery.geocomplete.min.js"></script>
-
-        <!-- All JS functions -->
-        <script src="/js/vendors/functions.js"></script>
-        <script type="text/javascript" src="/js/vendors/jquery.slidepanel.js"></script>
-        <script type="text/javascript" src="/js/createEvent.js"></script>
-        <script type="text/javascript" src="/js/map.js"></script>
-        <script type="text/javascript" src="/js/utils.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('[data-slidepanel]').slidepanel({
-                    orientation: 'right',
-                    mode: 'overlay'
-                });
-            });
-        </script>
-
-    </body>
+              </div>
+              <div class="side-border">
+                <small>Chrome Extension</small>
+                <div class="progress progress-small">
+                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-success" style="width: 95%;" data-original-title="95%">
+                  <span class="sr-only">95% Complete</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Side Menu -->
+        <ul class="list-unstyled side-menu">
+          <li class="active">
+            <a class="sa-side-home" href="index.html">
+            <span class="menu-item">Home</span>
+            </a>
+          </li>
+          <li>
+            <a class="sa-side-typography" href="typography.html">
+            <span class="menu-item">Friends</span>
+            </a>
+          </li>
+          <li>
+            <a class="sa-side-widget" href="content-widgets.html">
+            <span class="menu-item">Events</span>
+            </a>
+          </li>
+          <li>
+            <a class="sa-side-table" href="tables.html">
+            <span class="menu-item">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- Content -->
+      <section id="content" class="container">
+        <hr class="whiter" />
+        <div class="row" style="height: 100%;">
+          <div class="col-md-12">
+            <div class="tile">
+              <div style="height: 700px;padding:0px !important;margin: 0px;width: auto;">
+                <div id="map-canvas"></div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <!-- </div> -->
+        <!-- Chat -->
+        <div class="chat">
+          <!-- Chat List -->
+          <div class="pull-left chat-list">
+            <div class="listview narrow">
+              <div class="media">
+                <img class="pull-left" src="img/profile-pics/1.jpg" width="30" alt="">
+                <div class="media-body p-t-5">
+                  Alex Bendit
+                </div>
+              </div>
+              <div class="media">
+                <img class="pull-left" src="img/profile-pics/2.jpg" width="30" alt="">
+                <div class="media-body">
+                  <span class="t-overflow p-t-5">David Volla Watkinson</span>
+                </div>
+              </div>
+              <div class="media">
+                <img class="pull-left" src="img/profile-pics/3.jpg" width="30" alt="">
+                <div class="media-body">
+                  <span class="t-overflow p-t-5">Mitchell Christein</span>
+                </div>
+              </div>
+              <div class="media">
+                <img class="pull-left" src="img/profile-pics/4.jpg" width="30" alt="">
+                <div class="media-body">
+                  <span class="t-overflow p-t-5">Wayne Parnell</span>
+                </div>
+              </div>
+              <div class="media">
+                <img class="pull-left" src="img/profile-pics/5.jpg" width="30" alt="">
+                <div class="media-body">
+                  <span class="t-overflow p-t-5">Melina April</span>
+                </div>
+              </div>
+              <div class="media">
+                <img class="pull-left" src="img/profile-pics/6.jpg" width="30" alt="">
+                <div class="media-body">
+                  <span class="t-overflow p-t-5">Ford Harnson</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Chat Area -->
+          <div class="media-body">
+            <div class="chat-header">
+              <a class="btn btn-sm" href="">
+              <i class="fa fa-circle-o status m-r-5"></i> Chat with Friends
+              </a>
+            </div>
+            <div class="chat-body">
+              <div class="media">
+                <img class="pull-right" src="img/profile-pics/1.jpg" width="30" alt="" />
+                <div class="media-body pull-right">
+                  Hiiii<br/>
+                  How you doing bro?
+                  <small>Me - 10 Mins ago</small>
+                </div>
+              </div>
+              <div class="media pull-left">
+                <img class="pull-left" src="img/profile-pics/2.jpg" width="30" alt="" />
+                <div class="media-body">
+                  I'm doing well buddy. <br/>How do you do?
+                  <small>David - 9 Mins ago</small>
+                </div>
+              </div>
+              <div class="media pull-right">
+                <img class="pull-right" src="img/profile-pics/2.jpg" width="30" alt="" />
+                <div class="media-body">
+                  I'm Fine bro <br/>Thank you for asking
+                  <small>Me - 8 Mins ago</small>
+                </div>
+              </div>
+              <div class="media pull-right">
+                <img class="pull-right" src="img/profile-pics/2.jpg" width="30" alt="" />
+                <div class="media-body">
+                  Any idea for a hangout?
+                  <small>Me - 8 Mins ago</small>
+                </div>
+              </div>
+            </div>
+            <div class="chat-footer media">
+              <i class="chat-list-toggle pull-left fa fa-bars"></i>
+              <i class="pull-right fa fa-picture-o"></i>
+              <div class="media-body">
+                <textarea class="form-control" placeholder="Type something..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+    <!-- Modals -->
+    <!-- Create modal -->
+    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Creating new event</h4>
+          </div>
+          <div class="modal-body">
+            <h4 class="block-title">Provide information about the event you want to create!</h4>
+          </div>
+          <div class="block-area" id="multi-column">
+            <form class="row form-columned" role="form">
+              <div class="col-md-4">
+                <input id="name" type="text" class="form-control input-sm m-b-10" placeholder="Name">
+              </div>
+              <div class="col-md-4">
+                <input id="address" type="text" class="form-control input-sm m-b-10" placeholder="Address">
+              </div>
+              <div class="col-md-4">
+                <div id="cat" class="btn-group m-b-6">
+                  <button type="button" class="btn btn-sm">Category</button>
+                  <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu animated fadeIn">
+                    <li><a href="#">Fun</a></li>
+                    <li><a href="#">Friends</a></li>
+                    <li><a href="#">Family</a></li>
+                    <li><a href="#">Business</a></li>
+                    <li><a href="#">Adventure</a></li>
+                    <li><a href="#">Holidays</a></li>
+                    <li><a href="#">Concert</a></li>
+                    <!-- <li class="divider"></li>
+                      <li><input type="text" class="form-control input-sm m-b-10" placeholder="New Category"></li> -->
+                  </ul>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="col-md-4">
+                <input id="date" type="text" class="form-control input-sm m-b-10" placeholder="Date">
+              </div>
+              <div class="col-md-4">
+                <input id="time" type="text" class="form-control input-sm m-b-10" placeholder="Time">
+              </div>
+              <div class="col-md-12">
+                <textarea id="description" class="form-control m-b-10" placeholder="Description"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="createButton" type="button" class="btn btn-sm">Create event</button>
+            <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Login modal-->
+    <div id="modalLogin" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Login</h4>
+          </div>
+          <div class="modal-body">
+            <h4>Login</h4>
+            <p>If you have an account already, login with your email.</p>
+            <form action="/local-login" method="post">
+              <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" name="email">
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password">
+              </div>
+              <button type="submit" class="btn btn-warning btn-lg">Login</button>
+            </form>
+            <h4>Login with Facebook</h4>
+            <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook</a>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Signup modal-->
+    <div id="modalSign-up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Sign-up</h4>
+          </div>
+          <div class="modal-body">
+            <h4>Sign-up</h4>
+            <form action="/signup" method="post">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" class="form-control" name="firstName">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" class="form-control" name="lastName">
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" name="email">
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password">
+              </div>
+              <div class="form-group">
+                <label>Default Location</label>
+                <input type="text" class="form-control" name="location">
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" class="form-control" name="PhoneNUm">
+              </div>
+              <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+            </form>
+            <h4>Sign-up with Facebook</h4>
+            <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook</a>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Javascript Libraries -->
+    <!-- jQuery -->
+    <script src="/js/vendors/jquery.min.js"></script> <!-- jQuery Library -->
+    <script src="/js/vendors/jquery-ui.min.js"></script> <!-- jQuery UI -->
+    <!-- Bootstrap -->
+    <script src="/js/vendors/bootstrap.min.js"></script>
+    <!--  Form Related -->
+    <script src="/js/vendors/icheck.js"></script> <!-- Custom Checkbox + Radio -->
+    <!-- UX -->
+    <script src="/js/vendors/scroll.min.js"></script> <!-- Custom Scrollbar -->
+    <!-- Other -->
+    <script src="/js/vendors/calendar.min.js"></script> <!-- Calendar -->
+    <script src="/js/vendors/feeds.min.js"></script> <!-- News Feeds -->
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> <!-- google map API Places -->
+    <script src="/js/vendors/jquery.geocomplete.min.js"></script>
+    <!-- All JS functions -->
+    <script src="/js/vendors/functions.js"></script>
+    <script type="text/javascript" src="/js/vendors/jquery.slidepanel.js"></script>
+    <script type="text/javascript" src="/js/createEvent.js"></script>
+    <script type="text/javascript" src="/js/map.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+  </body>
 </html>

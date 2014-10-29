@@ -48,6 +48,22 @@ function getEvents(){
     // Get the events from Json to objects events
 }
 
+function handleNoGeolocation(errorFlag) {
+    if (errorFlag) {
+        var content = 'Error: The Geolocation service failed.';
+    } else {
+        var content = 'Error: Your browser doesn\'t support geolocation.';
+    }
+
+    var options = {
+        map: map,
+        position: new google.maps.LatLng(-29.3456, 151.4346),
+        content: content
+    };
+    var infowindow = new google.maps.InfoWindow(options);
+    map.setCenter(options.position);
+}
+
 // Search for events by name
 function search(){
     var name = $("#searchtxt").val();
@@ -148,7 +164,7 @@ function loadEvents(events) {
         markersArray.push(marker);
         google.maps.event.addListener(marker, 'click', clickEvent);
         google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
-        var contentString = '<div id="content">' +
+        var contentString = '<div id="content" class="markerInfo">' +
             '<div id="siteNotice">' +
             '</div>' +
             '<h1 id="firstHeading" class="firstHeading">'+ events[k].name +'</h1>' +

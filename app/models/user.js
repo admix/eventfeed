@@ -15,13 +15,15 @@ var userSchema = mongoose.Schema({
 		firstName    : String,
 		lastName     : String,
 		defaultLoc   : String,
-		phoneNum     : String
+		phoneNum     : String,
+    username     : String
     },
     facebook         : {
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
+        username     : String
     },
     twitter          : {
         id           : String,
