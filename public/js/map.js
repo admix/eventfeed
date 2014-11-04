@@ -5,12 +5,12 @@ var directionsService = new google.maps.DirectionsService();
 var pos;
 var directionsDisplay;
 var map;
-var marker;
 var markersArray = [];
 var infowindow;
 var mystartloc;
 var geocoder;
 var event_address;
+var mc; // marker clusterer
 var eventfeed = "http://eventfeed.me",
     localhost = "http://localhost:8080";
 
@@ -43,6 +43,7 @@ function initialize() {
         }
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     directionsDisplay.setMap(map);
+    mc = new MarkerClusterer(map);
 }
 function getEvents(){
     // Get the events from Json to objects events
@@ -109,7 +110,7 @@ function myEvents(){
 function loadOneEvent(data) {
   var locations = [43.7000, -79.4000];
 
-  marker = new google.maps.Marker({
+  var marker = new google.maps.Marker({
       position: new google.maps.LatLng(locations[0], locations[1]),
       map: map,
       title: data[i].name
@@ -156,14 +157,12 @@ function loadEvents(events) {
     console.log("loading events on map!");
     clearMap();
     for (var k in events) {
-        marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
             position: new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude),
             map: map,
             title: events[k].name
         });
-        markersArray.push(marker);
-        google.maps.event.addListener(marker, 'click', clickEvent);
-        google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
+
         var contentString = '<div id="content" class="markerInfo">' +
             '<div id="siteNotice">' +
             '</div>' +
@@ -179,19 +178,15 @@ function loadEvents(events) {
         infowindow = new google.maps.InfoWindow({
             content: contentString
         });
+        google.maps.event.addListener(marker, 'click', function() {
+            event_address = marker.getPosition();
+            infowindow.open(map,marker);
+        });
+        google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
+        markersArray.push(marker);
+        mc.addMarker(marker);
     }
-}
 
-// Window that appears when user hover over the 'Pin'
-function mouseOverEvent(){
-    // user mouse over event
-}
-
-// Window that appears when user click on 'Pin'
-function clickEvent(){
-    map.setCenter(marker.getPosition());
-    infowindow.open(map,marker);
-    event_address = marker.getPosition();
 }
 
 $("#address").geocomplete()
@@ -270,17 +265,12 @@ function loadOneEventCreate(data) {
   console.log(data);
   console.log("location info lat: " + data.location.latitude);
   console.log("location info long: " + data.location.longitude);
-  marker = new google.maps.Marker({
+  var marker = new google.maps.Marker({
       position: new google.maps.LatLng(data.location.latitude, data.location.longitude),
       map: map,
+      animation: google.maps.Animation.DROP,
       title: data.name
   });
-  markersArray.push(marker);
-  google.maps.event.addListener(marker, 'click', function() {
-        event_address = marker.getPosition();
-        infowindow.open(map,marker);
-  });
-  google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
   var contentString = '<div id="content">' +
       '<div id="siteNotice">' +
       '</div>' +
@@ -292,10 +282,16 @@ function loadOneEventCreate(data) {
       '</b></p><br>' +
       '<div><input type="button" onclick="calcRoute()" value="Directions"></div>' +
       '</div>';
-
   infowindow = new google.maps.InfoWindow({
       content: contentString
   });
+  google.maps.event.addListener(marker, 'click', function() {
+        event_address = marker.getPosition();
+        infowindow.open(map,marker);
+  });
+  google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
+  markersArray.push(marker);
+  mc.addMarker(marker);
 }
 
 function clearMap() {
@@ -303,6 +299,7 @@ function clearMap() {
     markersArray[i].setMap(null);
   }
   markersArray.length = 0;
+  mc.clearMarkers();
 }
 
 // Initializes Map
