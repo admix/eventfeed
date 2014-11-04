@@ -15,12 +15,37 @@ module.exports = exports = function(app, db, passport) {
     // })
     // Home page
     app.get('/', function(req, res) {
-      res.render("index.html");
+      res.render("index.ejs");
     });
-    app.get('/home', function(req, res) {
-      res.render("index");
-    });
+  //  app.get('/home', function(req, res) {
+  //    res.render("index");
+  //  });
 
+	app.get('/profile', isLoggedIn, function(req, res) {
+		 var resullt = null;
+		 var email = null;
+		// var test;
+		 if(req.user.facebook.email) {
+            email = req.user.facebook.email;
+            result = email.split('@')[0]; 
+         } else if(req.user.local.email) {
+            email = req.user.local.email;
+            result = email.split('@')[0];
+         }
+				  
+		res.render('profile.ejs', {
+			user : req.user, username: result // get the user out of session and pass to template
+		});
+	});
+	
+	// =====================================
+	// LOGOUT ==============================
+	// =====================================
+	app.get('/logout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
+	
   	// =====================================
   	// FACEBOOK ROUTES =====================
   	// =====================================
@@ -33,20 +58,20 @@ module.exports = exports = function(app, db, passport) {
   	// handle the callback after face book has authenticated the user
   	app.get('/auth/facebook/callback',
   		passport.authenticate('facebook', {
-  			successRedirect : '/',   // Need to discuss what happens after user logs in
+  			successRedirect : '/profile',   // Need to discuss what happens after user logs in
   			failureRedirect : '/'
   		}));
 
   	// process the login form
   	app.post('/local-login', passport.authenticate('local-login', {
-  		successRedirect : '/', // redirect to the secure profile section
+  		successRedirect : '/profile', // redirect to the secure profile section
   		failureRedirect : '/', // redirect back to the signup page if there is an error
   		failureFlash : true // allow flash messages
   	}));
 
   	// process the signup form
-  	app.post('/signup', passport.authenticate('local-signup', {
-  		successRedirect : '/', // redirect to the secure profile section
+  	app.post('/local-signup', passport.authenticate('local-signup', {
+  		successRedirect : '/profile', // redirect to the secure profile section
   		failureRedirect : '/', // redirect back to the signup page if there is an error
   		failureFlash : true // allow flash messages
   	}));
