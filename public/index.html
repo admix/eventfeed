@@ -325,7 +325,7 @@
               </div>
               <div class="col-md-4">
                 <div id="cat" class="btn-group m-b-6">
-                  <button type="button" class="btn btn-sm">Category</button>
+                  <button id="category" type="button" class="btn btn-sm">Category</button>
                   <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                   </button>
@@ -337,8 +337,6 @@
                     <li><a href="#">Adventure</a></li>
                     <li><a href="#">Holidays</a></li>
                     <li><a href="#">Concert</a></li>
-                    <!-- <li class="divider"></li>
-                      <li><input type="text" class="form-control input-sm m-b-10" placeholder="New Category"></li> -->
                   </ul>
                 </div>
               </div>
@@ -349,6 +347,13 @@
               <div class="col-md-4">
                 <input id="time" type="text" class="form-control input-sm m-b-10" placeholder="Time">
               </div>
+              <div class="col-md-4">
+                <div class="checkbox m-b-5">
+                    <label>
+                        <input id="private" type="checkbox" checked="">Private
+                    </label>
+                </div>
+              </div>
               <div class="col-md-12">
                 <textarea id="description" class="form-control m-b-10" placeholder="Description"></textarea>
               </div>
@@ -357,6 +362,26 @@
           <div class="modal-footer">
             <button id="createButton" type="button" class="btn btn-sm">Create event</button>
             <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Info modal -->
+    <div id="modalInfo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Info</h4>
+          </div>
+          <div class="modal-body">
+            <h4>Info</h4>
+            <p>More detailed info of the event</p>
+            <button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;
+            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

@@ -38,10 +38,22 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(function(position) {
             pos = new google.maps.LatLng(position.coords.latitude,
                 position.coords.longitude);
+
+            var contentString = '<div id="content" class="markerInfo">' +
+                '<div id="siteNotice">' +
+                '</div>' +
+                '<h3 id="firstHeading" class="firstHeading">You are here</h3>' +
+                '<div id="bodyContent">' +
+                '<p><b>What do you want to do today? </b><br>' +
+                '<b>Create new event: <button type="button" data-toggle="modal" href="#modalCreate" class="btn btn-default btn-sm">Create new</button><br>' +
+                '<b>Find event: <input type="text" class="form-control m-b-10" id="searchtxt2" placeholder="Enter event name" style="color: #333 !important; border: 1px solid #333;background: none;width: 70%;"><br>' +
+                '<button type="button" class="btn btn-md" onclick="search();">Search</button>' +
+                '</div>';
+
             var infowindow = new google.maps.InfoWindow({
                 map: map,
                 position: pos,
-                content: 'Im Here.'
+                content: contentString
             });
             map.setCenter(pos);
         }, function() {
@@ -85,6 +97,12 @@ function handleNoGeolocation(errorFlag) {
 // Search for events by name
 function search(){
     var name = $("#searchtxt").val();
+    if(name == "") {
+      name = $("#searchtxt2").val();
+    }
+
+    //searh nearby
+
     //e.preventDefault();
     $.ajax({
         url: localhost + '/feed/events/name/' + name,
@@ -174,7 +192,7 @@ function loadEvents(events) {
     console.log("loading events on map!");
     clearMap();
     var infowindow = new google.maps.InfoWindow({
-      maxWidth: 160
+      maxWidth: 200
     });
     var iconCounter = 0,
         i = 0;
@@ -190,13 +208,15 @@ function loadEvents(events) {
         var contentString = '<div id="content" class="markerInfo">' +
             '<div id="siteNotice">' + events[k].id +
             '</div>' +
-            '<h1 id="firstHeading" class="firstHeading">'+ events[k].name +'</h1>' +
+            '<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
             '<div id="bodyContent">' +
             '<p><b>Details: </b><br>' +
             '<b>Description: ' + events[k].permalink + '<br>' +
-            'Start: ' + events[k].time_start + '<br>' +
-            'End: ' + events[k].time_end + '</b></p><br>' +
-			'<div><button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
+            'Time: ' + events[k].time + '<br>' +
+            'Date: ' + events[k].date + '</b></p><br>' +
+			      '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
+            '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
+            '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
             '</div>';
 
         // infowindow = new google.maps.InfoWindow({
@@ -260,12 +280,13 @@ $("#createButton").click(function(e) {
     var eventTime = $("#time").val();
     var eventDesc = $("#description").val();
     var eventAddress = $("#address").val();
+    var eventPrivate = $("#private").is(':checked');
     var eventData = {
       "name": eventName,
       "category": eventCat,
       "date": eventDate,
       "time": eventTime,
-      "private": false,
+      "private": eventPrivate,
       "permalink": eventName.replace(" ","_"),
       "location": {
         "address": eventAddress,

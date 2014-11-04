@@ -16,8 +16,9 @@
   color: #333 !important;
   margin: 0px !important;
   max-height: 300px !important;
+  min-height: 220px !important;
 }
 .gm-style-iw {
   width: 324px !important;
-  height: 120px !important;
+  height: 220px !important;
 }
