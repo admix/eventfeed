@@ -1,6 +1,7 @@
 var ErrorHandler = require('./error').errorHandler;
 var dbEvents = require('../app/db/events');
 var dbUsers = require('../app/db/users');
+var emailer = require('../app/email/email');
 
 module.exports = exports = function(app, db, passport) {
 
@@ -165,6 +166,7 @@ module.exports = exports = function(app, db, passport) {
       dbEvents.registerForEvent(db, userData, eventId, function(err, msg) {
         if(err) throw err;
         console.log("Success");
+        emailer.sendEmail(req.user.facebook.email,{"event": "party yeah!"});
         //send email with confirmation
         res.send(msg, 200);
       })

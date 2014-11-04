@@ -156,6 +156,7 @@ function loadEvents(events) {
     var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7200, -79.4000]; // for testing
     console.log("loading events on map!");
     clearMap();
+    console.log(events);
     for (var k in events) {
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude),
@@ -182,7 +183,7 @@ function loadEvents(events) {
             event_address = marker.getPosition();
             infowindow.open(map,marker);
         });
-        google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
+        google.maps.event.addListener(marker, 'mouseover');
         markersArray.push(marker);
         mc.addMarker(marker);
     }
