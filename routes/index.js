@@ -162,13 +162,15 @@ module.exports = exports = function(app, db, passport) {
       } else if(req.user.local.email) {
         userData = req.user.local.username;
       }
-
+      var sent = "";
       dbEvents.registerForEvent(db, userData, eventId, function(err, msg) {
         if(err) throw err;
         console.log("Success");
-        emailer.sendEmail(req.user.facebook.email,{"event": "party yeah!"});
-        //send email with confirmation
-        res.send(msg, 200);
+        dbEvents.getEventById(db, eventId, function(err, event) {
+          if(err) throw err;
+          sent = emailer.sendEmail(req.user.facebook.email,event);
+          res.send(sent, 200);
+        })
       })
     });
 

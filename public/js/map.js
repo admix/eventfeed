@@ -14,6 +14,23 @@ var mc; // marker clusterer
 var eventfeed = "http://eventfeed.me",
     localhost = "http://localhost:8080";
 
+// Setup the different icons and shadows
+var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
+
+var icons = [
+  iconURLPrefix + 'red-dot.png',
+  iconURLPrefix + 'green-dot.png',
+  iconURLPrefix + 'blue-dot.png',
+  iconURLPrefix + 'orange-dot.png',
+  iconURLPrefix + 'purple-dot.png',
+  iconURLPrefix + 'pink-dot.png',
+  iconURLPrefix + 'yellow-dot.png'
+]
+var icons_length = icons.length;
+var shadow = {
+  anchor: new google.maps.Point(15,33),
+  url: iconURLPrefix + 'msmarker.shadow.png'
+};
 function initialize() {
     directionsDisplay = new google.maps.DirectionsRenderer();
     geocoder = new google.maps.Geocoder();
@@ -156,16 +173,22 @@ function loadEvents(events) {
     var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7200, -79.4000]; // for testing
     console.log("loading events on map!");
     clearMap();
-    console.log(events);
+    var infowindow = new google.maps.InfoWindow({
+      maxWidth: 160
+    });
+    var iconCounter = 0,
+        i = 0;
     for (var k in events) {
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude),
             map: map,
+            icon : icons[iconCounter],
+            shadow: shadow,
             title: events[k].name
         });
-
+        markersArray.push(marker);
         var contentString = '<div id="content" class="markerInfo">' +
-            '<div id="siteNotice">' +
+            '<div id="siteNotice">' + events[k].id +
             '</div>' +
             '<h1 id="firstHeading" class="firstHeading">'+ events[k].name +'</h1>' +
             '<div id="bodyContent">' +
@@ -173,26 +196,53 @@ function loadEvents(events) {
             '<b>Description: ' + events[k].permalink + '<br>' +
             'Start: ' + events[k].time_start + '<br>' +
             'End: ' + events[k].time_end + '</b></p><br>' +
-			'<div><input type="button" onclick="calcRoute()" value="Directions"></div>' +
+			'<div><button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
             '</div>';
 
-        infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
-        google.maps.event.addListener(marker, 'click', function() {
+        // infowindow = new google.maps.InfoWindow({
+        //     content: contentString
+        // });
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
             event_address = marker.getPosition();
-            infowindow.open(map,marker);
-        });
-        google.maps.event.addListener(marker, 'mouseover');
-        markersArray.push(marker);
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+        //google.maps.event.addListener(marker, 'mouseover');
+
         mc.addMarker(marker);
+        iconCounter++;
+        i++;
+        if(iconCounter >= icons_length){
+        	iconCounter = 0;
+        }
     }
 
+}
+function register() {
+  console.log("Registering");
+  var eventid = $('#siteNotice').text();
+  console.log(eventid);
+  $.ajax({
+      url: localhost + '/feed/user/event/' + eventid,
+      type: 'POST',
+      dataType: 'json',
+      success: function(data){
+        console.log(data);
+        console.log("Successful GET.");
+        if(data == "sent") {
+          console.log("sent");
+        } else if(data == "error") {
+          console.log("error");
+        }
+      }
+  });
 }
 
 $("#address").geocomplete()
   .bind("geocode:result", function(event, result){
-    $.log("Result: " + result.formatted_address);
+    //$.log("Result: " + result.formatted_address);
   })
   .bind("geocode:error", function(event, status){
     $.log("ERROR: " + status);
@@ -290,7 +340,7 @@ function loadOneEventCreate(data) {
         event_address = marker.getPosition();
         infowindow.open(map,marker);
   });
-  google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
+  google.maps.event.addListener(marker, 'mouseover');
   markersArray.push(marker);
   mc.addMarker(marker);
 }

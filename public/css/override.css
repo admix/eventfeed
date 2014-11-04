@@ -14,5 +14,10 @@
 
 .markerInfo {
   color: #333 !important;
-  margin: 0px;
+  margin: 0px !important;
+  max-height: 300px !important;
+}
+.gm-style-iw {
+  width: 324px !important;
+  height: 120px !important;
 }
