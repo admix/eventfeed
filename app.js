@@ -30,11 +30,11 @@ MongoClient.connect('mongodb://localhost:27017/eventfeed', function(err, db) {
   if(err) throw err;
 
   // Register our templating engine
-  app.engine('html', cons.swig);
-  app.set('view engine', 'html');
+  //app.engine('html', cons.swig);
+  app.set('view engine', 'ejs');
   app.use(compression()); //use compression
   app.use(express.static(__dirname + '/public'));
-  app.engine('html', require('ejs').renderFile);
+  //app.engine('html', require('ejs').renderFile);
   // Express middleware to populate 'req.cookies' so we can access cookies
   app.use(express.cookieParser());
 
