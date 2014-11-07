@@ -14,8 +14,10 @@ module.exports = exports = function(app, db, passport) {
     //   }
     // })
     // Home page
-    app.get('/', function(req, res) {
-      res.render("index.ejs");
+    app.get('/', isLoggedIn, function(req, res) {
+      res.render('profile.ejs', {
+        user : req.user, username: result // get the user out of session and pass to template
+      });
     });
   //  app.get('/home', function(req, res) {
   //    res.render("index");
@@ -26,18 +28,18 @@ module.exports = exports = function(app, db, passport) {
 		 var email = null;
 		// var test;
 		 if(req.user.facebook.email) {
-            email = req.user.facebook.email;
-            result = email.split('@')[0]; 
-         } else if(req.user.local.email) {
-            email = req.user.local.email;
-            result = email.split('@')[0];
-         }
-				  
-		res.render('profile.ejs', {
-			user : req.user, username: result // get the user out of session and pass to template
-		});
+       email = req.user.facebook.email;
+       result = email.split('@')[0];
+     } else if(req.user.local.email) {
+       email = req.user.local.email;
+       result = email.split('@')[0];
+     }
+
+		 res.render('profile.ejs', {
+		   user : req.user, username: result // get the user out of session and pass to template
+		 });
 	});
-	
+
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
@@ -45,7 +47,7 @@ module.exports = exports = function(app, db, passport) {
 		req.logout();
 		res.redirect('/');
 	});
-	
+
   	// =====================================
   	// FACEBOOK ROUTES =====================
   	// =====================================
@@ -294,7 +296,7 @@ function isLoggedIn(req, res, next) {
   }
   // if they aren't redirect them to the home page
   console.log("is logged in. not.")
-  res.redirect('/');
+  res.render("index.ejs");
 }
 
 function loggedIn(req, res, next) {

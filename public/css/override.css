@@ -22,3 +22,9 @@
   width: 324px !important;
   height: 220px !important;
 }
+
+@media (max-width: 700px) {
+  .media-body a, .media-body button {
+    width: 100%;
+  }
+}

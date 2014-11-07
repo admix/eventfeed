@@ -16,6 +16,7 @@ var eventfeed = "http://eventfeed.me",
 
 // Setup the different icons and shadows
 var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
+var mapStyle = [{"featureType":"road","elementType":"geometry","stylers":[{"lightness":100},{"visibility":"simplified"}]},{"featureType":"water","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#C6E2FF"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#C5E3BF"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#D1D1B8"}]}];
 
 var icons = [
   iconURLPrefix + 'red-dot.png',
@@ -62,13 +63,14 @@ function initialize() {
     } else {
 		console.log("no pos");
         mystartloc = new google.maps.LatLng(43.7000,-79.4000);
-		map.setCenter(mystartloc);
+		    map.setCenter(mystartloc);
         handleNoGeolocation(false);
     }
 	var mapOptions = {
             zoom: 12,
             center: mystartloc,
-            scrollwheel: false
+            scrollwheel: false,
+            styles: mapStyle
         }
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     directionsDisplay.setMap(map);

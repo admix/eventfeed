@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="format-detection" content="telephone=no">
     <meta charset="UTF-8">
-    <meta name="description" content="Violate Responsive Admin Template">
-    <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
+    <meta name="description" content="EventFeed - created by people for people">
+    <meta name="keywords" content="Event, find, invite, register">
     <title>Event Feed</title>
     <!-- CSS -->
     <link href="/css/vendors/bootstrap.min.css" rel="stylesheet">
@@ -55,10 +55,10 @@
     </script>
     <header id="header" class="media">
       <a href="" id="menu-toggle"></a>
-      <a class="logo pull-left" href="index.html">EventFeed.me</a>
+      <a class="logo pull-left" href="/">EventFeed.me</a>
       <div class="media-body">
         <div class="media" id="top-menu">
-          <div id="time" class="pull-right">
+          <div id="time" class="pull-right hidden-sm hidden-xs">
             <span id="hours"></span>
             :
             <span id="min"></span>
@@ -67,13 +67,19 @@
           </div>
           <div class="media-body">
             <div class="row">
-              <div class="col-lg-5 col-sm-5">
+              <div class="col-lg-5 col-xs-12">
                 <input type="text" class="form-control m-b-10" id="searchtxt" placeholder="Enter event name">
               </div>
+              <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
                 <button type="button" class="btn btn-md" onclick="search();">Search</button>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
                 <a data-toggle="modal" href="#modalCreate" class="btn btn-md">Create Event</a>
-                <a data-toggle="modal" href="#modalLogout" class="btn btn-md">Logout</a>			
-                <button id="register" type="button" class="btn btn-md">Reg</button>
+              </div>
+              <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
+                <a data-toggle="modal" href="#modalLogout" class="btn btn-md">Logout</a>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 hidden-sm hidden-xs">
                 <button type="button" class="btn btn-md" onclick="myEvents();">My Events</button>
               </div>
             </div>
@@ -434,6 +440,7 @@
     <!-- All JS functions -->
     <script src="/js/vendors/functions.js"></script>
     <script type="text/javascript" src="/js/vendors/jquery.slidepanel.js"></script>
+    <script type="text/javascript" src="/js/markerclusterer.js"></script>
     <script type="text/javascript" src="/js/createEvent.js"></script>
     <script type="text/javascript" src="/js/map.js"></script>
     <script type="text/javascript" src="/js/utils.js"></script>
