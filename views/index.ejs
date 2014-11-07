@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="format-detection" content="telephone=no">
     <meta charset="UTF-8">
-    <meta name="description" content="EventFeed - created by people for people">
-    <meta name="keywords" content="Event, find, invite, register">
+    <meta name="description" content="Violate Responsive Admin Template">
+    <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
     <title>Event Feed</title>
     <!-- CSS -->
     <link href="/css/vendors/bootstrap.min.css" rel="stylesheet">
@@ -70,19 +70,11 @@
               <div class="col-lg-5 col-sm-5">
                 <input type="text" class="form-control m-b-10" id="searchtxt" placeholder="Enter event name">
               </div>
-              <div class="col-lg-1 col-sm-1">
                 <button type="button" class="btn btn-md" onclick="search();">Search</button>
-              </div>
-              <div class="col-lg-2 col-sm-2">
                 <a data-toggle="modal" href="#modalCreate" class="btn btn-md">Create Event</a>
-              </div>
-              <div class="col-lg-1 col-sm-1">
                 <a data-toggle="modal" href="#modalLogin" class="btn btn-md">Login</a>
-              </div>
-              <div class="col-lg-1 col-sm-1">
+                <a data-toggle="modal" href="#modalSign-up" class="btn btn-md">Sign-Up</a>				
                 <button id="register" type="button" class="btn btn-md">Reg</button>
-              </div>
-              <div class="col-lg-2 col-sm-2">
                 <button type="button" class="btn btn-md" onclick="myEvents();">My Events</button>
               </div>
             </div>
@@ -107,8 +99,7 @@
               <li><a href="">Settings</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
               <li><a href="">Sign Out</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
             </ul>
-            <h4 class="m-0">Alex Snurnikov</h4>
-            @admixsn
+            <h4 class="m-0"></h4>
           </div>
           <!-- Calendar -->
           <div class="s-widget m-b-25">
@@ -304,81 +295,17 @@
       </section>
     </section>
     <!-- Modals -->
-    <!-- Create modal -->
-    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Creating new event</h4>
-          </div>
-          <div class="modal-body">
-            <h4 class="block-title">Provide information about the event you want to create!</h4>
-          </div>
-          <div class="block-area" id="multi-column">
-            <form class="row form-columned" role="form">
-              <div class="col-md-4">
-                <input id="name" type="text" class="form-control input-sm m-b-10" placeholder="Name">
-              </div>
-              <div class="col-md-4">
-                <input id="address" type="text" class="form-control input-sm m-b-10" placeholder="Address">
-              </div>
-              <div class="col-md-4">
-                <div id="cat" class="btn-group m-b-6">
-                  <button id="category" type="button" class="btn btn-sm">Category</button>
-                  <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu animated fadeIn">
-                    <li><a href="#">Fun</a></li>
-                    <li><a href="#">Friends</a></li>
-                    <li><a href="#">Family</a></li>
-                    <li><a href="#">Business</a></li>
-                    <li><a href="#">Adventure</a></li>
-                    <li><a href="#">Holidays</a></li>
-                    <li><a href="#">Concert</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="clearfix"></div>
-              <div class="col-md-4">
-                <input id="date" type="text" class="form-control input-sm m-b-10" placeholder="Date">
-              </div>
-              <div class="col-md-4">
-                <input id="time" type="text" class="form-control input-sm m-b-10" placeholder="Time">
-              </div>
-              <div class="col-md-4">
-                <div class="checkbox m-b-5">
-                    <label>
-                        <input id="private" type="checkbox" checked="">Private
-                    </label>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <textarea id="description" class="form-control m-b-10" placeholder="Description"></textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button id="createButton" type="button" class="btn btn-sm">Create event</button>
-            <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Info modal -->
-    <div id="modalInfo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <!-- Create Modal-->
+    <div id="modalCreate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">Info</h4>
+            <h4 class="modal-title" id="myModalLabel">Create Event</h4>
           </div>
           <div class="modal-body">
-            <h4>Info</h4>
-            <p>More detailed info of the event</p>
-            <button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;
-            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>
+            <h4>Create Event</h4>
+            <p>Please Sign-up or Login to Create Event </p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -427,7 +354,7 @@
           </div>
           <div class="modal-body">
             <h4>Sign-up</h4>
-            <form action="/signup" method="post">
+            <form action="/local-signup" method="post">
               <div class="form-group">
                 <label>First Name</label>
                 <input type="text" class="form-control" name="firstName">
@@ -478,7 +405,6 @@
     <script src="/js/vendors/feeds.min.js"></script> <!-- News Feeds -->
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> <!-- google map API Places -->
     <script src="/js/vendors/jquery.geocomplete.min.js"></script>
-    <script type="text/javascript" src="/js/markerclusterer.js"></script>
     <!-- All JS functions -->
     <script src="/js/vendors/functions.js"></script>
     <script type="text/javascript" src="/js/vendors/jquery.slidepanel.js"></script>
