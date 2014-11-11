@@ -3,7 +3,7 @@
  */
 var directionsService = new google.maps.DirectionsService();
 var pos;
-var directionsDisplay;
+var directionsDisplay = new google.maps.DirectionsRenderer();
 var map;
 var markersArray = [];
 var infowindow;
@@ -33,7 +33,7 @@ var shadow = {
   url: iconURLPrefix + 'msmarker.shadow.png'
 };
 function initialize() {
-    directionsDisplay = new google.maps.DirectionsRenderer();
+    $("#directions-panel").hide();
     geocoder = new google.maps.Geocoder();
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -73,7 +73,9 @@ function initialize() {
             styles: mapStyle
         }
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    directionsDisplay.setMap(map);
+    // var control = document.getElementById('control');
+    // control.style.display = 'block';
+    // map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
     mc = new MarkerClusterer(map);
 }
 function getEvents(){
@@ -172,6 +174,10 @@ function loadOneEvent(data) {
 }
 // Directions calculations
 function calcRoute() {
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay.setMap(map);
+    directionsDisplay.setPanel(document.getElementById('directions-panel'));
+    $("#directions-panel").show();
     var start = pos;
     var end = event_address;
     console.log("in calc route");
@@ -232,7 +238,7 @@ function loadEvents(events) {
           }
         })(marker, i));
         //google.maps.event.addListener(marker, 'mouseover');
-
+        console.log("here");
         mc.addMarker(marker);
         iconCounter++;
         i++;
@@ -246,6 +252,7 @@ function register() {
   console.log("Registering");
   var eventid = $('#siteNotice').text();
   console.log(eventid);
+  //$("#modalRegister").modal("show");
   $.ajax({
       url: localhost + '/feed/user/event/' + eventid,
       type: 'POST',
@@ -255,9 +262,14 @@ function register() {
         console.log("Successful GET.");
         if(data == "sent") {
           console.log("sent");
+          $("#modalRegister").modal("show");
         } else if(data == "error") {
           console.log("error");
         }
+      },
+      error: function(e) {
+        $("#modalInfo").modal("hide");
+        $("#modalRegister").modal("show");
       }
   });
 }
@@ -373,7 +385,11 @@ function clearMap() {
     markersArray[i].setMap(null);
   }
   markersArray.length = 0;
-  mc.clearMarkers();
+  directionsDisplay.setMap(null);
+  $("#directions-panel").hide();
+  map.setZoom(12);
+  if(mc)
+    mc.clearMarkers();
 }
 
 // Initializes Map

@@ -23,14 +23,49 @@
     <style type="text/css">
       html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
       #search-panel {
-      position: absolute;
-      top: 5px;
-      left: 50%;
-      margin-left: -180px;
-      z-index: 5;
-      background-color: #fff;
-      padding: 5px;
-      border: 1px solid #999;
+          position: absolute;
+          top: 5px;
+          left: 50%;
+          margin-left: -180px;
+          z-index: 5;
+          background-color: #fff;
+          padding: 5px;
+          border: 1px solid #999;
+      }
+
+      #directions-panel {
+          height: 100%;
+          float: right;
+          width: 390px;
+          overflow: auto;
+      }
+      #control {
+          background: #fff;
+          padding: 5px;
+          font-size: 14px;
+          font-family: Arial;
+          border: 1px solid #ccc;
+          box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+          display: none;
+      }
+      .adp-summary {
+        font-size: 14px !important;
+        color: #64DD17 !important;
+        font-weight: 600 !important;
+      }
+      .adp-directions {
+        color: #fff !important;
+      }
+      @media print {
+          #map-canvas {
+              height: 500px;
+              margin: 0;
+          }
+
+          #directions-panel {
+              float: none;
+              width: auto;
+          }
       }
     </style>
     <link href="/css/override.css" rel="stylesheet" type="text/css">
@@ -99,6 +134,7 @@
           <div class="col-md-12">
             <div class="tile">
               <div style="height: 700px;padding:0px !important;margin: 0px;width: auto;">
+                <div id="directions-panel"></div>
                 <div id="map-canvas"></div>
               </div>
             </div>
@@ -110,6 +146,27 @@
       </section>
     </section>
     <!-- Modals -->
+   <!-- Register Modal -->
+   <div id="modalRegister" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+           <h4 class="modal-title" id="myModalLabel">Register for event</h4>
+         </div>
+         <div class="modal-body">
+           <h4>Register for event</h4>
+           <p>Please Sign-up or Login to Register for event </p>
+           <a data-toggle="modal" href="#modalLogin" class="btn btn-md">Login</a>
+           <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook login</a>
+           or <a data-toggle="modal" href="#modalSign-up" class="btn btn-md">Sign-Up</a>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+         </div>
+       </div>
+     </div>
+   </div>
 	 <!-- Create Modal-->
     <div id="modalCreate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -121,6 +178,9 @@
           <div class="modal-body">
             <h4>Create Event</h4>
             <p>Please Sign-up or Login to Create Event </p>
+            <a data-toggle="modal" href="#modalLogin" class="btn btn-md">Login</a>
+            <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>  Facebook login</a>
+            or <a data-toggle="modal" href="#modalSign-up" class="btn btn-md">Sign-Up</a>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -205,13 +265,33 @@
         </div>
       </div>
     </div>
+    <!-- Info Modal -->
+    <div id="modalInfo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Info</h4>
+          </div>
+          <div class="modal-body">
+            <h4>Info</h4>
+            <p>More detailed info of the event</p>
+            <button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;
+            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+    </div>
+  </div>
     <!-- Javascript Libraries -->
     <!-- jQuery -->
     <script src="/js/vendors/jquery-ui.min.js"></script> <!-- jQuery UI -->
     <!-- Bootstrap -->
     <script src="/js/vendors/bootstrap.min.js"></script>
     <!--  Form Related -->
-    <script src="/js/vendors/icheck.js"></script> <!-- Custom Checkbox + Radio -->
+    <script src="/js/vendors/icheck.js"></script> <!-- Custom Checkbox  Radio -->
     <!-- UX -->
     <script src="/js/vendors/scroll.min.js"></script> <!-- Custom Scrollbar -->
     <!-- Other -->

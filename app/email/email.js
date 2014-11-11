@@ -17,6 +17,7 @@ function sendEmail(user, event) {
           pass: userpwd
       }
   });
+  console.log("Registering for: " + JSON.stringify(event));
   // transporter.use('stream', signer({
   //     domainName: '',
   //     keySelector: 'google',

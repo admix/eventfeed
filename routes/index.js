@@ -191,9 +191,13 @@ module.exports = exports = function(app, db, passport) {
       }
 
       dbEvents.registerForEvent(db, userData, eventId, function(err, msg) {
-        if(err) throw err;
-        console.log("Success");
-        emailer.sendEmail(req.user.facebook.email,{"event": "party yeah!"});
+        if(err) console.log("Error reg");
+        console.log("Success: " + msg);
+        dbEvents.getEventById(db, eventId, function(err, doc) {
+          if(err) console.log('Error get');
+          emailer.sendEmail(req.user.facebook.email,doc);
+        })
+
         //send email with confirmation
         res.send(msg, 200);
       })
