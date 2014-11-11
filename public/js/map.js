@@ -145,7 +145,10 @@ function myEvents(){
 // Loading only one event on a map
 function loadOneEvent(data) {
   var locations = [43.7000, -79.4000];
-
+  clearMap();
+  var infowindow = new google.maps.InfoWindow({
+    maxWidth: 200
+  });
   var marker = new google.maps.Marker({
       position: new google.maps.LatLng(locations[0], locations[1]),
       map: map,
@@ -153,21 +156,26 @@ function loadOneEvent(data) {
       //icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
   });
   markersArray.push(marker);
-  google.maps.event.addListener(marker, 'click', clickEvent);
-  google.maps.event.addListener(marker, 'mouseover', mouseOverEvent);
-  var contentString = '<div id="content">' +
-      '<div id="siteNotice">' +
+  var contentString = '<div id="content" class="markerInfo">' +
+      '<div id="siteNotice">' + data.id +
       '</div>' +
-      '<h1 id="firstHeading" class="firstHeading">'+ data[i].description +'</h1>' +
+      '<h3 id="firstHeading" class="firstHeading">'+ data.name +'</h3>' +
       '<div id="bodyContent">' +
-      '<p><b>Party details</b>' +
-      '</div>' +
-	  '<div><input type="button" onclick="calcRoute()" value="Directions"></div>' +
+      '<p><b>Details: </b><br>' +
+      '<b>Description: ' + data.permalink + '<br>' +
+      'Time: ' + data.time + '<br>' +
+      'Date: ' + data.date + '</b></p><br>' +
+      '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
+      '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
+      '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
       '</div>';
-
-  infowindow = new google.maps.InfoWindow({
-      content: contentString
-  });
+  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    return function() {
+      event_address = marker.getPosition();
+      infowindow.setContent(contentString);
+      infowindow.open(map, marker);
+    }
+  })(marker, i));
 }
 // Directions calculations
 function calcRoute() {
@@ -210,7 +218,19 @@ function loadEvents(events) {
             title: events[k].name
         });
         markersArray.push(marker);
-        var contentString = '<div id="content" class="markerInfo">' +
+  //       '<div class="panel panel-default">'+
+  // '<div class="panel-heading">' +
+  // '<h3 id="siteNotice" class="panel-title">'+events[k].id +' - '+events[k].name+'</h3>' +
+  // '</div>' +
+  // '<div class="panel-body">' +
+  // 'Description: ' + events[k].permalink + ' '+'<button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button>'
+  // 'Time: ' + events[k].time +
+  // 'Date: ' + events[k].date +
+  // '</div>'+
+  // '<div class="panel-footer"><button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;<br><button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>'+
+  // '</div>';
+
+            var contentString = '<div id="content" class="markerInfo panel">' +
             '<div id="siteNotice">' + events[k].id +
             '</div>' +
             '<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
@@ -326,7 +346,7 @@ function convertLatLong(eventData) {
           console.log(eventData.location.latitude);
           eventData.location.latitude = event[0];
           eventData.location.longitude = event[1];
-          loadOneEventCreate(eventData);
+
 
           $.ajax({
               url: localhost + '/feed/event',
@@ -334,7 +354,9 @@ function convertLatLong(eventData) {
               data: eventData,
               success: function(data){
                   $("#dataById").html(data.name);
+                  console.log(JSON.stringify(data));
                   $("#modalCreate").modal("hide");
+                  loadOneEventCreate(data);
               }
           });
 
@@ -345,26 +367,31 @@ function convertLatLong(eventData) {
 }
 
 function loadOneEventCreate(data) {
-  console.log(data);
-  console.log("location info lat: " + data.location.latitude);
-  console.log("location info long: " + data.location.longitude);
+  clearMap();
+  var infowindow = new google.maps.InfoWindow({
+    maxWidth: 200
+  });
   var marker = new google.maps.Marker({
       position: new google.maps.LatLng(data.location.latitude, data.location.longitude),
       map: map,
       animation: google.maps.Animation.DROP,
       title: data.name
   });
-  var contentString = '<div id="content">' +
-      '<div id="siteNotice">' +
+
+  var contentString = '<div id="content" class="markerInfo">' +
+      '<div id="siteNotice">' + data.id +
       '</div>' +
-      '<h1 id="firstHeading" class="firstHeading">'+ data.name +'</h1>' +
+      '<h3 id="firstHeading" class="firstHeading">'+ data.name +'</h3>' +
       '<div id="bodyContent">' +
       '<p><b>Details: </b><br>' +
       '<b>Description: ' + data.permalink + '<br>' +
-      'Time: ' + data.time_start + '<br>' +
-      '</b></p><br>' +
-      '<div><input type="button" onclick="calcRoute()" value="Directions"></div>' +
+      'Time: ' + data.time + '<br>' +
+      'Date: ' + data.date + '</b></p><br>' +
+      '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
+      '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
+      '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
       '</div>';
+
   infowindow = new google.maps.InfoWindow({
       content: contentString
   });
@@ -372,7 +399,7 @@ function loadOneEventCreate(data) {
         event_address = marker.getPosition();
         infowindow.open(map,marker);
   });
-  google.maps.event.addListener(marker, 'mouseover');
+  // google.maps.event.addListener(marker, 'mouseover');
   markersArray.push(marker);
   mc.addMarker(marker);
 }

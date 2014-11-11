@@ -23,6 +23,15 @@
   height: 220px !important;
 }
 
+.adp-summary {
+  font-size: 14px !important;
+  color: #64DD17 !important;
+  font-weight: 600 !important;
+}
+.adp-directions {
+  color: #fff !important;
+}
+
 @media (max-width: 700px) {
   .media-body a, .media-body button {
     width: 100%;
