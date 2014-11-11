@@ -33,6 +33,7 @@ var shadow = {
   url: iconURLPrefix + 'msmarker.shadow.png'
 };
 function initialize() {
+    $("#directions-panel").hide();
     directionsDisplay = new google.maps.DirectionsRenderer();
     geocoder = new google.maps.Geocoder();
     if(navigator.geolocation) {
@@ -74,10 +75,11 @@ function initialize() {
         }
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     directionsDisplay.setMap(map);
+    directionsDisplay.setPanel(document.getElementById('directions-panel'));
+    var control = document.getElementById('control');
+    control.style.display = 'block';
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
     mc = new MarkerClusterer(map);
-}
-function getEvents(){
-    // Get the events from Json to objects events
 }
 
 function handleNoGeolocation(errorFlag) {
@@ -172,6 +174,7 @@ function loadOneEvent(data) {
 }
 // Directions calculations
 function calcRoute() {
+    $("#directions-panel").show();
     var start = pos;
     var end = event_address;
     console.log("in calc route");
