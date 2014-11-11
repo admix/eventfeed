@@ -78,9 +78,6 @@ function initialize() {
     // map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
     mc = new MarkerClusterer(map);
 }
-function getEvents(){
-    // Get the events from Json to objects events
-}
 
 function handleNoGeolocation(errorFlag) {
     if (errorFlag) {
