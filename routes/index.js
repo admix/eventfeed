@@ -183,9 +183,9 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //-------------- Handling Friends ----------------
-    app.get('/friends/', loggedIn, function(req, res) {
+    app.get('/friends',  function(req, res) {
       console.log("Get friends for loggedin user");
-      var userData = "";
+      var userData = "jevon";
       if(req.user.facebook.username) {
         userData = req.user.facebook.username;
       } else if(req.user.local.email) {
