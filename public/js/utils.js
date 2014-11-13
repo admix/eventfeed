@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  console.log("utils loaded");
   var eventfeed = "http://eventfeed.me",
       localhost = "http://localhost:8080";
 
@@ -13,8 +14,8 @@ $(document).ready(function(){
 
   // create a button inside the info window with this id: #register
   // (when the button will be clicked it will go in this functions)
-   $("#register").click(function(e) {
-     e.preventDefault();
+  $("#register").click(function(e) {
+    e.preventDefault();
     var eventId = 19;  // change to real event id
 
     $.ajax({
@@ -25,7 +26,6 @@ $(document).ready(function(){
         console.log(data); // 1 will be returned if success
       }
     })
-   })
-
+  })
 
 });

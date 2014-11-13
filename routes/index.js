@@ -1,6 +1,7 @@
 var ErrorHandler = require('./error').errorHandler;
 var dbEvents = require('../app/db/events');
 var dbUsers = require('../app/db/users');
+var emailer = require('../app/email/email');
 
 module.exports = exports = function(app, db, passport) {
 
@@ -13,12 +14,39 @@ module.exports = exports = function(app, db, passport) {
     //   }
     // })
     // Home page
-    app.get('/', function(req, res) {
-      res.render("index.html");
+    app.get('/', isLoggedIn, function(req, res) {
+      res.render('profile.ejs', {
+        user : req.user, username: result // get the user out of session and pass to template
+      });
     });
-    app.get('/home', function(req, res) {
-      res.render("index");
-    });
+  //  app.get('/home', function(req, res) {
+  //    res.render("index");
+  //  });
+
+	app.get('/profile', isLoggedIn, function(req, res) {
+		 var resullt = null;
+		 var email = null;
+		// var test;
+		 if(req.user.facebook.email) {
+       email = req.user.facebook.email;
+       result = email.split('@')[0];
+     } else if(req.user.local.email) {
+       email = req.user.local.email;
+       result = email.split('@')[0];
+     }
+
+		 res.render('profile.ejs', {
+		   user : req.user, username: result // get the user out of session and pass to template
+		 });
+	});
+
+	// =====================================
+	// LOGOUT ==============================
+	// =====================================
+	app.get('/logout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
 
   	// =====================================
   	// FACEBOOK ROUTES =====================
@@ -32,20 +60,20 @@ module.exports = exports = function(app, db, passport) {
   	// handle the callback after face book has authenticated the user
   	app.get('/auth/facebook/callback',
   		passport.authenticate('facebook', {
-  			successRedirect : '/',   // Need to discuss what happens after user logs in
+  			successRedirect : '/profile',   // Need to discuss what happens after user logs in
   			failureRedirect : '/'
   		}));
 
   	// process the login form
   	app.post('/local-login', passport.authenticate('local-login', {
-  		successRedirect : '/', // redirect to the secure profile section
+  		successRedirect : '/profile', // redirect to the secure profile section
   		failureRedirect : '/', // redirect back to the signup page if there is an error
   		failureFlash : true // allow flash messages
   	}));
 
   	// process the signup form
-  	app.post('/signup', passport.authenticate('local-signup', {
-  		successRedirect : '/', // redirect to the secure profile section
+  	app.post('/local-signup', passport.authenticate('local-signup', {
+  		successRedirect : '/profile', // redirect to the secure profile section
   		failureRedirect : '/', // redirect back to the signup page if there is an error
   		failureFlash : true // allow flash messages
   	}));
@@ -175,8 +203,13 @@ module.exports = exports = function(app, db, passport) {
       }
 
       dbEvents.registerForEvent(db, userData, eventId, function(err, msg) {
-        if(err) throw err;
-        console.log("Success");
+        if(err) console.log("Error reg");
+        console.log("Success: " + msg);
+        dbEvents.getEventById(db, eventId, function(err, doc) {
+          if(err) console.log('Error get');
+          emailer.sendEmail(req.user.facebook.email,doc);
+        })
+
         //send email with confirmation
         res.send(msg, 200);
       })
@@ -293,7 +326,7 @@ function isLoggedIn(req, res, next) {
   }
   // if they aren't redirect them to the home page
   console.log("is logged in. not.")
-  res.redirect('/');
+  res.render("index.ejs");
 }
 
 function loggedIn(req, res, next) {
