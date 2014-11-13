@@ -50,6 +50,10 @@ module.exports = {
         }
       });
 
+    },
+    getFriends: function(db, user, callback) {
+      "use strict";
+      var users = db.collection("users");
     }, //updating user by ID
     updateUserByID: function(db, user, callback) {
       "use strict";

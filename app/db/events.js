@@ -39,7 +39,21 @@ module.exports = {
         console.log(doc);
         callback(null, doc);
       });
-    }, //get events for specific user
+    }, //get events by date
+    getEventsByDate: function(db, eventDate, callback) {
+      "use strict";
+      var events = db.collection("events");
+      eventDate.date = eventDate.date.replace(/-/g,"/");
+      console.log(eventDate);
+      events.find({"date":eventDate.date,'users':{$elemMatch:{'username':eventDate.user}}}).toArray(function(err, doc) {
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        }
+        //console.log(doc);  //response from mongo
+        callback(null, doc);
+      });
+    },//get events for specific user
     getEventsForUser: function(db, userId, callback) {
       "use strict";
       var events = db.collection("events");

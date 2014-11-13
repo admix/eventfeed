@@ -83,6 +83,18 @@ module.exports = exports = function(app, db, passport) {
 
     });
 
+    //GET events by Date
+    app.post('/feed/events/date/user', function (req, res) {
+      console.log("in GET by date");
+      var eventDate = req.body;
+      dbEvents.getEventsByDate(db, eventDate, function(err, msg) {
+        if(err) console.log(err);
+        res.send(JSON.stringify(msg), 200);
+        //res.end();
+      })
+
+    });
+
     //GET all events for specified user (username/id provided)
     app.get('/feed/events/user/:id', function (req, res) {
       var userName = req.params.id;
@@ -170,6 +182,20 @@ module.exports = exports = function(app, db, passport) {
       })
     });
 
+    //-------------- Handling Friends ----------------
+    app.get('/friends/', loggedIn, function(req, res) {
+      console.log("Get friends for loggedin user");
+      var userData = "";
+      if(req.user.facebook.username) {
+        userData = req.user.facebook.username;
+      } else if(req.user.local.email) {
+        userData = req.user.local.username;
+      }
+      dbUsers.getFriends(db, userData, function(err, msg) {
+        if(err) console.log("Error getting friends for logged in user");
+        res.send(msg, 200);
+      })
+    })
     //-------------- POSSIBLY NOT NEEDED --------------
 
     //PUT update an event for specific user by userID
