@@ -40,12 +40,12 @@ module.exports = {
         callback(null, doc);
       });
     }, //get events by date
-    getEventsByDate: function(db, eventDate, callback) {
+    getEventsByDate: function(db, username, eventDate, callback) {
       "use strict";
       var events = db.collection("events");
-      eventDate.date = eventDate.date.replace(/-/g,"/");
+      eventDate = eventDate.replace(/-/g,"/");
       console.log(eventDate);
-      events.find({"date":eventDate.date,'users':{$elemMatch:{'username':eventDate.user}}}).toArray(function(err, doc) {
+      events.find({"date": eventDate,'users':{$elemMatch:{'username':username}}}).toArray(function(err, doc) {
         if(err || doc == null) {
           console.log(err);
           callback(null, "Not found!");

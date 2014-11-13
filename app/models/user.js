@@ -37,7 +37,9 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-    fiends: []
+    username: String,
+    email: String,
+    friends: []
 
 });
 

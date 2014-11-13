@@ -50,14 +50,34 @@ module.exports = {
         }
       });
 
-    },
+    }, //get friend list
     getFriends: function(db, user, callback) {
       "use strict";
       var users = db.collection("users");
       console.log(user);
-      users.find({"friends": {$in:user}},{"facebook.token":0,"facebook.id":0,"_id":0,"__v":0,"facebook.email":0}, function(err, doc) {
+      users.find({'friends':{$in:[user]}},{"_id":0,"__v":0,"friends":0,"facebook":0}).toArray(function(err, doc) {
         if(err) console.log("Erro getting friends inside app/db");
-        console.log("friends: " + doc);
+        console.log("friends: " + JSON.stringify(doc));
+        callback(null, doc);
+      })
+    }, //add friend
+    addFriend: function(db, username, friend, callback) {
+      "use strict";
+      var users = db.collection("users");
+      console.log(username);
+      users.update({"username":username},{"$addToSet":{"friends":friend}}, function(err, doc) {
+        if(err) console.log("Error getting friends inside app/db");
+        console.log("friends: " + JSON.stringify(doc));
+        callback(null, doc);
+      })
+    },
+    removeFriend: function(db, username, friend, callback) {
+      "use strict";
+      var users = db.collection("users");
+      console.log(username);
+      users.update({"username":username},{"$pull":{"friends":friend}}, function(err, doc) {
+        if(err) console.log("Error getting friends inside app/db");
+        console.log("friends: " + JSON.stringify(doc));
         callback(null, doc);
       })
     }, //updating user by ID

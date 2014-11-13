@@ -26,7 +26,7 @@ Eventfeed
 5. GET - /feed/events/user/:id - get all events for specified user
 6. GET - /feed/myevents - get all myEvents (logged in user)
 7. GET - /feed/events/user/host/:id - get all the event 'userid' is hosting
-
+  7.1 POST - /feed/events/date/user' - get events by date+userevent
 6. POST - /feed/event - saves new event to DB (provided as JSON object in data)
 8. POST - /feed/user/event/:id - register for the event
 
@@ -43,5 +43,8 @@ Eventfeed
 ######Users
 1. GET - /feed/users/:username - get user by username
 2. POST - /feed/user/ - save user new info (from user profile)
-3. not tested - PUT - /feed/user/:id - update user info by username
-4.
+3. GET - /friends - get list of friends for loggedIn user
+  * [{"username":"some_username","email":"some_email"}, {"username":"some_username2","email":"some_email2"}]
+4. GET - /friends/:user - get list of friends for parameter user, return same as above
+5. POST - /friend - save friend for loggedIn user ({"friend":"name"} in body), return 1 if success
+6. POST - /friend/remove - remove friend from loggedIn user ({"friend":"name"} in body), return 1 if success
