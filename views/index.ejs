@@ -10,6 +10,8 @@
     <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
     <title>Event Feed</title>
     <!-- CSS -->
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <link href="/css/vendors/bootstrap.min.css" rel="stylesheet">
     <link href="/css/vendors/animate.min.css" rel="stylesheet">
     <link href="/css/vendors/font-awesome.min.css" rel="stylesheet">
@@ -82,7 +84,7 @@
         $("html").addClass("menu-active");
     </script>
     <header id="header" class="media">
-      <a class="logo pull-left" href="/">EventFeed.me</a>
+      <a class="logo pull-left" href="/"><img class="logo-img" src="/img/logo.jpg">EventFeed.me</a>
       <div class="media-body">
         <div class="media" id="top-menu">
           <div id="time" class="pull-right hidden-sm hidden-xs">
@@ -109,9 +111,6 @@
               <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
                 <a data-toggle="modal" href="#modalSign-up" class="btn btn-md">Sign-Up</a>
               </div>
-              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 hidden-sm hidden-xs">
-                <button type="button" class="btn btn-md" onclick="myEvents();">My Events</button>
-              </div>
             </div>
           </div>
         </div>
@@ -127,7 +126,7 @@
             <div class="tile">
               <div style="height: 700px;padding:0px !important;margin: 0px;width: auto;">
                 <div id="directions-panel"></div>
-                <div id="map-canvas"></div>
+                <div id="map-canvas" style="overflow: visible !important;"></div>
               </div>
             </div>
             <div class="clearfix"></div>

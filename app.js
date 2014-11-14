@@ -37,7 +37,6 @@ MongoClient.connect('mongodb://localhost:27017/eventfeed', function(err, db) {
   //app.engine('html', require('ejs').renderFile);
   // Express middleware to populate 'req.cookies' so we can access cookies
   app.use(express.cookieParser());
-
   // Express middleware to populate 'req.body' so we can access POST variables
   app.use(morgan('dev')); // log every request to the console
   app.use(express.bodyParser());
