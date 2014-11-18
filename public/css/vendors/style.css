@@ -1164,7 +1164,7 @@ hr {
 
 .modal-title, .dark-title {
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 18px;
     margin: 0;
     line-height: 1.428571429;
 }
@@ -1239,6 +1239,7 @@ hr {
     color: #fff;
     font-weight: normal;
     opacity: 0.3;
+    font-size: 28px;
 }
 
 /* Alerts */

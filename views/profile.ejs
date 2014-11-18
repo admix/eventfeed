@@ -39,6 +39,13 @@
           float: right;
           width: 390px;
           overflow: auto;
+          margin-top: 64px;
+          position: absolute;
+          float: right;
+          padding-right: 3px;
+          background-image: url(/img/body/violate.jpg);
+          right: 0;
+          z-index: 1;
       }
       #control {
           background: #fff;
@@ -228,8 +235,9 @@
         <div class="row" style="height: 100%;">
           <div class="col-md-12">
             <div class="tile">
-              <div style="height: 700px;padding:0px !important;margin: 0px;width: auto;">
-                <div id="directions-panel"></div>
+              <div id="directions-panel"></div>
+              <div style="height: 800px;padding:0px !important;margin: 0px;width: auto;">
+
                 <div id="map-canvas" style="overflow: visible !important;"></div>
               </div>
             </div>
@@ -484,7 +492,9 @@
             <h4>Info</h4>
             <p>More detailed info of the event</p>
             <button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;
-            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>
+            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button>
+            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Edit</button>
+            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Delete</button>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

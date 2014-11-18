@@ -179,7 +179,8 @@ function loadOneEvent(data) {
 }
 // Directions calculations
 function calcRoute() {
-    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay.setMap(null);
+    directionsDisplay.setOptions({ preserveViewport: true });
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
     $("#directions-panel").show();
@@ -204,11 +205,10 @@ function loadEvents(events) {
     var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7200, -79.4000]; // for testing
     console.log("loading events on map!");
     clearMap();
-    var infowindow = new google.maps.InfoWindow({
-      maxWidth: 200
-    });
     var iconCounter = 0,
         i = 0;
+    var det = ['bring a friend', 'could be cold', 'check email', 'smile', 'bring your own drink', 'whaaat?', 'have fun', 'nice weather', 'wear jeans and shirt', 'be patient'];
+    var h = 0;
     for (var k in events) {
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude),
@@ -229,17 +229,25 @@ function loadEvents(events) {
   // '</div>'+
   // '<div class="panel-footer"><button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;<br><button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>'+
   // '</div>';
-
-            var contentString = '<div id="content" class="markerInfo panel">' +
+            events[k].name = events[k].name[0].toUpperCase() + events[k].name.substr(1);
+            events[k].description = events[k].description[0].toUpperCase() + events[k].description.substr(1);
+            if(!det[h]) {
+              console.log('in h');
+              h = 0;
+            }
+            console.log(det[h]);
+            var contentString = '<div id="content" class="markerInfo panel panel-default">' +
             '<div id="siteNotice">' + events[k].id +
             '</div>' +
-            '<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
-            '<div id="bodyContent">' +
-            '<p><b>Details: </b><br>' +
-            '<b>Description: ' + events[k].permalink + '<br>' +
-            'Time: ' + events[k].time + '<br>' +
-            'Date: ' + events[k].date + '</b></p><br>' +
-			      '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
+            //'<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
+            '<div class="panel-heading"><h2 class="panel-title">'+events[k].name+'</h2></div>' +
+            '<div class="panel-body">' +
+            '<span style="text-align:center">Details: '+det[h]+'</span> <br>' +
+            'Description: ' + events[k].description + '<br>' +
+            'Time: 19:30 <br>' +// + /*events[k].time*/ + '<br>' +
+            'Date: ' + events[k].date + '<br></div>' +
+            'Address: ' + events[k].location.address + '<br></div>' +
+			      '<div class="panel-footer"><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
             '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
             '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
             '</div>';
@@ -247,18 +255,22 @@ function loadEvents(events) {
         // infowindow = new google.maps.InfoWindow({
         //     content: contentString
         // });
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        var infowindow = new google.maps.InfoWindow({
+          maxWidth: 200
+        });
+        google.maps.event.addListener(marker, 'click', (function(marker, i, contentString) {
           return function() {
             event_address = marker.getPosition();
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
           }
-        })(marker, i));
+        })(marker, i, contentString));
         //google.maps.event.addListener(marker, 'mouseover');
         console.log("here");
         mc.addMarker(marker);
         iconCounter++;
         i++;
+        h++;
         if(iconCounter >= icons_length){
         	iconCounter = 0;
         }
@@ -410,10 +422,12 @@ function clearMap() {
   }
   markersArray.length = 0;
   directionsDisplay.setMap(null);
+  directionsService = new google.maps.DirectionsService();
   $("#directions-panel").hide();
   map.setZoom(12);
-  if(mc)
+  if(mc) {
     mc.clearMarkers();
+  }
 }
 
 // Initializes Map
