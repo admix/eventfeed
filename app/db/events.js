@@ -53,6 +53,34 @@ module.exports = {
         //console.log(doc);  //response from mongo
         callback(null, doc);
       });
+    },
+    getMyEventsByDate: function(db, username, eventDate, callback) {
+      "use strict";
+      var events = db.collection("events");
+      eventDate = eventDate.replace(/-/g,"/");
+      console.log(eventDate);
+      events.find({"date": eventDate,'createdByUsername':username}).toArray(function(err, doc) {
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        }
+        //console.log(doc);  //response from mongo
+        callback(null, doc);
+      });
+    },
+    getEventsByYouAttend: function(db, username, callback) {
+      "use strict";
+      var events = db.collection("events");
+      //eventDate = eventDate.replace(/-/g,"/");
+      //console.log(eventDate);
+      events.find({'users':{$elemMatch:{'username':username}}}).toArray(function(err, doc) {
+        if(err || doc == null) {
+          console.log(err);
+          callback(null, "Not found!");
+        }
+        //console.log(doc);  //response from mongo
+        callback(null, doc);
+      });
     },//get events for specific user
     getEventsForUser: function(db, userId, callback) {
       "use strict";

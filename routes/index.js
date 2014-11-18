@@ -111,11 +111,37 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET events by Date
-    app.post('/feed/events/date/user', loggedIn, function (req, res) {
+    app.post('/feed/events/date/user', function (req, res) {
       console.log("in GET by date");
       var eventDate = req.body;
-      var username = req.user.username;
+      var username = "admix.snurnikov";//req.user.username;
       dbEvents.getEventsByDate(db, username, eventDate.date, function(err, msg) {
+        if(err) console.log(err);
+        res.send(JSON.stringify(msg), 200);
+        //res.end();
+      })
+
+    });
+
+    //GET events by Date and you created
+    app.post('/feed/events/date/myevents', function (req, res) {
+      console.log("in GET by date");
+      var eventDate = req.body;
+      var username = "admix.snurnikov";//req.user.username;
+      dbEvents.getMyEventsByDate(db, username, eventDate.date, function(err, msg) {
+        if(err) console.log(err);
+        res.send(JSON.stringify(msg), 200);
+        //res.end();
+      })
+
+    });
+
+    //GET events by Date
+    app.get('/feed/events/user/attend', function (req, res) {
+      console.log("in GET by date");
+      //var eventDate = req.body;
+      var username = "admix.snurnikov";//req.user.username;
+      dbEvents.getEventsByYouAttend(db, username, function(err, msg) {
         if(err) console.log(err);
         res.send(JSON.stringify(msg), 200);
         //res.end();
@@ -130,7 +156,7 @@ module.exports = exports = function(app, db, passport) {
       dbEvents.getEventsForUser(db, userName, function(err, msg) {
         if(err) throw err;
         console.log(msg);
-        res.send(msg, 200);
+        res.send(JSON.stringify(msg), 200);
         //res.end();
       })
     });
