@@ -31,9 +31,65 @@
 .adp-directions {
   color: #fff !important;
 }
+.logo {
+  padding-left: 35px;
+  padding-top: 7px;
+  text-align: left;
+  background: none;
+}
+.logo-img {
+  border-radius: 25px !important;
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+}
+#mai {
+  margin-top: -75px;
+}
 
-@media (max-width: 700px) {
+header {
+  z-index: 9;
+  opacity: 0.8;
+  background-image: url(/img/body/violate.jpg);
+}
+.media-body {
+  padding-top: 10px;
+}
+.media {
+  margin-top: 0px;
+}
+
+#sidebar {
+  margin-top: 75px;
+}
+.modal-dialog {
+  margin: 80px auto;
+}
+
+@media (max-width: 1220px) {
+  #mai {
+    margin-top: -100px;
+  }
+  .logo {
+    padding-top: 27px;
+  }
+  .mob #sidebar {
+    margin-top: 100px;
+  }
+
+}
+@media (max-width: 770px) {
   .media-body a, .media-body button {
     width: 100%;
+  }
+  #mai {
+    margin-top: 0px;
+  }
+  .logo {
+    padding-left: 35px;
+    padding-top: 7px;
+    margin-bottom: 7px;
+    text-align: center;
+    background: none;
   }
 }

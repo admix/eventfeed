@@ -108,7 +108,6 @@ module.exports = exports = function(app, db, passport) {
         res.send(JSON.stringify(msg), 200);
         //res.end();
       })
-
     });
 
     //GET events by Date
