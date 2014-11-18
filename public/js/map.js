@@ -1,6 +1,7 @@
 /**
- * Created by Owner on 9/22/2014.
+ * Created by EventFeed team on 9/22/2014.
  */
+
 var directionsService = new google.maps.DirectionsService();
 var pos;
 var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -36,7 +37,9 @@ function initialize() {
     $("#directions-panel").hide();
     geocoder = new google.maps.Geocoder();
     if(navigator.geolocation) {
+        var location_timeout = setTimeout("handleNoGeolocation(true)", 4000);
         navigator.geolocation.getCurrentPosition(function(position) {
+            clearTimeout(location_timeout);
             pos = new google.maps.LatLng(position.coords.latitude,
                 position.coords.longitude);
 
@@ -51,45 +54,45 @@ function initialize() {
                 '<button type="button" class="btn btn-md" onclick="search();">Search</button>' +
                 '</div>';
 
-            var infowindow = new google.maps.InfoWindow({
+                infowindow = new google.maps.InfoWindow({
                 map: map,
                 position: pos,
                 content: contentString
             });
             map.setCenter(pos);
         }, function() {
+            clearTimeout(location_timeout);
             handleNoGeolocation(true);
         });
     } else {
-		console.log("no pos");
-        mystartloc = new google.maps.LatLng(43.7000,-79.4000);
-		    map.setCenter(mystartloc);
         handleNoGeolocation(false);
     }
 	var mapOptions = {
-            zoom: 12,
+            zoom: 11,
             center: mystartloc,
             scrollwheel: false,
             styles: mapStyle
         }
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    // var control = document.getElementById('control');
-    // control.style.display = 'block';
-    // map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
     mc = new MarkerClusterer(map);
 }
 
 function handleNoGeolocation(errorFlag) {
-    if (errorFlag) {
-        var content = 'Error: The Geolocation service failed.';
-    } else {
-        var content = 'Error: Your browser doesn\'t support geolocation.';
-    }
+    var contentString = '<div id="content" class="markerInfo">' +
+        '<div id="siteNotice">' +
+        '</div>' +
+        '<h3 id="firstHeading" class="firstHeading">Start eventing!</h3>' +
+        '<div id="bodyContent">' +
+        '<p><b>What do you want to do today? </b><br>' +
+        '<b>Create new event: <button type="button" data-toggle="modal" href="#modalCreate" class="btn btn-default btn-sm">Create new</button><br>' +
+        '<b>Find event: <input type="text" class="form-control m-b-10" id="searchtxt2" placeholder="Enter event name" style="color: #333 !important; border: 1px solid #333;background: none;width: 70%;"><br>' +
+        '<button type="button" class="btn btn-md" onclick="search();">Search</button>' +
+        '</div>';
 
     var options = {
         map: map,
-        position: new google.maps.LatLng(-29.3456, 151.4346),
-        content: content
+        position: new google.maps.LatLng(43.653226, -79.383184),
+        content: contentString
     };
     var infowindow = new google.maps.InfoWindow(options);
     map.setCenter(options.position);
@@ -116,6 +119,7 @@ function search(){
             events.push(e);
           });
           console.log(events);
+          infowindow.close();
           loadEvents(data);
         }
     });
@@ -142,41 +146,41 @@ function myEvents(){
     });
 }
 
-// Loading only one event on a map
-function loadOneEvent(data) {
-  var locations = [43.7000, -79.4000];
-  clearMap();
-  var infowindow = new google.maps.InfoWindow({
-    maxWidth: 200
-  });
-  var marker = new google.maps.Marker({
-      position: new google.maps.LatLng(locations[0], locations[1]),
-      map: map,
-      title: data[i].name
-      //icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
-  });
-  markersArray.push(marker);
-  var contentString = '<div id="content" class="markerInfo">' +
-      '<div id="siteNotice">' + data.id +
-      '</div>' +
-      '<h3 id="firstHeading" class="firstHeading">'+ data.name +'</h3>' +
-      '<div id="bodyContent">' +
-      '<p><b>Details: </b><br>' +
-      '<b>Description: ' + data.permalink + '<br>' +
-      'Time: ' + data.time + '<br>' +
-      'Date: ' + data.date + '</b></p><br>' +
-      '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
-      '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
-      '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
-      '</div>';
-  google.maps.event.addListener(marker, 'click', (function(marker, i) {
-    return function() {
-      event_address = marker.getPosition();
-      infowindow.setContent(contentString);
-      infowindow.open(map, marker);
-    }
-  })(marker, i));
-}
+// // Loading only one event on a map
+// function loadOneEvent(data) {
+//   var locations = [43.7000, -79.4000];
+//   clearMap();
+//   var infowindow = new google.maps.InfoWindow({
+//     maxWidth: 200
+//   });
+//   var marker = new google.maps.Marker({
+//       position: new google.maps.LatLng(locations[0], locations[1]),
+//       map: map,
+//       title: data[i].name
+//       //icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
+//   });
+//   markersArray.push(marker);
+//   var contentString = '<div id="content" class="markerInfo">' +
+//       '<div id="siteNotice">' + data.id +
+//       '</div>' +
+//       '<h3 id="firstHeading" class="firstHeading">'+ data.name +'</h3>' +
+//       '<div id="bodyContent">' +
+//       '<p><b>Details: </b><br>' +
+//       '<b>Description: ' + data.permalink + '<br>' +
+//       'Time: ' + data.time + '<br>' +
+//       'Date: ' + data.date + '</b></p><br>' +
+//       '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
+//       '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
+//       '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
+//       '</div>';
+//   google.maps.event.addListener(marker, 'click', (function(marker, i) {
+//     return function() {
+//       event_address = marker.getPosition();
+//       infowindow.setContent(contentString);
+//       infowindow.open(map, marker);
+//     }
+//   })(marker, i));
+// }
 // Directions calculations
 function calcRoute() {
     directionsDisplay.setMap(null);
@@ -218,45 +222,31 @@ function loadEvents(events) {
             title: events[k].name
         });
         markersArray.push(marker);
-  //       '<div class="panel panel-default">'+
-  // '<div class="panel-heading">' +
-  // '<h3 id="siteNotice" class="panel-title">'+events[k].id +' - '+events[k].name+'</h3>' +
-  // '</div>' +
-  // '<div class="panel-body">' +
-  // 'Description: ' + events[k].permalink + ' '+'<button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button>'
-  // 'Time: ' + events[k].time +
-  // 'Date: ' + events[k].date +
-  // '</div>'+
-  // '<div class="panel-footer"><button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;<br><button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>'+
-  // '</div>';
-            events[k].name = events[k].name[0].toUpperCase() + events[k].name.substr(1);
-            events[k].description = events[k].description[0].toUpperCase() + events[k].description.substr(1);
-            if(!det[h]) {
-              console.log('in h');
-              h = 0;
-            }
-            console.log(det[h]);
-            var contentString = '<div id="content" class="markerInfo panel panel-default">' +
-            '<div id="siteNotice">' + events[k].id +
-            '</div>' +
-            //'<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
-            '<div class="panel-heading"><h2 class="panel-title">'+events[k].name+'</h2></div>' +
-            '<div class="panel-body">' +
-            '<span style="text-align:center">Details: '+det[h]+'</span> <br>' +
-            'Description: ' + events[k].description + '<br>' +
-            'Time: 19:30 <br>' +// + /*events[k].time*/ + '<br>' +
-            'Date: ' + events[k].date + '<br></div>' +
-            'Address: ' + events[k].location.address + '<br></div>' +
-			      '<div class="panel-footer"><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
-            '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
-            '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
-            '</div>';
+        events[k].name = events[k].name[0].toUpperCase() + events[k].name.substr(1);
+        events[k].description = events[k].description[0].toUpperCase() + events[k].description.substr(1);
+        if(!det[h]) {
+          console.log('in h');
+          h = 0;
+        }
+        console.log(det[h]);
+        var contentString = '<div id="content" class="markerInfo panel panel-default">' +
+        '<div id="siteNotice">' + events[k].id +
+        '</div>' +
+        //'<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
+        '<div class="panel-heading"><h2 class="panel-title">'+events[k].name+'</h2></div>' +
+        '<div class="panel-body" style="width: 100%">' +
+        '<span style="text-decoration: underline;">Details: '+det[h]+'</span> <br>' +
+        '<span style="text-decoration: underline;">Description: </span>' + events[k].description + '<br>' +
+        '<span style="text-decoration: underline;">Time: </span>19:30 <br>' +// + /*events[k].time*/ + '<br>' +
+        '<span style="text-decoration: underline;">Date: </span>' + events[k].date + '<br></div>' +
+        '<span style="text-decoration: underline;">Address: </span>' + events[k].location.address + '<br></div>' +
+	      '<div class="panel-footer"><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button>&nbsp;' +
+        '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
+        '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
+        '</div>';
 
-        // infowindow = new google.maps.InfoWindow({
-        //     content: contentString
-        // });
         var infowindow = new google.maps.InfoWindow({
-          maxWidth: 200
+          maxWidth: 300
         });
         google.maps.event.addListener(marker, 'click', (function(marker, i, contentString) {
           return function() {
@@ -265,6 +255,7 @@ function loadEvents(events) {
             infowindow.open(map, marker);
           }
         })(marker, i, contentString));
+        map.setZoom(11);
         //google.maps.event.addListener(marker, 'mouseover');
         console.log("here");
         mc.addMarker(marker);
@@ -277,6 +268,8 @@ function loadEvents(events) {
     }
 
 }
+
+// Register for event
 function register() {
   console.log("Registering");
   var eventid = $('#siteNotice').text();
@@ -314,6 +307,7 @@ $("#address").geocomplete()
     $.log("Multiple: " + results.length + " results found");
   });
 
+// Create new event
 $("#createButton").click(function(e) {
 
     e.preventDefault();
@@ -343,6 +337,7 @@ $("#createButton").click(function(e) {
 
 });
 
+// Converting address to lat long
 function convertLatLong(eventData) {
   console.log("Converting location");
   var latitude = 0;
@@ -399,7 +394,7 @@ function loadOneEventCreate(data) {
       '<b>Description: ' + data.permalink + '<br>' +
       'Time: ' + data.time + '<br>' +
       'Date: ' + data.date + '</b></p><br>' +
-      '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
+      '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span> more info</button><br><br>' +
       '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
       '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
       '</div>';
@@ -416,6 +411,7 @@ function loadOneEventCreate(data) {
   mc.addMarker(marker);
 }
 
+// Clear map
 function clearMap() {
   for (var i = 0; i < markersArray.length; i++ ) {
     markersArray[i].setMap(null);
