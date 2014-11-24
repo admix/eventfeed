@@ -136,15 +136,24 @@ module.exports = exports = function(app, db, passport) {
 
     });
 
-    //GET events by Date
-    app.get('/feed/events/user/attend', function (req, res) {
+    //GET all the events user create and attend by date
+    app.post('/feed/calendar/date', loggedIn, function (req, res) {
       console.log("in GET by date");
-      //var eventDate = req.body;
+      var eventDate = req.body;
       var username = req.user.username;
-      dbEvents.getEventsByYouAttend(db, username, function(err, msg) {
+      var events = [];
+      dbEvents.getMyEventsByDate(db, username, eventDate.date, function(err, msg) {
         if(err) console.log(err);
-        res.send(JSON.stringify(msg), 200);
-        //res.end();
+        events = events.concat(msg);
+
+        dbEvents.getEventsByDate(db, username, eventDate.date, function(err, eve) {
+          if(err) console.log(err);
+          events = events.concat(eve);
+          events = unique(events);
+
+          res.send(JSON.stringify(events), 200);
+          //res.end();
+        })
       })
 
     });
@@ -161,8 +170,22 @@ module.exports = exports = function(app, db, passport) {
         dbEvents.getEventsUserHost(db, username, function(error, eve) {
           if(error) console.log(error);
           events = events.concat(eve);
+          events = unique(events);
           res.send(JSON.stringify(events), 200);
         })
+      })
+
+    });
+
+    //GET events by Date
+    app.get('/feed/events/user/attend', loggedIn, function (req, res) {
+      console.log("in GET by date");
+      //var eventDate = req.body;
+      var username = req.user.username;
+      dbEvents.getEventsByYouAttend(db, username, function(err, msg) {
+        if(err) console.log(err);
+        res.send(JSON.stringify(msg), 200);
+        //res.end();
       })
 
     });
@@ -237,7 +260,7 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //POST save new event (Register) for particular user (userID passed in as a parameter)
-    app.post('/feed/user/event/:eventId', function (req, res) {
+    app.post('/feed/user/event/:eventId', loggedIn, function (req, res) {
       console.log("Registering for an event");
       var userData = "";
       var eventId = req.params.eventId;
@@ -430,4 +453,15 @@ function loggedIn(req, res, next) {
       console.log("not logged in");
       res.redirect('/');
     }
+}
+
+function unique(arr) {
+    var hash = {}, result = [];
+    for ( var i = 0, l = arr.length; i < l; ++i ) {
+        if ( !hash.hasOwnProperty(arr[i]) ) { //it works with objects! in FF, at least
+            hash[ arr[i] ] = true;
+            result.push(arr[i]);
+        }
+    }
+    return result;
 }
