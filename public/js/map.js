@@ -514,32 +514,6 @@ function clearMap() {
   }
 }
 
-function getMyEvents(){
-  console.log("Getting your events for Calander");
-  $.ajax({
-    url: '/feed/calendar/events',
-    //url: localhost + '/feed/myevents/date/myevents',
-    type: 'GET',
-    dataType: 'json',
-    success: function(data){
-
-      //console.log(data);
-      console.log("Got Data in getMyEvents \n "+ JSON.stringify(data));
-      var events = [];
-      data.forEach(function(e) {
-        events.push({
-          start:e.date
-        });
-      });
-      console.log(events);
-      //MYEVENTS=events;
-    },
-    error: function (request, status, error) {
-      alert("ERROR IN GET MY EVENTS\n" + request.responseText);
-    }
-  });
-}
-getMyEvents();
 // Initializes Map
 console.log("Creating map");
 google.maps.event.addDomListener(window, 'load', initialize);

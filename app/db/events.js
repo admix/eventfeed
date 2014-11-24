@@ -43,7 +43,7 @@ module.exports = {
     getEventsByDate: function(db, username, eventDate, callback) {
       "use strict";
       var events = db.collection("events");
-      eventDate = eventDate.replace(/-/g,"/");
+      //eventDate = eventDate.replace(/-/g,"/");
       console.log(eventDate);
       events.find({"date": eventDate,'users':{$elemMatch:{'username':username}}}).toArray(function(err, doc) {
         if(err || doc == null) {
@@ -57,7 +57,7 @@ module.exports = {
     getMyEventsByDate: function(db, username, eventDate, callback) {
       "use strict";
       var events = db.collection("events");
-      eventDate = eventDate.replace(/-/g,"/");
+      //eventDate = eventDate.replace(/-/g,"/");
       console.log(eventDate);
       events.find({"date": eventDate,'createdByUsername':username}).toArray(function(err, doc) {
         if(err || doc == null) {
