@@ -12,8 +12,6 @@ var mystartloc;
 var geocoder;
 var event_address;
 var mc; // marker clusterer
-var eventfeed = "http://eventfeed.me",
-    localhost = "http://localhost:8080";
 
 // Setup the different icons and shadows
 var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
@@ -116,7 +114,7 @@ function search(){
 
     //e.preventDefault();
     $.ajax({
-        url: localhost + '/feed/events/name/' + name,
+        url: '/feed/events/name/' + name,
         type: 'GET',
         dataType: 'json',
         success: function(data){
@@ -137,7 +135,7 @@ function myEvents(){
     //e.preventDefault();
     console.log("in myevents");
     $.ajax({
-        url: localhost + '/feed/myevents',
+        url: '/feed/myevents',
         type: 'GET',
         dataType: 'json',
         success: function(data){
@@ -285,7 +283,7 @@ function register() {
   console.log(eventid);
   //$("#modalRegister").modal("show");
   $.ajax({
-      url: localhost + '/feed/user/event/' + eventid,
+      url: '/feed/user/event/' + eventid,
       type: 'POST',
       dataType: 'json',
       success: function(data){
@@ -319,7 +317,7 @@ $("#address").geocomplete()
 // Edit modal
 function editModal() {
   $.ajax({
-    url: localhost + '/feed/events/' + $('#siteNotice').text(),
+    url: '/feed/events/' + $('#siteNotice').text(),
     type: 'GET',
     contentType: 'application/json',
     success: function(data) {
@@ -345,7 +343,7 @@ function editModal() {
 function deleteEvent() {
   console.log("in delete");
   $.ajax({
-    url: localhost + '/feed/events/' + $('#siteNotice').text(),
+    url: '/feed/events/' + $('#siteNotice').text(),
     type: 'DELETE',
     contentType: 'application/json',
     success: function(data) {
@@ -431,7 +429,7 @@ function convertLatLong(eventData, etype) {
 
           if(etype == 'create') {
             $.ajax({
-                url: localhost + '/feed/event',
+                url: '/feed/event',
                 type: 'POST',
                 data: eventData,
                 success: function(data){
@@ -443,7 +441,7 @@ function convertLatLong(eventData, etype) {
             });
           } else if(etype == 'edit') {
             $.ajax({
-                url: localhost + '/feed/event/edit',
+                url: '/feed/event/edit',
                 type: 'POST',
                 data: eventData,
                 success: function(data){
@@ -516,6 +514,32 @@ function clearMap() {
   }
 }
 
+function getMyEvents(){
+  console.log("Getting your events for Calander");
+  $.ajax({
+    url: '/feed/calendar/events',
+    //url: localhost + '/feed/myevents/date/myevents',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data){
+
+      //console.log(data);
+      console.log("Got Data in getMyEvents \n "+ JSON.stringify(data));
+      var events = [];
+      data.forEach(function(e) {
+        events.push({
+          start:e.date
+        });
+      });
+      console.log(events);
+      //MYEVENTS=events;
+    },
+    error: function (request, status, error) {
+      alert("ERROR IN GET MY EVENTS\n" + request.responseText);
+    }
+  });
+}
+getMyEvents();
 // Initializes Map
 console.log("Creating map");
 google.maps.event.addDomListener(window, 'load', initialize);

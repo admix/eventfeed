@@ -223,6 +223,8 @@ module.exports = function(passport) {
                 newUser.local.email    = email;
                 newUser.local.password = newUser.generateHash(password); // use the generateHash function in our user model
                 newUser.local.username = newUser.local.email.substr(0, newUser.local.email.indexOf('@'));
+                newUser.username = newUser.local.username;
+                newUser.email = newUser.local.email;
 
 				// save the user
                 newUser.save(function(err) {

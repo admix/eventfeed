@@ -1,7 +1,5 @@
 $(document).ready(function(){
   console.log("utils loaded");
-  var eventfeed = "http://eventfeed.me",
-      localhost = "http://localhost:8080";
 
   $("#cat li a").click(function(){
       $("#cat .btn:first-child").text($(this).text());
@@ -19,7 +17,7 @@ $(document).ready(function(){
     var eventId = 19;  // change to real event id
 
     $.ajax({
-      url: localhost + '/feed/user/event/' + eventId,
+      url: '/feed/user/event/' + eventId,
       type: 'POST',
       dataType: 'json',
       success: function(data) {
