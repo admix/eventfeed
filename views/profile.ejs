@@ -379,7 +379,7 @@
               </div>
               <div class="col-md-4">
                 <div id="cat" class="btn-group m-b-6">
-                  <button type="button" class="btn btn-sm">Category</button>
+                  <button id="category" type="button" class="btn btn-sm">Category</button>
                   <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                   </button>
@@ -403,6 +403,13 @@
               <div class="col-md-4">
                 <input id="time" type="text" class="form-control input-sm m-b-10" placeholder="Time">
               </div>
+              <div class="col-md-4">
+                <div class="checkbox m-b-5">
+                    <label>
+                        <input id="private" type="checkbox" checked="">Private
+                    </label>
+                </div>
+              </div>
               <div class="col-md-12">
                 <textarea id="description" class="form-control m-b-10" placeholder="Description"></textarea>
               </div>
@@ -411,6 +418,70 @@
           <div class="modal-footer">
             <button id="createButton" type="button" class="btn btn-sm">Create event</button>
             <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Edit modal -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Edit event</h4>
+          </div>
+          <div class="modal-body">
+            <h4 class="block-title">Rewrite the information about the event!</h4>
+          </div>
+          <div class="block-area" id="multi-column">
+            <form class="row form-columned" role="form">
+              <div class="col-md-4">
+                <input id="nameEdit" type="text" class="form-control input-sm m-b-10" placeholder="Name">
+              </div>
+              <div class="col-md-4">
+                <input id="addressEdit" type="text" class="form-control input-sm m-b-10" placeholder="Address">
+              </div>
+              <div class="col-md-4">
+                <div id="cat" class="btn-group m-b-6">
+                  <button id="categoryEdit" type="button" class="btn btn-sm">Category</button>
+                  <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu animated fadeIn">
+                    <li><a href="#">Fun</a></li>
+                    <li><a href="#">Friends</a></li>
+                    <li><a href="#">Family</a></li>
+                    <li><a href="#">Business</a></li>
+                    <li><a href="#">Adventure</a></li>
+                    <li><a href="#">Holidays</a></li>
+                    <li><a href="#">Concert</a></li>
+                    <!-- <li class="divider"></li>
+                      <li><input type="text" class="form-control input-sm m-b-10" placeholder="New Category"></li> -->
+                  </ul>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="col-md-4">
+                <input id="dateEdit" type="text" class="form-control input-sm m-b-10" placeholder="Date">
+              </div>
+              <div class="col-md-4">
+                <input id="timeEdit" type="text" class="form-control input-sm m-b-10" placeholder="Time">
+              </div>
+              <div class="col-md-4">
+                <div class="checkbox m-b-5">
+                    <label>
+                        <input id="privateEdit" type="checkbox" checked="">Private
+                    </label>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <textarea id="descriptionEdit" class="form-control m-b-10" placeholder="Description"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="editButton" type="button" class="btn btn-sm">Edit event</button>
+            <button type="button" class="btn btn-sm" data-dismiss="modal" href="#modalLogout">Close</button>
           </div>
         </div>
       </div>
@@ -493,8 +564,8 @@
             <p>More detailed info of the event</p>
             <button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;
             <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button>
-            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Edit</button>
-            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Delete</button>
+            <button type="button" onclick="editModal()" class="btn btn-sm btn-primary">Edit</button>
+            <button type="button" onclick="deleteEvent()" class="btn btn-sm btn-primary">Delete</button>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
