@@ -150,11 +150,11 @@ module.exports = exports = function(app, db, passport) {
     });
 
     //GET events user host and attend
-    app.get('/feed/calendar/events', function (req, res) {
+    app.get('/feed/calendar/events', loggedIn, function (req, res) {
       console.log("in GET for calendar");
       //var eventDate = req.body;
       var events = [];
-      var username = 'admix.snurnikov';//req.user.username;
+      var username = req.user.username;
       dbEvents.getEventsByYouAttend(db, username, function(err, msg) {
         if(err) console.log(err);
         events = events.concat(msg);
@@ -300,7 +300,7 @@ module.exports = exports = function(app, db, passport) {
     app.post('/friend/remove', loggedIn, function(req, res) {
       console.log("Add friend for loggedin user");
       var userData = req.body;
-      var username = "admix.snurnikov";//req.user.username;
+      var username = req.user.username;
       console.log(userData.friend + "  " + username);
       dbUsers.removeFriend(db, username, userData.friend, function(err, msg) {
         if(err) console.log("Error getting friends for logged in user");
