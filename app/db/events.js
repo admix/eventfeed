@@ -151,6 +151,19 @@ module.exports = {
       var events = db.collection("events");
       var users = db.collection("users");
 
+    },
+
+    deleteEventByID: function(db, userID, callback) {
+      "use strict";
+      var events = db.collection("events");
+      events.remove({"id":parseInt(userID)}, function(err, doc) {
+        if(err) {
+          callback(null);
+        }
+        console.log("deleted: " + doc);
+        callback(null, doc);
+      })
+
     }
 }
 
