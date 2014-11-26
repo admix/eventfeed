@@ -140,6 +140,38 @@ module.exports = {
 
 
     }, //updating event by ID
+    updateEvent: function(db, userID, event, callback) {
+      "use strict";
+      var events = db.collection("events");
+      console.log("To update: " + JSON.stringify(event));
+      events.update({"id":parseInt(event.id)},{$set:{
+        "name":event.name,
+        "category":event.category,
+        "date":event.date,
+        "time":event.time,
+        "private":event.private,
+        "permalink":event.permalink,
+        "location.address":event.location.address,
+        "location.latitude":event.location.latitude,
+        "location.longitude":event.location.longitude,
+        "description":event.description,
+        "users":[],
+        "createdByUsername":userID}}, function(err, msg) {
+          if(err) console.log("Error updating event");
+          console.log("Updated: " + msg);
+          event.users.forEach(function(us) {
+            events.update({"id":parseInt(event.id)},{"$addToSet":{"users":{"username": us}}}, function(err, doc) {
+              if(err) {
+                callback(null);
+              }
+              console.log("return: ");
+              console.log(doc);
+              callback(null, doc);
+            });
+          });
+        });
+
+    },
     updateEventByID: function(db, userID, event, callback) {
       "use strict";
       var events = db.collection("events");

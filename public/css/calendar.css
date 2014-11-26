@@ -1,0 +1,21 @@
+.ui-datepicker {
+  background-color: #000;
+  padding: 15px;
+}
+
+.ui-datepicker th {
+  padding: 3px;
+}
+
+.ui-datepicker-next {
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.ui-datepicker-next {
+  cursor: pointer;
+}
+
+.ui-datepicker-header {
+  text-align: center;  
+}

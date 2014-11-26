@@ -70,6 +70,7 @@
       }
     </style>
     <link href="/css/override.css" rel="stylesheet" type="text/css">
+    <link href="/css/calendar.css" rel="stylesheet" type="text/css">
   </head>
   <body id="skin-blur-violate">
     <script>
@@ -112,7 +113,7 @@
               </div>
               <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
                 <a data-toggle="modal" href="#modalCreate" class="btn btn-md">Create Event</a>
-              </div> 
+              </div>
               <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
                 <a data-toggle="modal" href="#modalLogout" class="btn btn-md">Logout</a>
               </div>
@@ -148,62 +149,15 @@
             <div id="sidebar-calendar"></div>
           </div>
           <!-- Feeds -->
-          <div class="s-widget m-b-25">
-            <h2 class="tile-title">
-              News Feeds
-            </h2>
+          <h2 class="tile-title">Friends</h2>
             <div class="s-widget-body">
-              <div id="news-feed"></div>
+                <nav>
+                    <ul>
+                        <div id ="friends-list"> </div>
+                    </ul>
+                <nav>
             </div>
-          </div>
           <!-- Projects -->
-          <div class="s-widget m-b-25">
-            <h2 class="tile-title">
-              Projects on going
-            </h2>
-            <div class="s-widget-body">
-              <div class="side-border">
-                <small>Joomla Website</small>
-                <div class="progress progress-small">
-                  <a href="#" data-toggle="tooltip" title="" class="progress-bar tooltips progress-bar-danger" style="width: 60%;" data-original-title="60%">
-                  <span class="sr-only">60% Complete</span>
-                  </a>
-                </div>
-              </div>
-              <div class="side-border">
-                <small>Opencart E-Commerce Website</small>
-                <div class="progress progress-small">
-                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-info" style="width: 43%;" data-original-title="43%">
-                  <span class="sr-only">43% Complete</span>
-                  </a>
-                </div>
-              </div>
-              <div class="side-border">
-                <small>Social Media API</small>
-                <div class="progress progress-small">
-                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-warning" style="width: 81%;" data-original-title="81%">
-                  <span class="sr-only">81% Complete</span>
-                  </a>
-                </div>
-              </div>
-              <div class="side-border">
-                <small>VB.Net Software Package</small>
-                <div class="progress progress-small">
-                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-success" style="width: 10%;" data-original-title="10%">
-                  <span class="sr-only">10% Complete</span>
-                  </a>
-                </div>
-              </div>
-              <div class="side-border">
-                <small>Chrome Extension</small>
-                <div class="progress progress-small">
-                  <a href="#" data-toggle="tooltip" title="" class="tooltips progress-bar progress-bar-success" style="width: 95%;" data-original-title="95%">
-                  <span class="sr-only">95% Complete</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <!-- Side Menu -->
         <ul class="list-unstyled side-menu">
@@ -428,7 +382,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Edit event</h4>
+            <h4 id="id-edit" class="modal-title">Edit event</h4>
           </div>
           <div class="modal-body">
             <h4 class="block-title">Rewrite the information about the event!</h4>
@@ -478,7 +432,16 @@
                 <textarea id="descriptionEdit" class="form-control m-b-10" placeholder="Description"></textarea>
               </div>
             </form>
+            <div class="row">
+              <div class="col-md-12">
+                People attending:<br>
+                <p id='ppl'>
+                  
+                </p>
+              </div>
+            </div>
           </div>
+
           <div class="modal-footer">
             <button id="editButton" type="button" class="btn btn-sm">Edit event</button>
             <button type="button" class="btn btn-sm" data-dismiss="modal" href="#modalLogout">Close</button>

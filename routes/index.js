@@ -39,21 +39,19 @@ module.exports = exports = function(app, db, passport) {
 		   user : req.user, username: result // get the user out of session and pass to template
 		 });
 	});
-	
+
 	app.get('/events', isLoggedIn, function(req, res) {
- 
+
       var userData = "";
-      if(req.user.facebook.username) {
-        userData = req.user.facebook.username;
-      } else if(req.user.local.username) {
-        userData = req.user.local.username;
+      if(req.user) {
+        userData = req.user.username;
       }
-	  
+
       res.render('events.ejs', {
         user : req.user, username: userData  // get the user out of session and pass to template
       });
     });
-	
+
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
@@ -185,6 +183,7 @@ module.exports = exports = function(app, db, passport) {
           if(error) console.log(error);
           events = events.concat(eve);
           events = unique(events);
+          console.log("Returning for calendar: " + JSON.stringify(events));
           res.send(JSON.stringify(events), 200);
         })
       })
@@ -284,12 +283,13 @@ module.exports = exports = function(app, db, passport) {
         userData = req.user.local.username;
       }
 
-      dbEvents.registerForEvent(db, userData, eventId, function(err, msg) {
+      dbEvents.registerForEvent(db, req.user.email, eventId, function(err, msg) {
         if(err) console.log("Error reg");
         console.log("Success: " + msg);
         dbEvents.getEventById(db, eventId, function(err, doc) {
           if(err) console.log('Error get');
-          emailer.sendEmail(req.user.email, doc);
+          var arr = [req.user.email];
+          emailer.sendEmail(arr, doc, 'new');
         })
 
         //send email with confirmation
@@ -297,6 +297,22 @@ module.exports = exports = function(app, db, passport) {
       })
     });
 
+    app.post('/feed/event/edit', loggedIn, function (req, res) {
+      console.log("in edit event");
+      var eventData = req.body;
+      var userData = req.user.username;
+
+      console.log("data received: " + JSON.stringify(eventData) + " User email passed by Session: " + userData );
+      dbEvents.updateEvent(db, userData, eventData, function(err, msg) {
+        if(err) throw err;
+        dbEvents.getEventById(db, eventData.id, function(err, data) {
+          if(err) console.log("Error getting event");
+          emailer.sendEmail(eventData.users, data, 'edit');
+          res.send(data, 200);
+        })
+
+      })
+    });
     //-------------- Handling Friends ----------------
         // Get my friends
     app.get('/friends', loggedIn,  function(req, res) {

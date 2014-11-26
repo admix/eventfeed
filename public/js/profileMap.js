@@ -41,31 +41,29 @@ var shadow = {
   url: iconURLPrefix + 'msmarker.shadow.png'
 };
 function initialize() {
-    $("#directions-panel").hide();
-	 var fenway = [];
-	 var mapOptions= [];
-	 var map = [];
-     var panoramaOptions;
-	 var eventMarker = [];
-	 
-	 numOfEvents = eventsUserHost.length;	
-	 for (i = 0; i < eventsUserHost.length; i++) {
- 
-	   fenway[i] = new google.maps.LatLng(eventsUserHost[i].location.latitude, eventsUserHost[i].location.longitude);
-	   mapOptions[i] = {
-		center: fenway[i],
-		zoom: 14,
-		streetViewControl: false
+  $("#directions-panel").hide();
+  var fenway = [];
+  var mapOptions= [];
+  var map = [];
+  var panoramaOptions;
+  var eventMarker = [];
+
+  numOfEvents = eventsUserHost.length;
+  for (i = 0; i < eventsUserHost.length; i++) {
+    fenway[i] = new google.maps.LatLng(eventsUserHost[i].location.latitude, eventsUserHost[i].location.longitude);
+    mapOptions[i] = {
+      center: fenway[i],
+      zoom: 14,
+      streetViewControl: false
 	  };
-		map[i] = new google.maps.Map(
-		  document.getElementById("map-event"+i), mapOptions[i]);
-  
-	    contentDesc[i] = '<b style="font-size:180%;">'+  eventsUserHost[i].name  +'</b> <br> Event Details: ' + eventsUserHost[i].description + '<br> Date: '+ eventsUserHost[i].date +
-                    '<br> Time: ' + eventsUserHost[i].time + '<br> Location: ' + eventsUserHost[i].location.address + '<br>' +
-					 '<button type="button" class="btn btn-md" onclick="showPplAttendingEvent('+i+');">Show People Attending</button>';
-                   
-        document.getElementById("event-desc"+i).innerHTML = contentDesc[i];
-   
+		map[i] = new google.maps.Map(document.getElementById("map-event"+i), mapOptions[i]);
+
+    contentDesc[i] = '<b style="font-size:180%;">'+  eventsUserHost[i].name  +'</b> <br> Event Details: ' + eventsUserHost[i].description + '<br> Date: '+ eventsUserHost[i].date +
+                  '<br> Time: ' + eventsUserHost[i].time + '<br> Location: ' + eventsUserHost[i].location.address + '<br>' +
+				 '<button type="button" class="btn btn-md" onclick="showPplAttendingEvent('+i+');">Show People Attending</button>';
+
+    document.getElementById("event-desc"+i).innerHTML = contentDesc[i];
+
 		eventMarker[i] = new google.maps.Marker({
 		  position: fenway[i],
 		  map: map[i],
@@ -77,49 +75,49 @@ function initialize() {
 		  heading: 265,
 		   pitch: 0
 		}));
-  
+
 		var showMapEvent =document.getElementById("map-event"+i);
 		showMapEvent.style.visibility="visible";
-		   
+
 		var showEventDesc =document.getElementById("event-desc"+i);
 		showEventDesc.style.visibility="visible";
-		   	
-    }
-	if (numOfEvents == 0){
-	
-	 document.getElementById("event-desc0").innerHTML = '<b> You currently have not created any events <br> '+
-	 'Go to  the home page and start creating! </b>';
-	 
-	    var showEventDesc =document.getElementById("event-desc0");
-		   showEventDesc.style.visibility="visible";	
+
+  }
+
+	if(numOfEvents == 0) {
+
+    document.getElementById("event-desc0").innerHTML = '<b> You currently have not created any events <br> '+
+    'Go to  the home page and start creating! </b>';
+
+    var showEventDesc =document.getElementById("event-desc0");
+    showEventDesc.style.visibility="visible";
 	}
-	
 }
 
 function toggleStreetView() {
- 
+
   var toggle = panorama[0].getVisible();
   if (toggle == false) {
-   for (i = 0; i < numOfEvents; i++) 
+   for (i = 0; i < numOfEvents; i++)
     panorama[i].setVisible(true);
   } else {
-  for (i = 0; i < numOfEvents; i++) 
+  for (i = 0; i < numOfEvents; i++)
     panorama[i].setVisible(false);
   }
 }
 function showPplAttendingEvent(idx) {
 
-document.getElementById("event-showUsers").innerHTML = '<b style="font-size:200%;"> People Attending: <br> ';
+  document.getElementById("event-showUsers").innerHTML = '<b style="font-size:200%;"> People Attending: <br> ';
 
-if (eventsUserHost[idx].users.length > 0){
-	document.getElementById("event-showUsers").innerHTML = '<b style="font-size:200%;"> People Attending: <br>';
-	for (i = 0; i < eventsUserHost[idx].users.length; i++)  
-   document.getElementById("event-showUsers").innerHTML += eventsUserHost[idx].users[i].username + '<br> ';
-   
+  if(eventsUserHost[idx].users.length > 0) {
+	   document.getElementById("event-showUsers").innerHTML = '<b style="font-size:200%;"> People Attending: <br>';
+	    for (i = 0; i < eventsUserHost[idx].users.length; i++) {
+        document.getElementById("event-showUsers").innerHTML += eventsUserHost[idx].users[i].username + '<br> ';
+      }
   }
 
-showPplAttending =document.getElementById("event-showUsers");
-		   showPplAttending.style.visibility="visible";
+  showPplAttending = document.getElementById("event-showUsers");
+	showPplAttending.style.visibility="visible";
 }
 
 
@@ -191,65 +189,30 @@ function myEvents(){
           loadEvents(data);
         }
     });
-}//  for myProfile
+}
+//  for myProfile
 function myProfile(){
-     numOfEvents=0;
-    console.log("in myProfie Loading..");
-	var test;	
+  numOfEvents=0;
+  console.log("in myProfie Loading..");
+	var test;
     $.ajax({
-        url: localhost + '/feed/myevents',
+        url: '/feed/myevents',
         type: 'GET',
         dataType: 'json',
         success: function(data){
           console.log(data);
           console.log("Successful GET.");
-		   console.log("Successful GET.");
           data.forEach(function(e) {
-		     numOfEvents++;
+  		      numOfEvents++;
             eventsUserHost.push(e);
-			console.log("HUUUH---> "+numOfEvents);
-			
+  			    console.log("HUUUH---> "+numOfEvents);
           });
+          loadMap();
         }
     });
-	
+
 }
 
-// // Loading only one event on a map
-// function loadOneEvent(data) {
-//   var locations = [43.7000, -79.4000];
-//   clearMap();
-//   var infowindow = new google.maps.InfoWindow({
-//     maxWidth: 200
-//   });
-//   var marker = new google.maps.Marker({
-//       position: new google.maps.LatLng(locations[0], locations[1]),
-//       map: map,
-//       title: data[i].name
-//       //icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
-//   });
-//   markersArray.push(marker);
-//   var contentString = '<div id="content" class="markerInfo">' +
-//       '<div id="siteNotice">' + data.id +
-//       '</div>' +
-//       '<h3 id="firstHeading" class="firstHeading">'+ data.name +'</h3>' +
-//       '<div id="bodyContent">' +
-//       '<p><b>Details: </b><br>' +
-//       '<b>Description: ' + data.permalink + '<br>' +
-//       'Time: ' + data.time + '<br>' +
-//       'Date: ' + data.date + '</b></p><br>' +
-//       '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
-//       '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
-//       '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
-//       '</div>';
-//   google.maps.event.addListener(marker, 'click', (function(marker, i) {
-//     return function() {
-//       event_address = marker.getPosition();
-//       infowindow.setContent(contentString);
-//       infowindow.open(map, marker);
-//     }
-//   })(marker, i));
-// }
 // Directions calculations
 function calcRoute() {
     directionsDisplay.setMap(null);
@@ -495,6 +458,8 @@ function clearMap() {
   }
 }
 
+function loadMap() {
+  google.maps.event.addDomListener(window, 'load', initialize);
+}
 // Initializes Maps With Users Events
 myProfile();
-google.maps.event.addDomListener(window, 'load', initialize);
