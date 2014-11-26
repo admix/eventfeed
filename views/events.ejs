@@ -23,6 +23,9 @@
     <link href="/css/vendors/jquery.slidepanel.css" rel="stylesheet" type="text/css">
     <style type="text/css">
       html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
+	  tr.spaceUnder > td{
+	      padding-bottom: 4em;
+	  }
       #search-panel {
           position: absolute;
           top: 5px;
@@ -79,18 +82,30 @@
        xfbml      : true,
        version    : 'v2.1'
        });
-         };
+		
+      };
 
-        (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+    //    (function(d, s, id){
+    //     var js, fjs = d.getElementsByTagName(s)[0];
+    //  if (d.getElementById(id)) {return;}
+   //   js = d.createElement(s); js.id = id;
+   //   js.src = "//connect.facebook.net/en_US/sdk.js";
+   //   fjs.parentNode.insertBefore(js, fjs);
+   //     }(document, 'script', 'facebook-jssdk'));
+		  </script>
+		
+		<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1469462683327868&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+		
 
-    </script>
-    <header id="header" class="media">
+  
+  <!--  <header id="header" class="media">
       <a href="" id="menu-toggle"></a>
       <a class="logo pull-left" href="/" style="padding-left: 50px;"><img class="logo-img" src="/img/logo.jpg">EventFeed.me</a>
       <div class="media-body">
@@ -104,26 +119,19 @@
           </div>
           <div class="media-body">
             <div class="row">
-              <div class="col-lg-5 col-xs-12">
-                <input type="text" class="form-control m-b-10" id="searchtxt" placeholder="Enter event name">
-              </div>
-              <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
-                <button type="button" class="btn btn-md" onclick="search();">Search</button>
-              </div>
-              <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
-                <a data-toggle="modal" href="#modalCreate" class="btn btn-md">Create Event</a>
-              </div> 
-              <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
+              <div >
                 <a data-toggle="modal" href="#modalLogout" class="btn btn-md">Logout</a>
-              </div>
-              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 hidden-sm hidden-xs">
-                <button type="button" class="btn btn-md" onclick="myEvents();">My Events</button>
+				  <input type="button" class="btn btn-md" value="Toggle Street View" onclick="toggleStreetView();"></input>
+                <a href="/profile" class="btn btn-md">Home</a>
+				<div style="padding-bottom: 4em; "> </div>  
+				<b style="text-align: center;">Upcoming Events</b>   
+				  			
               </div>
             </div>
           </div>
         </div>
       </div>
-    </header>
+    </header>  -->
     <div class="clearfix"></div>
     <section id="mai" class="p-relative mob" role="main">
       <!-- Sidebar -->
@@ -213,12 +221,12 @@
             </a>
           </li>
           <li>
-            <a class="sa-side-typography" href="index.html" >
+            <a class="sa-side-typography" href="typography.html">
             <span class="menu-item">Friends</span>
             </a>
           </li>
           <li>
-            <a class="sa-side-widget" href="/events">
+            <a class="sa-side-widget" href="content-widgets.html">
             <span class="menu-item">Events</span>
             </a>
           </li>
@@ -237,9 +245,38 @@
             <div class="tile">
               <div id="directions-panel"></div>
               <div style="height: 800px;padding:0px !important;margin: 0px;width: auto;">
-
-                <div id="map-canvas" style="overflow: visible !important;"></div>
-              </div>
+				<div style="padding-bottom: 5em; text-align: center"></div> 
+			<h2 style="text-align: center;">Events You Host</h2>   
+			 <a data-toggle="modal" href="#modalLogout" class="btn btn-md">Logout</a>
+				  <input " type="button" class="btn btn-md" value="Toggle Street View" onclick="toggleStreetView();"></input>
+                <a href="/profile" class="btn btn-md">Home</a>
+				<table>
+				 <tr>
+				 <td> 
+					 <table id="myTable" style="width:auto; height:70%; ">
+					  <tr class="spaceUnder">
+					  </tr>
+					  <tr class="spaceUnder">
+						<td style=" padding: 10px; vertical-align: top;"><div id="map-event0"  style="visibility:hidden; width: 300px; height: 200px"></div></td>
+						<td style=" padding: 10px; vertical-align: top;"><div id="event-desc0"  style="visibility:hidden; font-size: 120%;"></div><div class="fb-like" data-href="http://zenit.senecac.on.ca:9118/" 
+						data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></td>	
+							
+					  </tr>
+					  <tr class="spaceUnder">
+						<td style=" padding: 10px; vertical-align: top;"><div id="map-event1" style="visibility:hidden; width: 300px; height: 200px"></div></td>
+						<td style=" padding: 10px; vertical-align: top;"><div id="event-desc1"  style="visibility:hidden; font-size: 120%;"></div></td>
+			
+					  </tr>
+					  <tr class="spaceUnder">
+						<td style=" padding: 10px; vertical-align: top;"> <div id="map-event2" style="visibility:hidden; width: 300px; height: 200px"></div></td>
+						<td style=" padding: 10px; vertical-align: top;"><div id="event-desc2"  style="visibility:hidden; font-size: 120%;"> </div></td>
+					  </tr>
+					</table> 
+					</td>
+					<td style=" padding: 10px; vertical-align: top;"><div id="event-showUsers"  style="visibility:hidden; font-size: 150%;"></div></td>
+					</tr>
+					</table>
+				</div>
             </div>
             <div class="clearfix"></div>
           </div>
@@ -340,7 +377,7 @@
     </section>
     <!-- Modals -->
     <!-- Register event -->
-    <div id="modalRegister" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="#dmodalShowUsers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -359,7 +396,7 @@
       </div>
     </div>
     <!-- Create modal -->
-    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modalShowUsers0" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -368,6 +405,7 @@
           </div>
           <div class="modal-body">
             <h4 class="block-title">Provide information about the event you want to create!</h4>
+			<div id ="event-showUsers">   </div>
           </div>
           <div class="block-area" id="multi-column">
             <form class="row form-columned" role="form">
@@ -379,7 +417,7 @@
               </div>
               <div class="col-md-4">
                 <div id="cat" class="btn-group m-b-6">
-                  <button id="category" type="button" class="btn btn-sm">Category</button>
+                  <button type="button" class="btn btn-sm">Category</button>
                   <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                   </button>
@@ -403,13 +441,6 @@
               <div class="col-md-4">
                 <input id="time" type="text" class="form-control input-sm m-b-10" placeholder="Time">
               </div>
-              <div class="col-md-4">
-                <div class="checkbox m-b-5">
-                    <label>
-                        <input id="private" type="checkbox" checked="">Private
-                    </label>
-                </div>
-              </div>
               <div class="col-md-12">
                 <textarea id="description" class="form-control m-b-10" placeholder="Description"></textarea>
               </div>
@@ -418,70 +449,6 @@
           <div class="modal-footer">
             <button id="createButton" type="button" class="btn btn-sm">Create event</button>
             <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Edit modal -->
-    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Edit event</h4>
-          </div>
-          <div class="modal-body">
-            <h4 class="block-title">Rewrite the information about the event!</h4>
-          </div>
-          <div class="block-area" id="multi-column">
-            <form class="row form-columned" role="form">
-              <div class="col-md-4">
-                <input id="nameEdit" type="text" class="form-control input-sm m-b-10" placeholder="Name">
-              </div>
-              <div class="col-md-4">
-                <input id="addressEdit" type="text" class="form-control input-sm m-b-10" placeholder="Address">
-              </div>
-              <div class="col-md-4">
-                <div id="cat" class="btn-group m-b-6">
-                  <button id="categoryEdit" type="button" class="btn btn-sm">Category</button>
-                  <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu animated fadeIn">
-                    <li><a href="#">Fun</a></li>
-                    <li><a href="#">Friends</a></li>
-                    <li><a href="#">Family</a></li>
-                    <li><a href="#">Business</a></li>
-                    <li><a href="#">Adventure</a></li>
-                    <li><a href="#">Holidays</a></li>
-                    <li><a href="#">Concert</a></li>
-                    <!-- <li class="divider"></li>
-                      <li><input type="text" class="form-control input-sm m-b-10" placeholder="New Category"></li> -->
-                  </ul>
-                </div>
-              </div>
-              <div class="clearfix"></div>
-              <div class="col-md-4">
-                <input id="dateEdit" type="text" class="form-control input-sm m-b-10" placeholder="Date">
-              </div>
-              <div class="col-md-4">
-                <input id="timeEdit" type="text" class="form-control input-sm m-b-10" placeholder="Time">
-              </div>
-              <div class="col-md-4">
-                <div class="checkbox m-b-5">
-                    <label>
-                        <input id="privateEdit" type="checkbox" checked="">Private
-                    </label>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <textarea id="descriptionEdit" class="form-control m-b-10" placeholder="Description"></textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button id="editButton" type="button" class="btn btn-sm">Edit event</button>
-            <button type="button" class="btn btn-sm" data-dismiss="modal" href="#modalLogout">Close</button>
           </div>
         </div>
       </div>
@@ -564,8 +531,8 @@
             <p>More detailed info of the event</p>
             <button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;
             <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button>
-            <button type="button" onclick="editModal()" class="btn btn-sm btn-primary">Edit</button>
-            <button type="button" onclick="deleteEvent()" class="btn btn-sm btn-primary">Delete</button>
+            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Edit</button>
+            <button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Delete</button>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -586,14 +553,16 @@
     <!-- Other -->
     <script src="/js/vendors/calendar.min.js"></script> <!-- Calendar -->
     <script src="/js/vendors/feeds.min.js"></script> <!-- News Feeds -->
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> <!-- google map API Places -->
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> 
+  
     <script src="/js/vendors/jquery.geocomplete.min.js"></script>
     <!-- All JS functions -->
     <script src="/js/vendors/functions.js"></script>
     <script type="text/javascript" src="/js/vendors/jquery.slidepanel.js"></script>
     <script type="text/javascript" src="/js/markerclusterer.js"></script>
     <script type="text/javascript" src="/js/createEvent.js"></script>
-    <script type="text/javascript" src="/js/map.js"></script>
+    	<script type="text/javascript" src="/js/profileMap.js"></script>
     <script type="text/javascript" src="/js/utils.js"></script>
+
   </body>
 </html>

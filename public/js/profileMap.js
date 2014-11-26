@@ -1,7 +1,14 @@
 /**
  * Created by EventFeed team on 9/22/2014.
  */
-
+var numOfEvents;
+var defaultEvent = [];
+var panorama = [] ;
+var showPplAttending = [] ;
+var showEventDesc = [];
+var eventsUserHost = [];
+var mapId = [];
+var contentDesc = [];
 var directionsService = new google.maps.DirectionsService();
 var pos;
 var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -12,6 +19,8 @@ var mystartloc;
 var geocoder;
 var event_address;
 var mc; // marker clusterer
+var eventfeed = "http://eventfeed.me",
+    localhost = "http://localhost:8080";
 
 // Setup the different icons and shadows
 var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
@@ -31,58 +40,91 @@ var shadow = {
   anchor: new google.maps.Point(15,33),
   url: iconURLPrefix + 'msmarker.shadow.png'
 };
-
-$("date").datepicker({
-  dateFormat: 'yy-mm-dd'
-});
-
 function initialize() {
     $("#directions-panel").hide();
-    geocoder = new google.maps.Geocoder();
-    var location_timeout = setTimeout("handleNoGeolocation(true)", 4000);
-    if(navigator.geolocation) {
-
-        navigator.geolocation.getCurrentPosition(function(position) {
-            clearTimeout(location_timeout);
-            pos = new google.maps.LatLng(position.coords.latitude,
-                position.coords.longitude);
-
-            var contentString = '<div id="content" class="markerInfo">' +
-                '<div id="siteNotice">' +
-                '</div>' +
-                '<h3 id="firstHeading" class="firstHeading">You are here</h3>' +
-                '<div id="bodyContent">' +
-                '<p><b>What do you want to do today? </b><br>' +
-                '<b>Create new event: <button type="button" data-toggle="modal" href="#modalCreate" class="btn btn-default btn-sm">Create new</button><br>' +
-                '<b>Find event: <input type="text" class="form-control m-b-10" id="searchtxt2" placeholder="Enter event name" style="color: #333 !important; border: 1px solid #333;background: none;width: 70%;"><br>' +
-                '<button type="button" class="btn btn-md" onclick="search();">Search</button>' + 
-                '</div>';
-
-                infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: contentString
-            });
-            map.setCenter(pos);
-        }, function() {
-            clearTimeout(location_timeout);
-            handleNoGeolocation(true, location_timeout);
-        });
-    } else {
-        handleNoGeolocation(false, location_timeout);
+	 var fenway = [];
+	 var mapOptions= [];
+	 var map = [];
+     var panoramaOptions;
+	 var eventMarker = [];
+	 
+	 numOfEvents = eventsUserHost.length;	
+	 for (i = 0; i < eventsUserHost.length; i++) {
+ 
+	   fenway[i] = new google.maps.LatLng(eventsUserHost[i].location.latitude, eventsUserHost[i].location.longitude);
+	   mapOptions[i] = {
+		center: fenway[i],
+		zoom: 14,
+		streetViewControl: false
+	  };
+		map[i] = new google.maps.Map(
+		  document.getElementById("map-event"+i), mapOptions[i]);
+  
+	    contentDesc[i] = '<b style="font-size:180%;">'+  eventsUserHost[i].name  +'</b> <br> Event Details: ' + eventsUserHost[i].description + '<br> Date: '+ eventsUserHost[i].date +
+                    '<br> Time: ' + eventsUserHost[i].time + '<br> Location: ' + eventsUserHost[i].location.address + '<br>' +
+					 '<button type="button" class="btn btn-md" onclick="showPplAttendingEvent('+i+');">Show People Attending</button>';
+                   
+        document.getElementById("event-desc"+i).innerHTML = contentDesc[i];
+   
+		eventMarker[i] = new google.maps.Marker({
+		  position: fenway[i],
+		  map: map[i],
+		  title: 'Event Feed'
+		});
+		panorama[i] = map[i].getStreetView();
+		panorama[i].setPosition(fenway[i]);
+		panorama[i].setPov(/** @type {google.maps.StreetViewPov} */({
+		  heading: 265,
+		   pitch: 0
+		}));
+  
+		var showMapEvent =document.getElementById("map-event"+i);
+		showMapEvent.style.visibility="visible";
+		   
+		var showEventDesc =document.getElementById("event-desc"+i);
+		showEventDesc.style.visibility="visible";
+		   	
     }
-	var mapOptions = {
-            zoom: 11,
-            center: mystartloc,
-            scrollwheel: false,
-            styles: mapStyle
-        }
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    mc = new MarkerClusterer(map);
+	if (numOfEvents == 0){
+	
+	 document.getElementById("event-desc0").innerHTML = '<b> You currently have not created any events <br> '+
+	 'Go to  the home page and start creating! </b>';
+	 
+	    var showEventDesc =document.getElementById("event-desc0");
+		   showEventDesc.style.visibility="visible";	
+	}
+	
 }
 
-function handleNoGeolocation(errorFlag, cleartime) {
-    clearTimeout(cleartime);
+function toggleStreetView() {
+ 
+  var toggle = panorama[0].getVisible();
+  if (toggle == false) {
+   for (i = 0; i < numOfEvents; i++) 
+    panorama[i].setVisible(true);
+  } else {
+  for (i = 0; i < numOfEvents; i++) 
+    panorama[i].setVisible(false);
+  }
+}
+function showPplAttendingEvent(idx) {
+
+document.getElementById("event-showUsers").innerHTML = '<b style="font-size:200%;"> People Attending: <br> ';
+
+if (eventsUserHost[idx].users.length > 0){
+	document.getElementById("event-showUsers").innerHTML = '<b style="font-size:200%;"> People Attending: <br>';
+	for (i = 0; i < eventsUserHost[idx].users.length; i++)  
+   document.getElementById("event-showUsers").innerHTML += eventsUserHost[idx].users[i].username + '<br> ';
+   
+  }
+
+showPplAttending =document.getElementById("event-showUsers");
+		   showPplAttending.style.visibility="visible";
+}
+
+
+
+function handleNoGeolocation(errorFlag) {
     var contentString = '<div id="content" class="markerInfo">' +
         '<div id="siteNotice">' +
         '</div>' +
@@ -114,7 +156,7 @@ function search(){
 
     //e.preventDefault();
     $.ajax({
-        url: '/feed/events/name/' + name,
+        url: localhost + '/feed/events/name/' + name,
         type: 'GET',
         dataType: 'json',
         success: function(data){
@@ -135,7 +177,7 @@ function myEvents(){
     //e.preventDefault();
     console.log("in myevents");
     $.ajax({
-        url: '/feed/myevents',
+        url: localhost + '/feed/myevents',
         type: 'GET',
         dataType: 'json',
         success: function(data){
@@ -146,10 +188,31 @@ function myEvents(){
             events.push(e);
           });
           console.log(events);
-          infowindow.close();
           loadEvents(data);
         }
     });
+}//  for myProfile
+function myProfile(){
+     numOfEvents=0;
+    console.log("in myProfie Loading..");
+	var test;	
+    $.ajax({
+        url: localhost + '/feed/myevents',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+          console.log(data);
+          console.log("Successful GET.");
+		   console.log("Successful GET.");
+          data.forEach(function(e) {
+		     numOfEvents++;
+            eventsUserHost.push(e);
+			console.log("HUUUH---> "+numOfEvents);
+			
+          });
+        }
+    });
+	
 }
 
 // // Loading only one event on a map
@@ -239,14 +302,13 @@ function loadEvents(events) {
         '<div id="siteNotice">' + events[k].id +
         '</div>' +
         //'<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
-        '<div class="panel-heading"><h1 class="panel-title">'+events[k].name+'</h1></div>' +
+        '<div class="panel-heading"><h2 class="panel-title">'+events[k].name+'</h2></div>' +
         '<div class="panel-body" style="width: 100%">' +
         '<span style="text-decoration: underline;">Details: '+det[h]+'</span> <br>' +
         '<span style="text-decoration: underline;">Description: </span>' + events[k].description + '<br>' +
         '<span style="text-decoration: underline;">Time: </span>19:30 <br>' +// + /*events[k].time*/ + '<br>' +
-        '<span style="text-decoration: underline;">Date: </span>' + events[k].date + '<br>' +
-        '<span style="text-decoration: underline;">Address: </span>' + events[k].location.address + '</div>' +
-        '<span style="text-decoration: underline;">Share </span><a href="http://twitter.com" style="color: #1abc9c;">Twitter</a> and <a href="http://facebook.com" style="color: #1abc9c;">Facebook</a><br>' +
+        '<span style="text-decoration: underline;">Date: </span>' + events[k].date + '<br></div>' +
+        '<span style="text-decoration: underline;">Address: </span>' + events[k].location.address + '<br></div>' +
 	      '<div class="panel-footer"><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button>&nbsp;' +
         '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
         '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
@@ -283,7 +345,7 @@ function register() {
   console.log(eventid);
   //$("#modalRegister").modal("show");
   $.ajax({
-      url: '/feed/user/event/' + eventid,
+      url: localhost + '/feed/user/event/' + eventid,
       type: 'POST',
       dataType: 'json',
       success: function(data){
@@ -314,75 +376,9 @@ $("#address").geocomplete()
     $.log("Multiple: " + results.length + " results found");
   });
 
-// Edit modal
-function editModal() {
-  $.ajax({
-    url: '/feed/events/' + $('#siteNotice').text(),
-    type: 'GET',
-    contentType: 'application/json',
-    success: function(data) {
-      console.log("event: " + JSON.stringify(data));
-      $('#modalEdit').modal('show');
-      $('#modalInfo').modal('hide');
-      $('#nameEdit').val(data.name);
-      $('#categoryEdit').val(data.category);
-      $("#addressEdit").val(data.location.address);
-      $('#dateEdit').val(data.date);
-      $('#timeEdit').val(data.time);
-      $('#descriptionEdit').val(data.description);
-      if(data.private == 'true') {
-        $("#privateEdit").prop('checked', true);
-      } else {
-        $("#privateEdit").prop('checked', false);
-      }
-    }
-  })
-}
-
-// Delete event
-function deleteEvent() {
-  console.log("in delete");
-  $.ajax({
-    url: '/feed/events/' + $('#siteNotice').text(),
-    type: 'DELETE',
-    contentType: 'application/json',
-    success: function(data) {
-      console.log("event: " + JSON.stringify(data));
-      $('#modalInfo').modal('hide');
-    }
-  })
-}
-
-// Edit event
-$('#editButton').click(function(e) {
-  e.preventDefault();
-  var eventName = $("#nameEdit").val();
-  var eventCat = $("#categoryEdit").val();
-  var eventDate = $("#dateEdit").val();
-  var eventTime = $("#timeEdit").val();
-  var eventDesc = $("#descriptionEdit").val();
-  var eventAddress = $("#addressEdit").val();
-  var eventPrivate = $("#privateEdit").is(':checked');
-  var eventData = {
-    "name": eventName,
-    "category": eventCat,
-    "date": eventDate,
-    "time": eventTime,
-    "private": eventPrivate,
-    "permalink": eventName.replace(" ","_"),
-    "location": {
-      "address": eventAddress,
-      "latitude": 0,
-      "longitude": 0
-    },
-    "description": eventDesc
-  };
-  console.log(eventData);
-  convertLatLong(eventData, 'edit');
-});
-
 // Create new event
 $("#createButton").click(function(e) {
+
     e.preventDefault();
     var eventName = $("#name").val();
     var eventCat = $("#category").val();
@@ -406,12 +402,12 @@ $("#createButton").click(function(e) {
       "description": eventDesc
     };
 
-    convertLatLong(eventData, 'create');
+    convertLatLong(eventData);
 
 });
 
 // Converting address to lat long
-function convertLatLong(eventData, etype) {
+function convertLatLong(eventData) {
   console.log("Converting location");
   var latitude = 0;
   var longitude = 0;
@@ -427,32 +423,18 @@ function convertLatLong(eventData, etype) {
           eventData.location.latitude = event[0];
           eventData.location.longitude = event[1];
 
-          if(etype == 'create') {
-            $.ajax({
-                url: '/feed/event',
-                type: 'POST',
-                data: eventData,
-                success: function(data){
-                    $("#dataById").html(data.name);
-                    console.log(JSON.stringify(data));
-                    $("#modalCreate").modal("hide");
-                    loadOneEventCreate(data);
-                }
-            });
-          } else if(etype == 'edit') {
-            $.ajax({
-                url: '/feed/event/edit',
-                type: 'POST',
-                data: eventData,
-                success: function(data){
-                    //$("#dataById").html(data.name);
-                    console.log(JSON.stringify(data));
-                    $("#modalEdit").modal("hide");
-                    loadOneEventCreate(data);
-                }
-            });
-          }
 
+          $.ajax({
+              url: localhost + '/feed/event',
+              type: 'POST',
+              data: eventData,
+              success: function(data){
+                  $("#dataById").html(data.name);
+                  console.log(JSON.stringify(data));
+                  $("#modalCreate").modal("hide");
+                  loadOneEventCreate(data);
+              }
+          });
 
       } else {
           alert('Geocode was not successful for the following reason: ' + status);
@@ -481,7 +463,6 @@ function loadOneEventCreate(data) {
       '<b>Description: ' + data.permalink + '<br>' +
       'Time: ' + data.time + '<br>' +
       'Date: ' + data.date + '</b></p><br>' +
-      '<span style="text-decoration: underline;">Share </span><a href="http://twitter.com" style="color: #1abc9c;">Twitter</a> and <a href="http://facebook.com" style="color: #1abc9c;">Facebook</a><br>' +
       '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span> more info</button><br><br>' +
       '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
       '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
@@ -514,6 +495,6 @@ function clearMap() {
   }
 }
 
-// Initializes Map
-console.log("Creating map");
+// Initializes Maps With Users Events
+myProfile();
 google.maps.event.addDomListener(window, 'load', initialize);

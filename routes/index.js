@@ -39,7 +39,21 @@ module.exports = exports = function(app, db, passport) {
 		   user : req.user, username: result // get the user out of session and pass to template
 		 });
 	});
-
+	
+	app.get('/events', isLoggedIn, function(req, res) {
+ 
+      var userData = "";
+      if(req.user.facebook.username) {
+        userData = req.user.facebook.username;
+      } else if(req.user.local.username) {
+        userData = req.user.local.username;
+      }
+	  
+      res.render('events.ejs', {
+        user : req.user, username: userData  // get the user out of session and pass to template
+      });
+    });
+	
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
