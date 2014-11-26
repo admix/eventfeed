@@ -12,17 +12,17 @@ $(document).ready(function(){
 	if($('.select')[0]) {
 	    $('.select').selectpicker();
 	}
-        
+
         //Sortable
         if($('.sortable')[0]) {
 	    $('.sortable').sortable();
 	}
-	
+
         //Tag Select
 	if($('.tag-select')[0]) {
 	    $('.tag-select').chosen();
 	}
-        
+
         /* Tab */
 	if($('.tab')[0]) {
 	    $('.tab a').click(function(e) {
@@ -30,12 +30,12 @@ $(document).ready(function(){
 		$(this).tab('show');
 	    });
 	}
-        
+
         /* Collapse */
 	if($('.collapse')[0]) {
 	    $('.collapse').collapse();
 	}
-        
+
         /* Accordion */
         $('.panel-collapse').on('shown.bs.collapse', function () {
             $(this).prev().find('.panel-title a').removeClass('active');
@@ -48,7 +48,7 @@ $(document).ready(function(){
         //Popover
     	if($('.pover')[0]) {
     	    $('.pover').popover();
-    	} 
+    	}
     })();
 
     /* --------------------------------------------------------
@@ -62,7 +62,7 @@ $(document).ready(function(){
             $('#sidebar').toggleClass('toggled');
             //$('#content').toggleClass('m-0');
         });
-         
+
         /* Active Menu */
         $('#sidebar .menu-item').hover(function(){
             $(this).closest('.dropdown').addClass('hovered');
@@ -74,7 +74,7 @@ $(document).ready(function(){
         $('.side-menu .dropdown > a').click(function(e){
             e.preventDefault();
         });
-	
+
 
     })();
 
@@ -105,7 +105,7 @@ $(document).ready(function(){
 
             $('.todo-list .media input').on('ifUnchecked', function(){
                 $(this).closest('.media').find('.checkbox label').removeAttr('style');
-            });    
+            });
         })
     })();
 
@@ -154,28 +154,155 @@ $(document).ready(function(){
     })();
 
 
+	//custom Calendar Implementation
+	// Get events by username
+
+
+	var eventfeed = "http://eventfeed.me",
+    localhost = "http://localhost:8080";
+
+	// loading events on a Date
+	function loadEventsOnDate(date)
+	{	//formated date
+		var fd = $.datepicker.formatDate("yy-mm-dd", date);
+		//console.log(fd);
+
+		console.log("Loading Events Happening on " + fd);
+		$.ajax({
+			url:'feed/calendar/date',
+			data: {date:fd},
+			type: 'POST',
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				console.log("SUCCESS LOADING DATES");
+				console.log(JSON.stringify(data));
+
+				var events = [];
+				data.forEach(function(e) {
+					events.push(e);
+				});
+				loadEvents(events);
+				alert("Events: " + JSON.stringify(events));
+			},
+			error: function (request, status, error) {
+				alert("ERROR" + request.responseText);
+			}
+		});
+
+	}
+
+
+
+	// gets an AJX event object and returns an event for calander
+	function getCalDates(events){
+
+		events.success(function(realData)
+		{
+			for(var ev in realData)
+			{	var fd = $.datepicker.formatDate("mm-dd-yy", realData[ev].date);
+				calEvents.push({
+				start:fd
+				});
+			}
+			console.log(JSON.stringify("CalenderEvents: "+ JSON.stringify(calEvents)));
+			MYEVENTS = calEvents;
+		});
+		console.log(JSON.stringify("CalenderEvent2: "+ JSON.stringify(calEvents)));
+		return calEvents;
+	}
+
+	//http://stackoverflow.com/questions/5316697/jquery-return-data-after-ajax-call-success
+	function getMyEvents(){
+		console.log("Getting your events for Calander");
+		return $.ajax({
+			url: localhost + '/feed/calendar/events',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data){
+			  //console.log(data);
+			  //console.log("Got Data in getMyEvents \n "+ JSON.stringify(data));
+			  var events = [];
+			  data.forEach(function(e) {
+				events.push({
+					start:e.date
+				});
+				console.log("\ndate being pushed" + e.date + "\n");
+			  });
+			},
+			error: function (request, status, error) {
+				console.log("ERROR IN GET MY EVENTS\n" + request.responseText);
+			}
+		});
+	}
+
+	function displCal(event)
+	{
+		event.success(function(eventDates){
+			var calEvents= [];
+			for(var ev in eventDates)
+			{
+				calEvents.push({
+				start:eventDates[ev].date
+				});
+				//console.log("events on "+ eventDates[ev].date);
+			}
+
+			if ($('#sidebar-calendar')[0]) {
+				$('#sidebar-calendar').fullCalendar({
+					editable: false,
+					events: calEvents,
+					eventRender: function(event, element,view) {
+						// highlight date of event
+						var dateString = $.fullCalendar.formatDate(event.start, 'yyyy-MM-dd');
+
+
+
+
+						view.element.find('.fc-day[data-date="' + dateString + '"]').css('background-color', 'rgba(204,229,255,0.26)');
+						// hide default calendar css
+						$('.fc-day-content').hide();
+						$('.fc-event-title').hide();
+						$('.fc-event-inner').hide();
+					},
+					dayClick: function(date, allDay, jsEvent, view) {
+						alert(date);
+						clearMap();
+						loadEventsOnDate(date);
+					},
+
+					header: {
+						left: 'title'
+					}
+				});
+			}
+		});
+	}
+
+
+
+
+
+
+
+
+
+
+
     /* --------------------------------------------------------
 	Calendar
     -----------------------------------------------------------*/
     (function(){
-	
-        //Sidebar
-        if ($('#sidebar-calendar')[0]) {
-            var date = new Date();
-            var d = date.getDate();
-            var m = date.getMonth();
-            var y = date.getFullYear();
-            $('#sidebar-calendar').fullCalendar({
-                editable: false,
-                events: [],
-                header: {
-                    left: 'title'
-                }
-            });
-        }
+
+		var events = getMyEvents();
+		displCal(events);
+
+		//console.log(JSON.stringify("dates"+dates));
+		//console.log(JSON.stringify("MYEVENTS"+MYEVENTS));
+
 
         //Content widget
-        if ($('#calendar-widget')[0]) {
+        /*if ($('#calendar-widget')[0]) {
             $('#calendar-widget').fullCalendar({
                 header: {
                     left: 'title',
@@ -205,14 +332,105 @@ $(document).ready(function(){
                     }
                 ]
             });
-        }
+        }*/
 
     })();
 
-    /* --------------------------------------------------------
+
+
+	/* --------------------------------------------------------
+	Friends List
+    -----------------------------------------------------------*/
+	// Make friends list in fiv
+	function makeList(friends){
+
+		console.log("making friends list");
+		if(friends.length==0)
+		{
+			console.log("no friends, i  will create some for you to test");
+
+			friends = ["Jevon","Alex","Ayaz","Phillip", "mo"];
+
+			var items = document.getElementById("friends-list");
+
+			for(var f = 0; f < friends.length; f++)
+			{
+				var friendItem = document.createElement("li");
+				friendItem.innerHTML = friends[f];
+				console.log(friends[f] + f);
+				items.appendChild(friendItem);
+			}
+
+
+
+
+
+		}
+
+		/*
+		var items = document.getElementById("friends-list");
+
+		for(var i =0; i < friends.length; i++);
+		{
+			console.log("Adding friend to list");
+			console.log(friends[i]);
+			var friendItem = document.createElement("li");
+			friendItem.innerHTML = friends[i];
+			items.appendChild(friendItem);
+		}
+		*/
+	}
+
+
+
+
+	(function ()
+	{
+		if($('#friends-list')[0]){
+
+		// getAllFriends
+		$.ajax({
+			url: '/friends',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				console.log("You actually have friends?");
+				console.log(data.length+"friends found");
+
+				console.log(JSON.stringify(data));
+
+				var Friends = [];
+				data.forEach(function(e) {
+					Friends.push(e);
+					console.log(e);
+				});
+
+				makeList(Friends);
+				//alert("Friends: " + JSON.stringify(Friends));
+			},
+			error: function (request, status, error) {
+				alert("ERROR" + request.responseText);
+			}
+		});
+
+
+
+
+
+		}
+	})();
+
+
+
+
+
+
+	/* --------------------------------------------------------
 	RSS Feed widget
     -----------------------------------------------------------*/
-    (function(){
+    /*
+	(function(){
 	if($('#news-feed')[0]){
 	    $('#news-feed').FeedEk({
 		FeedUrl: 'http://rss.cnn.com/rss/edition.rss',
@@ -223,11 +441,12 @@ $(document).ready(function(){
 	    });
 	}
     })();
-
+	*/
     /* --------------------------------------------------------
 	Chat
     -----------------------------------------------------------*/
-    $(function() {
+    /*
+	$(function() {
         $('body').on('click touchstart', '.chat-list-toggle', function(){
             $(this).closest('.chat').find('.chat-list').toggleClass('toggled');
         });
@@ -245,6 +464,7 @@ $(document).ready(function(){
             }
         });
     });
+	*/
 
     /* --------------------------------------------------------
 	Form Validation
@@ -269,21 +489,21 @@ $(document).ready(function(){
 	if($('.color-picker')[0]) {
 	    $('.color-picker').colorpicker();
 	}
-        
+
         //RGB
 	if($('.color-picker-rgb')[0]) {
 	    $('.color-picker-rgb').colorpicker({
 		format: 'rgb'
 	    });
 	}
-        
+
         //RGBA
 	if($('.color-picker-rgba')[0]) {
 	    $('.color-picker-rgba').colorpicker({
 		format: 'rgba'
 	    });
 	}
-	
+
 	//Output Color
 	if($('[class*="color-picker"]')[0]) {
 	    $('[class*="color-picker"]').colorpicker().on('changeColor', function(e){
@@ -318,7 +538,7 @@ $(document).ready(function(){
 		pick12HourFormat: true
 	    });
 	}
-        
+
         $('.datetime-pick input:text').on('click', function(){
             $(this).closest('.datetime-pick').find('.add-on i').click();
         });
@@ -346,14 +566,14 @@ $(document).ready(function(){
 		savable:false
 	    });
 	}
-        
+
         //WYSIWYE Editor
 	if($('.wysiwye-editor')[0]) {
 	    $('.wysiwye-editor').summernote({
 		height: 200
 	    });
 	}
-        
+
     })();
 
     /* --------------------------------------------------------
@@ -384,7 +604,7 @@ $(document).ready(function(){
 		    jQuery.browser.version = RegExp.$1;
 		}
 	    })();
-	    
+
 	    //Lightbox
 	    $().piroBox_ext({
 		piro_speed : 700,
@@ -421,7 +641,7 @@ $(document).ready(function(){
 
 
     })();
-    
+
     /* --------------------------------------------------------
      Login + Sign up
     -----------------------------------------------------------*/
@@ -430,51 +650,51 @@ $(document).ready(function(){
 	    e.preventDefault();
 	    var box = $(this).attr('data-switch');
 	    $(this).closest('.box').toggleClass('active');
-	    $('#'+box).closest('.box').addClass('active'); 
+	    $('#'+box).closest('.box').addClass('active');
 	});
     })();
-    
-   
-    
+
+
+
     /* --------------------------------------------------------
      Checkbox + Radio
      -----------------------------------------------------------*/
     if($('input:checkbox, input:radio')[0]) {
-    	
+
 	//Checkbox + Radio skin
 	$('input:checkbox:not([data-toggle="buttons"] input, .make-switch input), input:radio:not([data-toggle="buttons"] input)').iCheck({
 		    checkboxClass: 'icheckbox_minimal',
 		    radioClass: 'iradio_minimal',
 		    increaseArea: '20%' // optional
 	});
-    
+
 	//Checkbox listing
 	var parentCheck = $('.list-parent-check');
 	var listCheck = $('.list-check');
-    
+
 	parentCheck.on('ifChecked', function(){
 		$(this).closest('.list-container').find('.list-check').iCheck('check');
 	});
-    
+
 	parentCheck.on('ifClicked', function(){
 		$(this).closest('.list-container').find('.list-check').iCheck('uncheck');
 	});
-    
+
 	listCheck.on('ifChecked', function(){
 		    var parent = $(this).closest('.list-container').find('.list-parent-check');
 		    var thisCheck = $(this).closest('.list-container').find('.list-check');
 		    var thisChecked = $(this).closest('.list-container').find('.list-check:checked');
-	    
+
 		    if(thisCheck.length == thisChecked.length) {
 			parent.iCheck('check');
 		    }
 	});
-    
+
 	listCheck.on('ifUnchecked', function(){
 		    var parent = $(this).closest('.list-container').find('.list-parent-check');
 		    parent.iCheck('uncheck');
 	});
-    
+
 	listCheck.on('ifChanged', function(){
 		    var thisChecked = $(this).closest('.list-container').find('.list-check:checked');
 		    var showon = $(this).closest('.list-container').find('.show-on');
@@ -486,9 +706,9 @@ $(document).ready(function(){
 		    }
 	});
     }
-    
+
     /* --------------------------------------------------------
-        MAC Hack 
+        MAC Hack
     -----------------------------------------------------------*/
     (function(){
 	//Mac only
@@ -505,7 +725,7 @@ $(document).ready(function(){
             $('.photo-gallery').SuperBox();
         }
     })();
-    
+
 });
 
 $(window).load(function(){
@@ -541,7 +761,7 @@ $(window).load(function(){
             return val;
         }
     });
-    
+
 });
 
 /* --------------------------------------------------------
@@ -587,5 +807,3 @@ Date Time Widget
         $("#hours").html(( hours < 10 ? "0" : "" ) + hours);
     }, 1000);
 })();
-
-
