@@ -127,7 +127,7 @@ module.exports = exports = function(app, db, passport) {
       console.log("in GET by date");
       var eventDate = req.body;
       var username = req.user.username;
-      dbEvents.getEventsByDate(db, username, eventDate.date, function(err, msg) {
+      dbEvents.getEventsByDate(db, req.user.email, eventDate.date, function(err, msg) {
         if(err) console.log(err);
         res.send(JSON.stringify(msg), 200);
         //res.end();
@@ -158,7 +158,7 @@ module.exports = exports = function(app, db, passport) {
         if(err) console.log(err);
         events = events.concat(msg);
 
-        dbEvents.getEventsByDate(db, username, eventDate.date, function(err, eve) {
+        dbEvents.getEventsByDate(db, req.user.email, eventDate.date, function(err, eve) {
           if(err) console.log(err);
           events = events.concat(eve);
           events = unique(events);
@@ -176,7 +176,8 @@ module.exports = exports = function(app, db, passport) {
       //var eventDate = req.body;
       var events = [];
       var username = req.user.username;
-      dbEvents.getEventsByYouAttend(db, username, function(err, msg) {
+      var email = req.user.email;
+      dbEvents.getEventsByYouAttend(db, email, function(err, msg) {
         if(err) console.log(err);
         events = events.concat(msg);
         dbEvents.getEventsUserHost(db, username, function(error, eve) {
@@ -275,24 +276,18 @@ module.exports = exports = function(app, db, passport) {
     //POST save new event (Register) for particular user (userID passed in as a parameter)
     app.post('/feed/user/event/:eventId', loggedIn, function (req, res) {
       console.log("Registering for an event");
-      var userData = "";
+      var userData = req.user.email;
       var eventId = req.params.eventId;
-      if(req.user.facebook.username) {
-        userData = req.user.facebook.username;
-      } else if(req.user.local.email) {
-        userData = req.user.local.username;
-      }
 
-      dbEvents.registerForEvent(db, req.user.email, eventId, function(err, msg) {
+      dbEvents.registerForEvent(db, userData, eventId, function(err, msg) {
         if(err) console.log("Error reg");
         console.log("Success: " + msg);
         dbEvents.getEventById(db, eventId, function(err, doc) {
           if(err) console.log('Error get');
-          var arr = [req.user.email];
+          var arr = [userData];
           emailer.sendEmail(arr, doc, 'new');
         })
 
-        //send email with confirmation
         res.send(msg, 200);
       })
     });
@@ -447,11 +442,23 @@ module.exports = exports = function(app, db, passport) {
     // Delete event by ID
     app.delete('/feed/events/:id', function (req, res){
       var eventID = req.params.id;
+      var users = "";
+      var usersEmail = [];
       console.log("in delete server");
-      dbEvents.deleteEventByID(db, eventID,  function(err, msg) {
-        if(err) throw err;
-        res.send(msg, 200);
+      dbEvents.getEventById(db, eventID, function(err, data) {
+        if(err) console.log("Error getting event");
+        users = data.users;
+        users.forEach(function(us) {
+          usersEmail.push(us.username);
+        });
+        console.log("emails: " + usersEmail.toString());
+        dbEvents.deleteEventByID(db, eventID,  function(err, msg) {
+          if(err) throw err;
+          emailer.sendEmail(usersEmail, data, 'delete');
+          res.send(msg, 200);
+        })
       })
+
     });
 
     // Error handling middleware
@@ -486,12 +493,14 @@ function loggedIn(req, res, next) {
 }
 
 function unique(arr) {
-    var hash = {}, result = [];
-    for ( var i = 0, l = arr.length; i < l; ++i ) {
-        if ( !hash.hasOwnProperty(arr[i]) ) { //it works with objects! in FF, at least
-            hash[ arr[i] ] = true;
-            result.push(arr[i]);
-        }
-    }
-    return result;
+  var results = [];
+  var idsSeen = {}, idSeenValue = {};
+  for (var i = 0, len = arr.length, id; i < len; ++i) {
+      id = arr[i].id;
+      if (idsSeen[id] !== idSeenValue) {
+          results.push(arr[i]);
+          idsSeen[id] = idSeenValue;
+      }
+  }
+  return results;
 }
