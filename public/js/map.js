@@ -32,9 +32,14 @@ var shadow = {
   url: iconURLPrefix + 'msmarker.shadow.png'
 };
 
-$("date").datepicker({
+$("#date").datepicker({
   dateFormat: 'yy-mm-dd'
 });
+
+$("#dateEdit").datepicker({
+  dateFormat: 'yy-mm-dd'
+});
+
 
 function initialize() {
     $("#directions-panel").hide();
@@ -55,7 +60,7 @@ function initialize() {
                 '<p><b>What do you want to do today? </b><br>' +
                 '<b>Create new event: <button type="button" data-toggle="modal" href="#modalCreate" class="btn btn-default btn-sm">Create new</button><br>' +
                 '<b>Find event: <input type="text" class="form-control m-b-10" id="searchtxt2" placeholder="Enter event name" style="color: #333 !important; border: 1px solid #333;background: none;width: 70%;"><br>' +
-                '<button type="button" class="btn btn-md" onclick="search();">Search</button>' + 
+                '<button type="button" class="btn btn-md" onclick="search();">Search</button>' +
                 '</div>';
 
                 infowindow = new google.maps.InfoWindow({
@@ -152,41 +157,6 @@ function myEvents(){
     });
 }
 
-// // Loading only one event on a map
-// function loadOneEvent(data) {
-//   var locations = [43.7000, -79.4000];
-//   clearMap();
-//   var infowindow = new google.maps.InfoWindow({
-//     maxWidth: 200
-//   });
-//   var marker = new google.maps.Marker({
-//       position: new google.maps.LatLng(locations[0], locations[1]),
-//       map: map,
-//       title: data[i].name
-//       //icon: 'https://cdn1.iconfinder.com/data/icons/BRILLIANT/food/png/32/beer.png'
-//   });
-//   markersArray.push(marker);
-//   var contentString = '<div id="content" class="markerInfo">' +
-//       '<div id="siteNotice">' + data.id +
-//       '</div>' +
-//       '<h3 id="firstHeading" class="firstHeading">'+ data.name +'</h3>' +
-//       '<div id="bodyContent">' +
-//       '<p><b>Details: </b><br>' +
-//       '<b>Description: ' + data.permalink + '<br>' +
-//       'Time: ' + data.time + '<br>' +
-//       'Date: ' + data.date + '</b></p><br>' +
-//       '<div><button type="button" data-toggle="modal" href="#modalInfo" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-info-sign"></span></button><br>' +
-//       '<button type="button" onclick="calcRoute()" class="btn btn-sm btn-default">Direction</button>&nbsp;' +
-//       '<button type="button" onclick="register()" id="reg" class="btn btn-sm btn-primary">Register</button></div>' +
-//       '</div>';
-//   google.maps.event.addListener(marker, 'click', (function(marker, i) {
-//     return function() {
-//       event_address = marker.getPosition();
-//       infowindow.setContent(contentString);
-//       infowindow.open(map, marker);
-//     }
-//   })(marker, i));
-// }
 // Directions calculations
 function calcRoute() {
     directionsDisplay.setMap(null);
@@ -324,6 +294,7 @@ function editModal() {
       console.log("event: " + JSON.stringify(data));
       $('#modalEdit').modal('show');
       $('#modalInfo').modal('hide');
+      $('#id-edit').text(data.id);
       $('#nameEdit').val(data.name);
       $('#categoryEdit').val(data.category);
       $("#addressEdit").val(data.location.address);
@@ -335,6 +306,12 @@ function editModal() {
       } else {
         $("#privateEdit").prop('checked', false);
       }
+      var users = "";
+      data.users.forEach(function(us) {
+        users+=us.username + "  ";
+      });
+      $('#ppl').text(users);
+      // console.log(data.users);
     }
   })
 }
@@ -349,6 +326,7 @@ function deleteEvent() {
     success: function(data) {
       console.log("event: " + JSON.stringify(data));
       $('#modalInfo').modal('hide');
+      myEvents();
     }
   })
 }
@@ -363,7 +341,12 @@ $('#editButton').click(function(e) {
   var eventDesc = $("#descriptionEdit").val();
   var eventAddress = $("#addressEdit").val();
   var eventPrivate = $("#privateEdit").is(':checked');
+  var id = $('#id-edit').text();
+  var users = $('#ppl').text();
+  users = users.replace("  ", ",");
+  users = users.split(',');
   var eventData = {
+    "id": parseInt(id),
     "name": eventName,
     "category": eventCat,
     "date": eventDate,
@@ -375,7 +358,8 @@ $('#editButton').click(function(e) {
       "latitude": 0,
       "longitude": 0
     },
-    "description": eventDesc
+    "description": eventDesc,
+    "users": users
   };
   console.log(eventData);
   convertLatLong(eventData, 'edit');
@@ -436,6 +420,13 @@ function convertLatLong(eventData, etype) {
                     $("#dataById").html(data.name);
                     console.log(JSON.stringify(data));
                     $("#modalCreate").modal("hide");
+                    $("#name").val('');
+                    $("#category").val('');
+                    $("#date").val('');
+                    $("#time").val('');
+                    $("#description").val('');
+                    $("#address").val('');
+                    $("#private").val('');
                     loadOneEventCreate(data);
                 }
             });
@@ -444,11 +435,11 @@ function convertLatLong(eventData, etype) {
                 url: '/feed/event/edit',
                 type: 'POST',
                 data: eventData,
-                success: function(data){
+                success: function(msg){
                     //$("#dataById").html(data.name);
-                    console.log(JSON.stringify(data));
+                    console.log(JSON.stringify(msg));
                     $("#modalEdit").modal("hide");
-                    loadOneEventCreate(data);
+                    loadOneEventCreate(msg);
                 }
             });
           }

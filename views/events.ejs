@@ -82,7 +82,7 @@
        xfbml      : true,
        version    : 'v2.1'
        });
-		
+
       };
 
     //    (function(d, s, id){
@@ -93,7 +93,7 @@
    //   fjs.parentNode.insertBefore(js, fjs);
    //     }(document, 'script', 'facebook-jssdk'));
 		  </script>
-		
+
 		<div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -102,9 +102,9 @@
   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1469462683327868&version=v2.0";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
-		
 
-  
+
+
   <!--  <header id="header" class="media">
       <a href="" id="menu-toggle"></a>
       <a class="logo pull-left" href="/" style="padding-left: 50px;"><img class="logo-img" src="/img/logo.jpg">EventFeed.me</a>
@@ -123,9 +123,9 @@
                 <a data-toggle="modal" href="#modalLogout" class="btn btn-md">Logout</a>
 				  <input type="button" class="btn btn-md" value="Toggle Street View" onclick="toggleStreetView();"></input>
                 <a href="/profile" class="btn btn-md">Home</a>
-				<div style="padding-bottom: 4em; "> </div>  
-				<b style="text-align: center;">Upcoming Events</b>   
-				  			
+				<div style="padding-bottom: 4em; "> </div>
+				<b style="text-align: center;">Upcoming Events</b>
+
               </div>
             </div>
           </div>
@@ -216,22 +216,22 @@
         <!-- Side Menu -->
         <ul class="list-unstyled side-menu">
           <li class="active">
-            <a class="sa-side-home" href="index.html">
+            <a class="sa-side-home" href="/profile">
             <span class="menu-item">Home</span>
             </a>
           </li>
           <li>
-            <a class="sa-side-typography" href="typography.html">
+            <a class="sa-side-typography" href="/friends">
             <span class="menu-item">Friends</span>
             </a>
           </li>
           <li>
-            <a class="sa-side-widget" href="content-widgets.html">
+            <a class="sa-side-widget" href="/events">
             <span class="menu-item">Events</span>
             </a>
           </li>
           <li>
-            <a class="sa-side-table" href="tables.html">
+            <a class="sa-side-table" href="/logout">
             <span class="menu-item">Logout</span>
             </a>
           </li>
@@ -245,33 +245,33 @@
             <div class="tile">
               <div id="directions-panel"></div>
               <div style="height: 800px;padding:0px !important;margin: 0px;width: auto;">
-				<div style="padding-bottom: 5em; text-align: center"></div> 
-			<h2 style="text-align: center;">Events You Host</h2>   
+				<div style="padding-bottom: 5em; text-align: center"></div>
+			<h2 style="text-align: center;">Events You Host</h2>
 			 <a data-toggle="modal" href="#modalLogout" class="btn btn-md">Logout</a>
 				  <input " type="button" class="btn btn-md" value="Toggle Street View" onclick="toggleStreetView();"></input>
                 <a href="/profile" class="btn btn-md">Home</a>
 				<table>
 				 <tr>
-				 <td> 
+				 <td>
 					 <table id="myTable" style="width:auto; height:70%; ">
 					  <tr class="spaceUnder">
 					  </tr>
 					  <tr class="spaceUnder">
 						<td style=" padding: 10px; vertical-align: top;"><div id="map-event0"  style="visibility:hidden; width: 300px; height: 200px"></div></td>
-						<td style=" padding: 10px; vertical-align: top;"><div id="event-desc0"  style="visibility:hidden; font-size: 120%;"></div><div class="fb-like" data-href="http://zenit.senecac.on.ca:9118/" 
-						data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></td>	
-							
+						<td style=" padding: 10px; vertical-align: top;"><div id="event-desc0"  style="visibility:hidden; font-size: 120%;"></div><div class="fb-like" data-href="http://zenit.senecac.on.ca:9118/"
+						data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></td>
+
 					  </tr>
 					  <tr class="spaceUnder">
 						<td style=" padding: 10px; vertical-align: top;"><div id="map-event1" style="visibility:hidden; width: 300px; height: 200px"></div></td>
 						<td style=" padding: 10px; vertical-align: top;"><div id="event-desc1"  style="visibility:hidden; font-size: 120%;"></div></td>
-			
+
 					  </tr>
 					  <tr class="spaceUnder">
 						<td style=" padding: 10px; vertical-align: top;"> <div id="map-event2" style="visibility:hidden; width: 300px; height: 200px"></div></td>
 						<td style=" padding: 10px; vertical-align: top;"><div id="event-desc2"  style="visibility:hidden; font-size: 120%;"> </div></td>
 					  </tr>
-					</table> 
+					</table>
 					</td>
 					<td style=" padding: 10px; vertical-align: top;"><div id="event-showUsers"  style="visibility:hidden; font-size: 150%;"></div></td>
 					</tr>
@@ -553,8 +553,8 @@
     <!-- Other -->
     <script src="/js/vendors/calendar.min.js"></script> <!-- Calendar -->
     <script src="/js/vendors/feeds.min.js"></script> <!-- News Feeds -->
-  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> 
-  
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+
     <script src="/js/vendors/jquery.geocomplete.min.js"></script>
     <!-- All JS functions -->
     <script src="/js/vendors/functions.js"></script>
