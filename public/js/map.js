@@ -40,7 +40,6 @@ $("#dateEdit").datepicker({
   dateFormat: 'yy-mm-dd'
 });
 
-
 function initialize() {
     $("#directions-panel").hide();
     geocoder = new google.maps.Geocoder();
@@ -128,7 +127,6 @@ function search(){
           data.forEach(function(e) {
             events.push(e);
           });
-          console.log(events);
           infowindow.close();
           loadEvents(data);
         }
@@ -144,13 +142,11 @@ function myEvents(){
         type: 'GET',
         dataType: 'json',
         success: function(data){
-          console.log(data);
           console.log("Successful GET.");
           var events = [];
           data.forEach(function(e) {
             events.push(e);
           });
-          console.log(events);
           infowindow.close();
           loadEvents(data);
         }
@@ -208,16 +204,15 @@ function loadEvents(events) {
         events[k].name = events[k].name[0].toUpperCase() + events[k].name.substr(1);
         events[k].description = events[k].description[0].toUpperCase() + events[k].description.substr(1);
         if(!det[h]) {
-          console.log('in h');
           h = 0;
         }
-        console.log(det[h]);
         var contentString = '<div id="content" class="markerInfo panel panel-default">' +
         '<div id="siteNotice">' + events[k].id +
         '</div>' +
         //'<h3 id="firstHeading" class="firstHeading">'+ events[k].name +'</h3>' +
         '<div class="panel-heading"><h1 class="panel-title">'+events[k].name+'</h1></div>' +
         '<div class="panel-body" style="width: 100%">' +
+        '<span style="text-decoration: underline;">Hosted by: </span><span id="friendUsername" style="font-weight: bold;">'+events[k].createdByUsername+'</span>&nbsp;<button type="button" id="addFriend" class="btn btn-xs btn-primary">Add to friend</button> <br>' +
         '<span style="text-decoration: underline;">Details: '+det[h]+'</span> <br>' +
         '<span style="text-decoration: underline;">Description: </span>' + events[k].description + '<br>' +
         '<span style="text-decoration: underline;">Time: </span>19:30 <br>' +// + /*events[k].time*/ + '<br>' +
@@ -239,9 +234,6 @@ function loadEvents(events) {
             infowindow.open(map, marker);
           }
         })(marker, i, contentString));
-        //map.setZoom(11);
-        //google.maps.event.addListener(marker, 'mouseover');
-        console.log("here");
         mc.addMarker(marker);
         iconCounter++;
         i++;
@@ -257,6 +249,27 @@ function loadEvents(events) {
     map.fitBounds(bounds);
 }
 
+$(document).on("click", '#addFriend' ,function(){
+
+  var friend = $('#friendUsername').text();
+  console.log(friend);
+  $.ajax({
+    url: '/friend',
+    type: 'POST',
+    dataType: 'json',
+    data:{'friend':friend},
+    success: function(data){
+      console.log("Successful GET.");
+      console.log(data);
+      alert("Friend request has been sent to: " + friend);
+    },
+    error: function(e) {
+      console.log('error');
+    }
+  });
+});
+
+
 // Register for event
 function register() {
   console.log("Registering");
@@ -268,7 +281,6 @@ function register() {
       type: 'POST',
       dataType: 'json',
       success: function(data){
-        console.log(data);
         console.log("Successful GET.");
         if(data == "sent") {
           console.log("sent");
@@ -335,7 +347,6 @@ function deleteEvent() {
     type: 'DELETE',
     contentType: 'application/json',
     success: function(data) {
-      console.log("event: " + JSON.stringify(data));
       $('#modalInfo').modal('hide');
       myEvents();
     }
@@ -372,7 +383,6 @@ $('#editButton').click(function(e) {
     "description": eventDesc,
     "users": users
   };
-  console.log(eventData);
   convertLatLong(eventData, 'edit');
 });
 
@@ -417,8 +427,6 @@ function convertLatLong(eventData, etype) {
           longitude = results[0].geometry.location.lng();
           map.setCenter(results[0].geometry.location);
           event = [latitude, longitude];
-          console.log(event);
-          console.log(eventData.location.latitude);
           eventData.location.latitude = event[0];
           eventData.location.longitude = event[1];
 
@@ -447,8 +455,6 @@ function convertLatLong(eventData, etype) {
                 type: 'POST',
                 data: eventData,
                 success: function(msg){
-                    //$("#dataById").html(data.name);
-                    console.log(JSON.stringify(msg));
                     $("#modalEdit").modal("hide");
                     loadOneEventCreate(msg);
                 }
