@@ -74,6 +74,7 @@ module.exports = function(passport) {
                   newUser.facebook.username = newUser.facebook.email.substr(0, newUser.facebook.email.indexOf('@'));
                   newUser.username = newUser.facebook.username;
                   newUser.email = newUser.facebook.email;
+                  newUser.active = 0;
 					// save our user to the database
 	                newUser.save(function(err) {
 	                    if (err)
@@ -225,6 +226,7 @@ module.exports = function(passport) {
                 newUser.local.username = newUser.local.email.substr(0, newUser.local.email.indexOf('@'));
                 newUser.username = newUser.local.username;
                 newUser.email = newUser.local.email;
+                newUser.active = 0;
 
 				// save the user
                 newUser.save(function(err) {
