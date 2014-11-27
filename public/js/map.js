@@ -188,11 +188,7 @@ function loadEvents(events) {
     var h = 0;
     var delay_counter = 0;
     for (var k in events) {
-<<<<<<< HEAD
         var latlong = new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude);
-=======
-        var latlong = new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude);;
->>>>>>> Merged bounds
         var marker = new google.maps.Marker({
             position: latlong,
             map: map,
