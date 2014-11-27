@@ -24,20 +24,12 @@ module.exports = exports = function(app, db, passport) {
   //  });
 
 	app.get('/profile', isLoggedIn, function(req, res) {
-		 var resullt = null;
-		 var email = null;
-		// var test;
-		 if(req.user.facebook.email) {
-       email = req.user.facebook.email;
-       result = email.split('@')[0];
-     } else if(req.user.local.email) {
-       email = req.user.local.email;
-       result = email.split('@')[0];
-     }
 
-		 res.render('profile.ejs', {
-		   user : req.user, username: result // get the user out of session and pass to template
-		 });
+		 var email = req.user.email;
+     var result = email.split('@')[0];
+     console.log(req.user);
+     // get the user out of session and pass to template
+		 res.render('profile.ejs', { user : req.user, username: result, requests: req.user.friendRequest, active: req.active, friends: req.user.friends });
 	});
 
 	app.get('/events', isLoggedIn, function(req, res) {
@@ -322,7 +314,19 @@ module.exports = exports = function(app, db, passport) {
         if(err) console.log("Error getting friends for logged in user");
         res.send(JSON.stringify(msg), 200);
       })
-    })
+    });
+
+    app.post('/friend/confirm', loggedIn, function(req, res) {
+      console.log("Add friend for loggedin user");
+      var userData = req.body;
+      var username = req.user.username;
+      console.log(userData.friendToConfirm + "  for " + username);
+      dbUsers.friendConfirm(db, username, userData.friendToConfirm, userData.flag, function(err, msg) {
+        if(err) console.log("Error getting friends for logged in user");
+        res.send(JSON.stringify(msg), 200);
+      })
+    });
+
         // get for username
     app.get('/friends/:user', function(req, res) {
       console.log("Get friends for loggedin user");
@@ -337,10 +341,14 @@ module.exports = exports = function(app, db, passport) {
       console.log("Add friend for loggedin user");
       var userData = req.body;
       var username = req.user.username;
-      console.log(userData.friend + "  " + username);
+      console.log(userData.friend + "  for " + username);
       dbUsers.addFriend(db, username, userData.friend, function(err, msg) {
         if(err) console.log("Error getting friends for logged in user");
-        res.send(JSON.stringify(msg), 200);
+        dbUsers.notifyFriend(db, username, userData.friend, function(err, data) {
+          if(err) console.log("Error notifying friend");
+          res.send(JSON.stringify(data), 200);
+        })
+
       })
     })
 
@@ -351,7 +359,7 @@ module.exports = exports = function(app, db, passport) {
       var username = req.user.username;
       console.log(userData.friend + "  " + username);
       dbUsers.removeFriend(db, username, userData.friend, function(err, msg) {
-        if(err) console.log("Error getting friends for logged in user");
+        if(err) console.log("Error removing friends for logged in user");
         res.send(JSON.stringify(msg), 200);
       })
     })

@@ -133,16 +133,46 @@
         <div class="side-widgets overflow">
           <!-- Profile Menu -->
           <div class="text-center s-widget m-b-25 dropdown" id="profile-menu">
-            <a href="" data-toggle="dropdown">
             <img class="profile-pic animated" src="img/profile-pic.jpg" alt="">
-            </a>
-            <ul class="dropdown-menu profile-menu">
-              <li><a href="">My Profile</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-              <li><a href="">Messages</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-              <li><a href="">Settings</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-              <li><a href="">Sign Out</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
-            </ul>
-            <h4 class="m-0"><%= username %></h4>
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                      <h4>
+                        <%= username %>
+                        <br>
+                        <small>friend requests </small>
+                        <%if (requests.length > 0) { %>
+                          <small><i class="fa fa-warning" style="color: red;"></i></small>
+                        <% } %>
+                      </h4>
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="panel-body" style='padding-left: 0;padding-right:0;padding-bottom: 2px;'>
+                    <% for(var i=0; i < requests.length; i++) {%>
+                      <div id='add<%=i%>' class='row' style='padding: 0;margin:0;'>
+                        <div class='col-sm-12'>
+                          <p>
+                            <%= requests[i] %>
+                            <i class="fa fa-check-square" style="color: green; cursor: pointer;" onclick="confirmFriend('<%= requests[i] %>', 'yes', <%=i%>)"></i>
+                            <i class="fa fa-times" style="color: red; cursor: pointer;" onclick="confirmFriend('<%= requests[i] %>','no',<%=i%>)"></i>
+                          </p>
+                        </div>
+                      </div>
+
+                      <!-- <li><a id="req<%= i%>" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><%= requests[i] %></a><i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li> -->
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <a href="" data-toggle="dropdown">  <h4 class="m-0"><%= username %> </h4></a>
+            <ul class="dropdown-menu profile-menu" style="height: 100px; overflow: auto;">
+
+            </ul> -->
           </div>
           <!-- Calendar -->
           <div class="s-widget m-b-25">
@@ -152,9 +182,16 @@
           <h2 class="tile-title">Friends</h2>
             <div class="s-widget-body">
                 <nav>
-                    <ul>
-                        <div id ="friends-list"> </div>
-                    </ul>
+                  <% for(var i=0; i < friends.length; i++) {%>
+                    <div id='rem<%=i%>' class='row' style='padding: 0;margin:0;'>
+                      <div class='col-sm-12'>
+                        <p>
+                          <%= friends[i] %>
+                          <i class="fa fa-times" style="color: red; cursor: pointer;" onclick="removeFriend('<%= friends[i] %>',<%=i%>)"></i>
+                        </p>
+                      </div>
+                    </div>
+                  <% } %>
                 <nav>
             </div>
           <!-- Projects -->
@@ -436,7 +473,7 @@
               <div class="col-md-12">
                 People attending:<br>
                 <p id='ppl'>
-                  
+
                 </p>
               </div>
             </div>
@@ -558,5 +595,6 @@
     <script type="text/javascript" src="/js/createEvent.js"></script>
     <script type="text/javascript" src="/js/map.js"></script>
     <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/extra.js"></script>
   </body>
 </html>

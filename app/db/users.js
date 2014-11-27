@@ -71,14 +71,47 @@ module.exports = {
         callback(null, doc);
       })
     },
+    notifyFriend: function(db, userRequests, userToNotify, callback) {
+      "use strict";
+      var users = db.collection("users");
+
+      users.update({"username": userToNotify},{"$addToSet":{"friendRequest":userRequests}}, function(err, doc) {
+        if(err) console.log("Error setting notification");
+        console.log("Success")
+        callback(null, doc);
+      })
+    },
+    friendConfirm: function(db, username, friendToConfirm, flag, callback) {
+      "use strict";
+      var users = db.collection("users");
+      if(flag == 'yes') {
+        users.update({"username":username},{"$addToSet":{"friends":friendToConfirm}}, function(err, doc) {
+          if(err) console.log("Error getting friends inside app/db");
+          users.update({"username":username},{"$pull":{"friendRequest":friendToConfirm}}, function(err, msg) {
+            if(err) console.log("Error getting friends inside app/db");
+            console.log("friends NO: " + JSON.stringify(msg));
+            callback(null, doc);
+          });
+        });
+      } else if(flag == 'no') {
+        users.update({"username":username},{"$pull":{"friendRequest":friendToConfirm}}, function(err, doc) {
+          if(err) console.log("Error getting friends inside app/db");
+          console.log("friends NO: " + JSON.stringify(doc));
+          callback(null, doc);
+        });
+      }
+    },
     removeFriend: function(db, username, friend, callback) {
       "use strict";
       var users = db.collection("users");
       console.log(username);
       users.update({"username":username},{"$pull":{"friends":friend}}, function(err, doc) {
-        if(err) console.log("Error getting friends inside app/db");
-        console.log("friends: " + JSON.stringify(doc));
-        callback(null, doc);
+        if(err) console.log("Error getting friend in me inside app/db");
+        users.update({"username":friend},{"$pull":{"friends":username}}, function(err, msg) {
+          if(err) console.log("Error removing me in friend inside app/db");
+          console.log("friends: " + JSON.stringify(msg));
+          callback(null, doc);
+        })
       })
     }, //updating user by ID
     updateUserByID: function(db, user, callback) {
