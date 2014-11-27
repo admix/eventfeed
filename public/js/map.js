@@ -183,20 +183,27 @@ function calcRoute() {
 // Loading array of the events on a map
 function loadEvents(events) {
     var locations = [43.7000, -79.4000, 43.7100, -79.4000, 43.7200, -79.4000]; // for testing
+    var LatLngList = [];
     console.log("loading events on map!");
     clearMap();
     var iconCounter = 0,
         i = 0;
     var det = ['bring a friend', 'could be cold', 'check email', 'smile', 'bring your own drink', 'whaaat?', 'have fun', 'nice weather', 'wear jeans and shirt', 'be patient'];
     var h = 0;
+    var delay_counter = 0;
     for (var k in events) {
+        var latlong = new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude);
         var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(events[k].location.latitude, events[k].location.longitude),
+            position: latlong,
             map: map,
             icon : icons[iconCounter],
             shadow: shadow,
+            animation: google.maps.Animation.DROP,
             title: events[k].name
         });
+        delay_counter++;
+        setTimeout(function() {}, 200 * delay_counter);
+        LatLngList.push(latlong);
         markersArray.push(marker);
         events[k].name = events[k].name[0].toUpperCase() + events[k].name.substr(1);
         events[k].description = events[k].description[0].toUpperCase() + events[k].description.substr(1);
@@ -232,7 +239,7 @@ function loadEvents(events) {
             infowindow.open(map, marker);
           }
         })(marker, i, contentString));
-        map.setZoom(11);
+        //map.setZoom(11);
         //google.maps.event.addListener(marker, 'mouseover');
         console.log("here");
         mc.addMarker(marker);
@@ -243,7 +250,11 @@ function loadEvents(events) {
         	iconCounter = 0;
         }
     }
-
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
+        bounds.extend(LatLngList[i]);
+    }
+    map.fitBounds(bounds);
 }
 
 // Register for event
