@@ -21,6 +21,7 @@
     <link href="/css/vendors/icons.css" rel="stylesheet">
     <link href="/css/vendors/generics.css" rel="stylesheet">
     <link href="/css/vendors/jquery.slidepanel.css" rel="stylesheet" type="text/css">
+    <link href="/css/vendors/jquery.timepicker.css" rel="stylesheet" type="text/css">
     <style type="text/css">
       html, body, #map-canvas { height: 100%;margin: 0; padding: 0;}
       #search-panel {
@@ -93,7 +94,7 @@
     </script>
     <header id="header" class="media">
       <a href="" id="menu-toggle"></a>
-      <a class="logo pull-left" href="/" style="padding-left: 50px;"><img class="logo-img" src="/img/logo.jpg">EventFeed.me</a>
+      <a class="logo pull-left" href="/profile" style="padding-left: 50px;"><img class="logo-img" src="/img/logo.jpg">EventFeed.me</a>
       <div class="media-body">
         <div class="media" id="top-menu">
           <div id="time" class="pull-right hidden-sm hidden-xs">
@@ -199,22 +200,22 @@
         <!-- Side Menu -->
         <ul class="list-unstyled side-menu">
           <li class="active">
-            <a class="sa-side-home" href="index.html">
+            <a class="sa-side-home" href="/profile">
             <span class="menu-item">Home</span>
             </a>
           </li>
-          <li>
+          <!-- <li>
             <a class="sa-side-typography" href="index.html" >
             <span class="menu-item">Friends</span>
             </a>
-          </li>
+          </li> -->
           <li>
             <a class="sa-side-widget" href="/events">
             <span class="menu-item">Events</span>
             </a>
           </li>
           <li>
-            <a class="sa-side-table" href="tables.html">
+            <a class="sa-side-table" href="/logout">
             <span class="menu-item">Logout</span>
             </a>
           </li>
@@ -392,7 +393,7 @@
                 <input id="date" type="text" class="form-control input-sm m-b-10" placeholder="Date">
               </div>
               <div class="col-md-4">
-                <input id="time" type="text" class="form-control input-sm m-b-10" placeholder="Time">
+                <input id="timeCreate" type="text" class="form-control input-sm m-b-10" placeholder="Time">
               </div>
               <div class="col-md-4">
                 <div class="checkbox m-b-5">
@@ -591,6 +592,7 @@
     <!-- All JS functions -->
     <script src="/js/vendors/functions.js"></script>
     <script type="text/javascript" src="/js/vendors/jquery.slidepanel.js"></script>
+    <script type="text/javascript" src="/js/vendors/jquery.timepicker.min.js"></script>
     <script type="text/javascript" src="/js/markerclusterer.js"></script>
     <script type="text/javascript" src="/js/createEvent.js"></script>
     <script type="text/javascript" src="/js/map.js"></script>

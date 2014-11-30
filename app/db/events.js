@@ -159,16 +159,20 @@ module.exports = {
         "createdByUsername":userID}}, function(err, msg) {
           if(err) console.log("Error updating event");
           console.log("Updated: " + msg);
-          event.users.forEach(function(us) {
-            events.update({"id":parseInt(event.id)},{"$addToSet":{"users":{"username": us}}}, function(err, doc) {
-              if(err) {
-                callback(null);
-              }
-              console.log("return: ");
-              console.log(doc);
-              callback(null, doc);
+          if(event.users.length > 0) {
+            event.users.forEach(function(us) {
+              events.update({"id":parseInt(event.id)},{"$addToSet":{"users":{"username": us}}}, function(err, doc) {
+                if(err) {
+                  callback(null);
+                }
+                console.log("return: ");
+                console.log(doc);
+                callback(null, doc);
+              });
             });
-          });
+          } else {
+            callback(null, 1);
+          }
         });
 
     },

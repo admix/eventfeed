@@ -291,10 +291,10 @@ module.exports = exports = function(app, db, passport) {
 
       console.log("data received: " + JSON.stringify(eventData) + " User email passed by Session: " + userData );
       dbEvents.updateEvent(db, userData, eventData, function(err, msg) {
-        if(err) throw err;
+        if(err) console.error(err.stack);
         dbEvents.getEventById(db, eventData.id, function(err, data) {
           if(err) console.log("Error getting event");
-          emailer.sendEmail(eventData.users, data, 'edit');
+          var response = emailer.sendEmail(eventData.users, data, 'edit');
           res.send(data, 200);
         })
 
