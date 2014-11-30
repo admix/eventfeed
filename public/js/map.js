@@ -256,19 +256,20 @@ function loadEvents(events) {
         	iconCounter = 0;
         }
     }
-
-    console.log("latlng length: " + LatLngList);
-    if(LatLngList.length > 0) {
+    if(LatLngList.length > 1) {
       var bounds = new google.maps.LatLngBounds();
       for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
         bounds.extend(LatLngList[i]);
       }
       map.fitBounds(bounds);
 
-    } else {
+    } else if(LatLngList.length == 0){
       map.setZoom(11);
       map.setCenter(new google.maps.LatLng(43.7000, -79.4000));
       $("#modalNoResults").modal("show");
+    } else {
+      map.setZoom(13);
+      map.setCenter(LatLngList[0]);
     }
 
 }

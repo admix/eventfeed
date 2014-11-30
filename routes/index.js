@@ -28,8 +28,11 @@ module.exports = exports = function(app, db, passport) {
 		 var email = req.user.email;
      var result = email.split('@')[0];
      console.log(req.user);
+     dbEvents.getEventsByYouAttend(db, email, function(err, events) {
+       if(err) console.error(err.stack);
+       res.render('profile.ejs', { user : req.user, username: result, requests: req.user.friendRequest, active: req.active, friends: req.user.friends, events: events });
+     })
      // get the user out of session and pass to template
-		 res.render('profile.ejs', { user : req.user, username: result, requests: req.user.friendRequest, active: req.active, friends: req.user.friends });
 	});
 
 	app.get('/events', isLoggedIn, function(req, res) {
