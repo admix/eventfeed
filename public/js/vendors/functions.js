@@ -157,10 +157,6 @@ $(document).ready(function(){
 	//custom Calendar Implementation
 	// Get events by username
 
-
-	var eventfeed = "http://eventfeed.me",
-    localhost = "http://localhost:8080";
-
 	// loading events on a Date
 	function loadEventsOnDate(date)
 	{	//formated date
@@ -169,7 +165,7 @@ $(document).ready(function(){
 
 		console.log("Loading Events Happening on " + fd);
 		$.ajax({
-			url:'feed/calendar/date',
+			url:'/feed/calendar/date',
 			data: {date:fd},
 			type: 'POST',
 			dataType: 'json',
@@ -183,7 +179,7 @@ $(document).ready(function(){
 					events.push(e);
 				});
 				loadEvents(events);
-				alert("Events: " + JSON.stringify(events));
+				//alert("Events: " + JSON.stringify(events));
 			},
 			error: function (request, status, error) {
 				alert("ERROR" + request.responseText);
@@ -216,7 +212,7 @@ $(document).ready(function(){
 	function getMyEvents(){
 		console.log("Getting your events for Calander");
 		return $.ajax({
-			url: localhost + '/feed/calendar/events',
+			url: '/feed/calendar/events',
 			type: 'GET',
 			dataType: 'json',
 			success: function(data){
@@ -266,7 +262,7 @@ $(document).ready(function(){
 						$('.fc-event-inner').hide();
 					},
 					dayClick: function(date, allDay, jsEvent, view) {
-						alert(date);
+						//alert(date);
 						clearMap();
 						loadEventsOnDate(date);
 					},

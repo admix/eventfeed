@@ -40,6 +40,9 @@ $("#dateEdit").datepicker({
   dateFormat: 'yy-mm-dd'
 });
 
+$("#timeCreate").timepicker({ 'step': 15 });
+$("#timeEdit").timepicker({ 'step': 15 });
+
 function initialize() {
     $("#directions-panel").hide();
     geocoder = new google.maps.Geocoder();
@@ -155,7 +158,10 @@ function myEvents(){
 
 // Directions calculations
 function calcRoute() {
+  if(directionsDisplay.getMap()) {
     directionsDisplay.setMap(null);
+    $("#directions-panel").hide();
+  } else {
     directionsDisplay.setOptions({ preserveViewport: true });
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
@@ -164,16 +170,19 @@ function calcRoute() {
     var end = event_address;
     console.log("in calc route");
     var request = {
-        origin:start,
-        destination:end,
-        travelMode: google.maps.TravelMode.DRIVING
+      origin:start,
+      destination:end,
+      travelMode: google.maps.TravelMode.DRIVING
     };
 
     directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-        }
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
+      }
     });
+  }
+
+
 }
 
 // Loading array of the events on a map
@@ -215,7 +224,7 @@ function loadEvents(events) {
         '<span style="text-decoration: underline;">Hosted by: </span><span id="friendUsername" style="font-weight: bold;">'+events[k].createdByUsername+'</span>&nbsp;<button type="button" id="addFriend" class="btn btn-xs btn-primary">Add to friend</button> <br>' +
         '<span style="text-decoration: underline;">Details: '+det[h]+'</span> <br>' +
         '<span style="text-decoration: underline;">Description: </span>' + events[k].description + '<br>' +
-        '<span style="text-decoration: underline;">Time: </span>19:30 <br>' +// + /*events[k].time*/ + '<br>' +
+        '<span style="text-decoration: underline;">Time: </span>' + events[k].time + ' <br>' +// + /*events[k].time*/ + '<br>' +
         '<span style="text-decoration: underline;">Date: </span>' + events[k].date + '<br>' +
         '<span style="text-decoration: underline;">Address: </span>' + events[k].location.address + '</div>' +
         '<span style="text-decoration: underline;">Share </span><a href="http://twitter.com" style="color: #1abc9c;">Twitter</a> and <a href="http://facebook.com" style="color: #1abc9c;">Facebook</a><br>' +
@@ -393,7 +402,7 @@ $("#createButton").click(function(e) {
     var eventName = $("#name").val();
     var eventCat = $("#category").val();
     var eventDate = $("#date").val();
-    var eventTime = $("#time").val();
+    var eventTime = $("#timeCreate").val();
     var eventDesc = $("#description").val();
     var eventAddress = $("#address").val();
     var eventPrivate = $("#private").is(':checked');
@@ -418,7 +427,7 @@ $("#createButton").click(function(e) {
 
 // Converting address to lat long
 function convertLatLong(eventData, etype) {
-  console.log("Converting location");
+  console.log("Converting location for: " + etype);
   var latitude = 0;
   var longitude = 0;
   var event = [];
@@ -443,7 +452,7 @@ function convertLatLong(eventData, etype) {
                     $("#name").val('');
                     $("#category").val('');
                     $("#date").val('');
-                    $("#time").val('');
+                    $("#timeCreate").val('');
                     $("#description").val('');
                     $("#address").val('');
                     $("#private").val('');
@@ -451,13 +460,16 @@ function convertLatLong(eventData, etype) {
                 }
             });
           } else if(etype == 'edit') {
+            console.log("Edit started");
             $.ajax({
                 url: '/feed/event/edit',
                 type: 'POST',
                 data: eventData,
                 success: function(msg){
-                    $("#modalEdit").modal("hide");
-                    loadOneEventCreate(msg);
+                  console.log("edit success: " + msg);
+                  $("#modalEdit").modal("hide");
+                  // clearMap();
+                  loadOneEventCreate(msg);
                 }
             });
           }
@@ -486,8 +498,7 @@ function loadOneEventCreate(data) {
       '</div>' +
       '<h3 id="firstHeading" class="firstHeading">'+ data.name +'</h3>' +
       '<div id="bodyContent">' +
-      '<p><b>Details: </b><br>' +
-      '<b>Description: ' + data.permalink + '<br>' +
+      '<b>Description: ' + data.description + '<br>' +
       'Time: ' + data.time + '<br>' +
       'Date: ' + data.date + '</b></p><br>' +
       '<span style="text-decoration: underline;">Share </span><a href="http://twitter.com" style="color: #1abc9c;">Twitter</a> and <a href="http://facebook.com" style="color: #1abc9c;">Facebook</a><br>' +
