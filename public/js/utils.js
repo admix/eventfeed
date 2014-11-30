@@ -30,4 +30,25 @@ $(document).ready(function(){
     e.preventDefault();
     console.log("in add friend");
   })
+
 });
+
+function loadEventsOnId(id) {
+  $.ajax({
+    url:'/feed/events/' + id,
+    type: 'GET',
+    dataType: 'json',
+    success: function(data){
+      console.log(data);
+      console.log("SUCCESS LOADING by ID");
+      console.log(JSON.stringify(data));
+
+      var events = [];
+      events.push(data);
+      loadEvents(events);
+    },
+    error: function (request, status, error) {
+      alert("ERROR" + request.responseText);
+    }
+  });
+}

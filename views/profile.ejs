@@ -181,20 +181,34 @@
           </div>
           <!-- Feeds -->
           <h2 class="tile-title">Friends</h2>
-            <div class="s-widget-body">
-                <nav>
-                  <% for(var i=0; i < friends.length; i++) {%>
-                    <div id='rem<%=i%>' class='row' style='padding: 0;margin:0;'>
-                      <div class='col-sm-12'>
-                        <p>
-                          <%= friends[i] %>
-                          <i class="fa fa-times" style="color: red; cursor: pointer;" onclick="removeFriend('<%= friends[i] %>',<%=i%>)"></i>
-                        </p>
-                      </div>
+          <div class="s-widget-body">
+              <nav>
+                <% for(var i=0; i < friends.length; i++) {%>
+                  <div id='rem<%=i%>' class='row' style='padding: 0;margin:0;'>
+                    <div class='col-sm-12'>
+                      <p>
+                        <%= friends[i] %>
+                        <i class="fa fa-times" style="color: red; cursor: pointer;" onclick="removeFriend('<%= friends[i] %>',<%=i%>)"></i>
+                      </p>
                     </div>
-                  <% } %>
-                <nav>
-            </div>
+                  </div>
+                <% } %>
+              <nav>
+          </div>
+          <h2 class="tile-title">Events</h2>
+          <div class="s-widget-body">
+            <nav>
+              <% for(var i=0; i < events.length; i++) {%>
+                <div id='rem<%=i%>' class='row' style='padding: 0;margin:0;'>
+                  <div class='col-sm-12'>
+                    <p class='events-list' onclick="loadEventsOnId('<%= events[i].id %>')">
+                      <%= events[i].name %>
+                    </p>
+                  </div>
+                </div>
+              <% } %>
+            <nav>
+          </div>
           <!-- Projects -->
         </div>
         <!-- Side Menu -->

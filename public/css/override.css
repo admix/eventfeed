@@ -66,6 +66,11 @@ header {
   margin: 80px auto;
 }
 
+.events-list:hover {
+  color: #FFD600;
+  cursor: pointer;
+}
+
 @media (max-width: 1220px) {
   #mai {
     margin-top: -100px;
