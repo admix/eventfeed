@@ -116,7 +116,11 @@ function search(){
     if(name == "") {
       name = $("#searchtxt2").val();
     }
-
+    console.log("name: " + name);
+    if(name == "") {
+      console.log('empty');
+      name = "_";
+    }
     //searh nearby
 
     //e.preventDefault();
@@ -207,7 +211,7 @@ function loadEvents(events) {
             title: events[k].name
         });
         delay_counter++;
-        setTimeout(function() {}, 200 * delay_counter);
+        setTimeout(function() {}, 500 * delay_counter);
         LatLngList.push(latlong);
         markersArray.push(marker);
         events[k].name = events[k].name[0].toUpperCase() + events[k].name.substr(1);
@@ -252,11 +256,21 @@ function loadEvents(events) {
         	iconCounter = 0;
         }
     }
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
+
+    console.log("latlng length: " + LatLngList);
+    if(LatLngList.length > 0) {
+      var bounds = new google.maps.LatLngBounds();
+      for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
         bounds.extend(LatLngList[i]);
+      }
+      map.fitBounds(bounds);
+
+    } else {
+      map.setZoom(11);
+      map.setCenter(new google.maps.LatLng(43.7000, -79.4000));
+      $("#modalNoResults").modal("show");
     }
-    map.fitBounds(bounds);
+
 }
 
 $(document).on("click", '#addFriend' ,function(){
